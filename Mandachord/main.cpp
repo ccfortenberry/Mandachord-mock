@@ -9,8 +9,12 @@ using std::vector;
 
 int main() {
 	// Initialize the window
-	sf::RenderWindow window(sf::VideoMode(1280, 720), "Mock Mandachord", sf::Style::Titlebar | sf::Style::Close);
-	window.setVerticalSyncEnabled(true);
+	float viewX = 0, viewY = 0;
+	size_t width = 1280, height = 720;
+	sf::View view(sf::FloatRect(viewX, viewY, width, height));
+	sf::RenderWindow window(sf::VideoMode(width, height), "Mock Mandachord", sf::Style::Titlebar | sf::Style::Close);
+	window.setFramerateLimit(60);
+	window.setView(view);
 
 	// Generate the stuff that goes on the screen
 	sf::Font font; // font source (u: Pitchers): https://forums.warframe.com/topic/880893-warframe-logo-fan-font/
@@ -59,8 +63,41 @@ int main() {
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed)
+			switch (event.type) {
+			case (sf::Event::KeyPressed):
+				if (event.key.code == sf::Keyboard::Right) {
+					view.move(10, 0);
+					window.setView(view);
+				}
+				if (event.key.code == sf::Keyboard::Left) {
+					view.move(-10, 0);
+					window.setView(view);
+				}
+				if (event.key.code == sf::Keyboard::Up) {
+					view.move(0, -10);
+					window.setView(view);
+				}
+				if (event.key.code == sf::Keyboard::Down) {
+					view.move(0, 10);
+					window.setView(view);
+				}
+				break;
+			case (sf::Event::MouseButtonPressed):
+				if (event.key.code == sf::Mouse::Left) {
+					cout << "Toggling?" << endl;
+					for (size_t i = 0; i < MANSIZE; i++) {
+						if (mandachord[i].getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+							mandachord[i].toggleNote();
+							cout << "Toggled note: " << i << endl;
+						}
+					}
+				}
+				break;
+			case (sf::Event::Closed):
 				window.close();
+			default:
+				break;
+			}
 		}
 
 		window.clear();
@@ -68,7 +105,8 @@ int main() {
 		int posX=10, posY=40;
 		for (size_t i = 0; i < MANSIZE; i++) {
 			mandachord[i].draw(window, posX, posY);
-			if (i % 64 != 0 || i == 0) posX += 60;
+			if ((i+1) % 64 != 0)
+				posX += 60;
 			else {
 				posX = 10;
 				posY += 60;

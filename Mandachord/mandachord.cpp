@@ -24,6 +24,10 @@ sf::Color Note::getColor() {
 	return _color;
 }
 
+sf::FloatRect Note::getPos() {
+	return _noteBox.getGlobalBounds();
+}
+
 void Note::setSound(const data_type & sound) {
 	_sound = sound;
 }
@@ -36,14 +40,20 @@ void Note::setColor(const sf::Color & color) {
 	_color = color;
 }
 
+//void Note::setPos(const sf::Vector2f & position) {
+//	_position = position;
+//}
+
 void Note::toggleNote() {
 	if (!_toggled) {
 		_toggled = true;
 		_noteBox.setFillColor(_color);
+		cout << "Toggled!" << endl;
 	}
 	else {
 		_toggled = false;
 		_noteBox.setFillColor(sf::Color::Transparent);
+		cout << "Un-Toggled!" << endl;
 	}
 }
 

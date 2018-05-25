@@ -24,10 +24,12 @@ public:
 	data_type getSound();
 	data_type getIcon();
 	sf::Color getColor();
+	sf::FloatRect getPos();
 
 	void setSound(const data_type &);
 	void setIcon(const data_type &);
 	void setColor(const sf::Color &);
+	//void setPos(const sf::Vector2f &);
 
 	void toggleNote();
 	bool isToggled();
