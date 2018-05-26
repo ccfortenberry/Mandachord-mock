@@ -1,3 +1,4 @@
+#include "button.hpp"
 #include "mandachord.hpp"
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
@@ -65,13 +66,21 @@ int main() {
 	line.rotate(90);
 	line.setPosition(10, 35);
 
+	sf::Text textPlay;
+	textPlay.setFont(font);
+	textPlay.setString("PLAY");
+	textPlay.setCharacterSize(18);
+	Button play(textPlay, sf::Color::White);
+
 	// Running application
 	while (window.isOpen())
 	{
-		if (line.getPosition().x < BAR * 60)
-			line.move(sf::Vector2f(5, 0));
-		else
-			line.setPosition(10, 35);
+		if (play.isToggled()) {
+			if (line.getPosition().x < BAR * 60)
+				line.move(sf::Vector2f(5, 0));
+			else
+				line.setPosition(10, 35);
+		}
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -104,6 +113,10 @@ int main() {
 							cout << "Toggled note: " << i << endl;
 						}
 					}
+					if (play.getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+						play.toggle();
+						cout << "Toggled Play" << endl;
+					}
 				}
 				break;
 			case (sf::Event::Closed):
@@ -122,6 +135,7 @@ int main() {
 
 		window.clear();
 		window.draw(text);
+		play.draw(window, 500, 5);
 		float posX=10, posY=40;
 		for (size_t i = 0; i < MANSIZE; i++) {
 			mandachord[i].draw(window, posX, posY);

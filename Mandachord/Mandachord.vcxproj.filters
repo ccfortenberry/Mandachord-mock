@@ -21,9 +21,15 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mandachord.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="button.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

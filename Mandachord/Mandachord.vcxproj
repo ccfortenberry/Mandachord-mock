@@ -131,10 +131,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="button.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mandachord.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="button.hpp" />
     <ClInclude Include="mandachord.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
