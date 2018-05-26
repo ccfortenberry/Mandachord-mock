@@ -44,11 +44,23 @@ int main() {
 	
 	const size_t RESSIZE = 5 * 64;
 	sf::Color blue(39, 89, 114, 225);
-	Note resNote("Resonator sound", malletTexture, blue);
+	sf::Texture resTexture;
+	if (!resTexture.loadFromFile("icons/resonator_icon.png")) {
+		cout << "Unable to load resonator texture" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	Note resNote("Resonator sound", resTexture, blue);
 
 	const size_t METSIZE = RESSIZE;
 	sf::Color pink(107, 58, 113, 225);
-	Note metNote("Metronome sound", malletTexture, pink);
+	sf::Texture metTexture;
+	if (!metTexture.loadFromFile("icons/metronome_icon.png")) {
+		cout << "Unable to load metronome texture" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	Note metNote("Metronome sound", metTexture, pink);
 
 	const size_t MANSIZE = 13 * 64;
 	vector<Note> mandachord;
