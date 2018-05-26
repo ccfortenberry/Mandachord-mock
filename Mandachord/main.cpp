@@ -57,9 +57,21 @@ int main() {
 		cout << mandachord[i].getColor().toInteger() << ")" << endl;
 	}
 
+	const size_t BAR = 16;
+	const size_t MEASURE = 4 * BAR;
+
+	sf::RectangleShape line(sf::Vector2f(780, 2));
+	line.rotate(90);
+	line.setPosition(10, 35);
+
 	// Running application
 	while (window.isOpen())
 	{
+		if (line.getPosition().x < BAR * 60)
+			line.move(sf::Vector2f(5, 0));
+		else
+			line.setPosition(10, 35);
+
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -100,6 +112,11 @@ int main() {
 			}
 		}
 
+		for (size_t i = 0; i < MANSIZE; i++) {
+			if (mandachord[i].isColliding(line))
+				mandachord[i].play();
+		}
+
 		window.clear();
 		window.draw(text);
 		int posX=10, posY=40;
@@ -112,6 +129,7 @@ int main() {
 				posY += 60;
 			}
 		}
+		window.draw(line);
 		window.display();
 	}
 

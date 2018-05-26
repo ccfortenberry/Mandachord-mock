@@ -31,9 +31,10 @@ public:
 	void setColor(const sf::Color &);
 	//void setPos(const sf::Vector2f &);
 
+	void draw(sf::RenderWindow &, const int &, const int &);
 	void toggleNote();
 	bool isToggled();
-	void draw(sf::RenderWindow &, const int &, const int &);
+	bool isColliding(const sf::RectangleShape &);
 	void play();
 };
 
