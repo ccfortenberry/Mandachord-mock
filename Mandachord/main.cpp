@@ -34,15 +34,21 @@ int main() {
 
 	const size_t MALSIZE = 3 * 64;
 	sf::Color gray(91, 91, 91, 225);
-	Note malletNote("Mallet sound", "Mallet icon", gray);
+	sf::Texture malletTexture;
+	if (!malletTexture.loadFromFile("icons/mallets_icon.png")) {
+		cout << "Unable to load mallet texture" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	Note malletNote("Mallet sound", malletTexture, gray);
 	
 	const size_t RESSIZE = 5 * 64;
 	sf::Color blue(39, 89, 114, 225);
-	Note resNote("Resonator sound", "Resonator icon", blue);
+	Note resNote("Resonator sound", malletTexture, blue);
 
 	const size_t METSIZE = RESSIZE;
 	sf::Color pink(107, 58, 113, 225);
-	Note metNote("Metronome sound", "Metronome icon", pink);
+	Note metNote("Metronome sound", malletTexture, pink);
 
 	const size_t MANSIZE = 13 * 64;
 	vector<Note> mandachord;

@@ -10,7 +10,6 @@ private:
 	using size_type = float;
 	
 	sf::Text _text;
-	sf::Color _color;
 	sf::RectangleShape _box;
 	bool _toggled;
 

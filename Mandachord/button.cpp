@@ -1,9 +1,9 @@
 #include "button.hpp"
 
 Button::Button(const sf::Text & text, const sf::Color & color)
-	:_text(text), _color(color), _box(sf::Vector2f(_text.getCharacterSize()*5, _text.getCharacterSize()*1.5f)), _toggled(false)  {
-	_box.setFillColor(_color);
-	_text.setFillColor(sf::Color::Red);
+	:_text(text), _box(sf::Vector2f(_text.getCharacterSize()*5, _text.getCharacterSize()*1.5f)), _toggled(true)  {
+	_box.setFillColor(color);
+	_text.setFillColor(sf::Color::Green);
 }
 
 sf::FloatRect Button::getPos() {
