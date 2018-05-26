@@ -10,8 +10,9 @@ using std::vector;
 int main() {
 	// Initialize the window
 	float viewX = 0, viewY = 0;
+	float widthf = 1280, heightf = 720;
+	sf::View view(sf::FloatRect(viewX, viewY, widthf, heightf));
 	size_t width = 1280, height = 720;
-	sf::View view(sf::FloatRect(viewX, viewY, width, height));
 	sf::RenderWindow window(sf::VideoMode(width, height), "Mock Mandachord", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(60);
 	window.setView(view);
@@ -49,13 +50,13 @@ int main() {
 		else if (i < MALSIZE + RESSIZE) mandachord.push_back(resNote);
 		else mandachord.push_back(metNote);
 	}
-	cout << "Mandachord size: " << mandachord.size() << endl;
+	/*cout << "Mandachord size: " << mandachord.size() << endl;
 	for (size_t i = 0; i < MANSIZE; i++) {
 		cout << "Mandachord data at" << i << ": (";
 		cout << mandachord[i].getSound() << ", ";
 		cout << mandachord[i].getIcon() << ", ";
 		cout << mandachord[i].getColor().toInteger() << ")" << endl;
-	}
+	}*/
 
 	const size_t BAR = 16;
 	const size_t MEASURE = 4 * BAR;
@@ -96,7 +97,7 @@ int main() {
 				break;
 			case (sf::Event::MouseButtonPressed):
 				if (event.key.code == sf::Mouse::Left) {
-					cout << "Toggling?" << endl;
+					// cout << "Toggling?" << endl;
 					for (size_t i = 0; i < MANSIZE; i++) {
 						if (mandachord[i].getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
 							mandachord[i].toggleNote();
@@ -113,13 +114,15 @@ int main() {
 		}
 
 		for (size_t i = 0; i < MANSIZE; i++) {
-			if (mandachord[i].isColliding(line))
+			if (mandachord[i].isColliding(line) && mandachord[i].isToggled()) {
+				cout << "Collision!" << endl;
 				mandachord[i].play();
+			}
 		}
 
 		window.clear();
 		window.draw(text);
-		int posX=10, posY=40;
+		float posX=10, posY=40;
 		for (size_t i = 0; i < MANSIZE; i++) {
 			mandachord[i].draw(window, posX, posY);
 			if ((i+1) % 64 != 0)

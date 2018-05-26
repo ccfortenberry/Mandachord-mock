@@ -7,7 +7,7 @@
 
 class Note {
 private:
-	using size_type = size_t;
+	using size_type = float;
 	using data_type = std::string;
 
 	data_type _sound;
@@ -31,7 +31,7 @@ public:
 	void setColor(const sf::Color &);
 	//void setPos(const sf::Vector2f &);
 
-	void draw(sf::RenderWindow &, const int &, const int &);
+	void draw(sf::RenderWindow &, const size_type &, const size_type &);
 	void toggleNote();
 	bool isToggled();
 	bool isColliding(const sf::RectangleShape &);

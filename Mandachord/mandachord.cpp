@@ -44,7 +44,7 @@ void Note::setColor(const sf::Color & color) {
 //	_position = position;
 //}
 
-void Note::draw(sf::RenderWindow & window, const int & posX, const int & posY) {
+void Note::draw(sf::RenderWindow & window, const size_type & posX, const size_type & posY) {
 	_noteBox.setPosition(posX, posY);
 	window.draw(_noteBox);
 }
@@ -53,12 +53,12 @@ void Note::toggleNote() {
 	if (!_toggled) {
 		_toggled = true;
 		_noteBox.setFillColor(_color);
-		cout << "Toggled!" << endl;
+		// cout << "Toggled!" << endl;
 	}
 	else {
 		_toggled = false;
 		_noteBox.setFillColor(sf::Color::Transparent);
-		cout << "Un-Toggled!" << endl;
+		// cout << "Un-Toggled!" << endl;
 	}
 }
 
@@ -67,7 +67,7 @@ bool Note::isToggled() {
 }
 
 bool Note::isColliding(const sf::RectangleShape & line) {
-	return _noteBox.getPosition() == line.getPosition();
+	return _noteBox.getPosition().x == line.getPosition().x;
 }
 
 void Note::play() {
