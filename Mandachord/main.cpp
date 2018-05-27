@@ -1,6 +1,7 @@
 #include "button.hpp"
 #include "mandachord.hpp"
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <cstdlib>
 #include <iostream>
 using std::cout;
@@ -32,6 +33,7 @@ int main() {
 	text.setCharacterSize(24);
 	text.setStyle(sf::Text::Bold);
 
+	sf::Sound sound;
 	const size_t MALSIZE = 3 * 64;
 	sf::Color gray(91, 91, 91, 225);
 	sf::Texture malletTexture;
@@ -40,7 +42,27 @@ int main() {
 		system("pause");
 		return EXIT_FAILURE;
 	}
-	Note malletNote("Mallet sound", malletTexture, gray);
+	sf::SoundBuffer malletRow1;
+	if (!malletRow1.loadFromFile("instruments/adau/adau_mal_1.wav")) {
+		cout << "Unable to load mallet sound 1" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	sf::SoundBuffer malletRow2;
+	if (!malletRow2.loadFromFile("instruments/adau/adau_mal_2.wav")) {
+		cout << "Unable to load mallet sound 2" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	sf::SoundBuffer malletRow3;
+	if (!malletRow3.loadFromFile("instruments/adau/adau_mal_3.wav")) {
+		cout << "Unable to load mallet sound 3" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	Note malletNote1(malletRow1, malletTexture, gray);
+	Note malletNote2(malletRow2, malletTexture, gray);
+	Note malletNote3(malletRow3, malletTexture, gray);
 	
 	const size_t RESSIZE = 5 * 64;
 	sf::Color blue(39, 89, 114, 225);
@@ -50,7 +72,41 @@ int main() {
 		system("pause");
 		return EXIT_FAILURE;
 	}
-	Note resNote("Resonator sound", resTexture, blue);
+	sf::SoundBuffer resRow1;
+	if (!malletRow1.loadFromFile("instruments/adau/adau_res_1.wav")) {
+		cout << "Unable to load resonator sound 1" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	sf::SoundBuffer resRow2;
+	if (!malletRow2.loadFromFile("instruments/adau/adau_res_2.wav")) {
+		cout << "Unable to load resonator sound 2" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	sf::SoundBuffer resRow3;
+	if (!malletRow3.loadFromFile("instruments/adau/adau_res_3.wav")) {
+		cout << "Unable to load resonator sound 3" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	sf::SoundBuffer resRow4;
+	if (!malletRow1.loadFromFile("instruments/adau/adau_res_4.wav")) {
+		cout << "Unable to load resonator sound 4" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	sf::SoundBuffer resRow5;
+	if (!malletRow2.loadFromFile("instruments/adau/adau_res_5.wav")) {
+		cout << "Unable to load resonator sound 5" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	Note resNote1(resRow1, resTexture, blue);
+	Note resNote2(resRow2, resTexture, blue);
+	Note resNote3(resRow3, resTexture, blue);
+	Note resNote4(resRow4, resTexture, blue);
+	Note resNote5(resRow5, resTexture, blue);
 
 	const size_t METSIZE = RESSIZE;
 	sf::Color pink(107, 58, 113, 225);
@@ -60,14 +116,64 @@ int main() {
 		system("pause");
 		return EXIT_FAILURE;
 	}
-	Note metNote("Metronome sound", metTexture, pink);
+	sf::SoundBuffer metRow1;
+	if (!malletRow1.loadFromFile("instruments/adau/adau_met_1.wav")) {
+		cout << "Unable to load metronome sound 1" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	sf::SoundBuffer metRow2;
+	if (!malletRow2.loadFromFile("instruments/adau/adau_met_2.wav")) {
+		cout << "Unable to load metronome sound 2" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	sf::SoundBuffer metRow3;
+	if (!malletRow3.loadFromFile("instruments/adau/adau_met_3.wav")) {
+		cout << "Unable to load metronome sound 3" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	sf::SoundBuffer metRow4;
+	if (!malletRow1.loadFromFile("instruments/adau/adau_met_4.wav")) {
+		cout << "Unable to load metronome sound 4" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	sf::SoundBuffer metRow5;
+	if (!malletRow2.loadFromFile("instruments/adau/adau_met_5.wav")) {
+		cout << "Unable to load metronome sound 5" << endl;
+		system("pause");
+		return EXIT_FAILURE;
+	}
+	Note metNote1(metRow1, metTexture, pink);
+	Note metNote2(metRow2, metTexture, pink);
+	Note metNote3(metRow3, metTexture, pink);
+	Note metNote4(metRow4, metTexture, pink);
+	Note metNote5(metRow5, metTexture, pink);
 
 	const size_t MANSIZE = 13 * 64;
 	vector<Note> mandachord;
 	for (size_t i = 0; i < MANSIZE; i++) {
-		if (i < MALSIZE) mandachord.push_back(malletNote);
-		else if (i < MALSIZE + RESSIZE) mandachord.push_back(resNote);
-		else mandachord.push_back(metNote);
+		if (i < MALSIZE) {
+			if (i < 64) mandachord.push_back(malletNote1);
+			else if (i < 2 * 64) mandachord.push_back(malletNote2);
+			else mandachord.push_back(malletNote3);
+		}
+		else if (i < MALSIZE + RESSIZE) {
+			if (i < 4 * 64) mandachord.push_back(resNote1);
+			else if (i < 5 * 64) mandachord.push_back(resNote2);
+			else if (i < 6 * 64) mandachord.push_back(resNote3);
+			else if (i < 7 * 64) mandachord.push_back(resNote4);
+			else mandachord.push_back(resNote5);
+		}
+		else {
+			if (i < 9 * 64) mandachord.push_back(metNote1);
+			else if (i < 10 * 64) mandachord.push_back(metNote2);
+			else if (i < 11 * 64) mandachord.push_back(metNote3);
+			else if (i < 12 * 64) mandachord.push_back(metNote4);
+			else mandachord.push_back(metNote5);
+		}
 	}
 	/*cout << "Mandachord size: " << mandachord.size() << endl;
 	for (size_t i = 0; i < MANSIZE; i++) {
@@ -147,7 +253,7 @@ int main() {
 		for (size_t i = 0; i < MANSIZE; i++) {
 			if (mandachord[i].isColliding(line) && mandachord[i].isToggled()) {
 				cout << "Collision!" << endl;
-				mandachord[i].play();
+				mandachord[i].play(sound);
 			}
 		}
 

@@ -5,7 +5,7 @@ using std::endl;
 
 
 // ------ Note ------
-Note::Note(const data_type & sound, const sf::Texture & icon, const sf::Color & color)
+Note::Note(const sf::SoundBuffer & sound, const sf::Texture & icon, const sf::Color & color)
 	:_sound(sound), _icon(sf::Vector2f(50, 50)), _color(color), _noteBox(sf::Vector2f(50, 50)), _toggled(false) {
 	_noteBox.setOutlineThickness(2);
 	_noteBox.setOutlineColor(color);
@@ -45,6 +45,8 @@ bool Note::isColliding(const sf::RectangleShape & line) {
 	return _noteBox.getPosition().x == line.getPosition().x;
 }
 
-void Note::play() {
-	cout << "Playing :" << _sound << endl;
+void Note::play(sf::Sound & sound) {
+	cout << "Playing sound" << endl;
+	sound.setBuffer(_sound);
+	sound.play();
 }
