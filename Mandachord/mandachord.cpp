@@ -5,8 +5,8 @@ using std::endl;
 
 
 // ------ Note ------
-Note::Note(const sf::SoundBuffer & sound, const sf::Texture & icon, const sf::Color & color)
-	:_sound(sound), _icon(sf::Vector2f(50, 50)), _color(color), _noteBox(sf::Vector2f(50, 50)), _toggled(false) {
+Note::Note(const sf::Texture & icon, const sf::Color & color)
+	: _icon(sf::Vector2f(50, 50)), _color(color), _noteBox(sf::Vector2f(50, 50)), _toggled(false) {
 	_noteBox.setOutlineThickness(2);
 	_noteBox.setOutlineColor(color);
 	_noteBox.setFillColor(sf::Color::Transparent);
@@ -24,16 +24,14 @@ void Note::draw(sf::RenderWindow & window, const size_type & posX, const size_ty
 	window.draw(_icon);
 }
 
-void Note::toggleNote() {
+void Note::toggle() {
 	if (!_toggled) {
 		_toggled = true;
 		_noteBox.setFillColor(_color);
-		// cout << "Toggled!" << endl;
 	}
 	else {
 		_toggled = false;
 		_noteBox.setFillColor(sf::Color::Transparent);
-		// cout << "Un-Toggled!" << endl;
 	}
 }
 
@@ -45,8 +43,7 @@ bool Note::isColliding(const sf::RectangleShape & line) {
 	return _noteBox.getPosition().x == line.getPosition().x;
 }
 
-void Note::play(sf::Sound & sound) {
+void Note::play(sf::Sound & noteSound) {
 	cout << "Playing sound" << endl;
-	sound.setBuffer(_sound);
-	sound.play();
+	noteSound.play();
 }

@@ -21,12 +21,10 @@ void Button::toggle() {
 	if (!_toggled) {
 		_toggled = true;
 		_text.setFillColor(sf::Color::Green);
-		// cout << "Toggled!" << endl;
 	}
 	else {
 		_toggled = false;
 		_text.setFillColor(sf::Color::Red);
-		// cout << "Un-Toggled!" << endl;
 	}
 }
 
