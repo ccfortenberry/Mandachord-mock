@@ -8,13 +8,23 @@ using std::cout;
 using std::endl;
 #include <array>
 using std::array;
+#include <deque>
+using std::deque;
+
+/* -------------- TODO --------------
+	* Add a structure for live sounds
+	* Add a structure for instrument packs
+	* Fix mallet drum sample
+		- Well make them all better really...
+	* Clean this shit up
+*/
 
 int main() {
 	/* ---------- Initialize the window ---------- */
 	float viewX = 0, viewY = 0;
 	float widthf = 1280, heightf = 720;
 	sf::View view(sf::FloatRect(viewX, viewY, widthf, heightf));
-	size_t width = 1280, height = 720;
+	unsigned int width = 1280, height = 720;
 	sf::RenderWindow window(sf::VideoMode(width, height), "Mock Mandachord", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(60);
 	window.setView(view);
@@ -247,12 +257,29 @@ int main() {
 
 	// Need to make a sound table to hold the note sounds since
 	// loading 832 sounds into memory is a bad idea...
-	array<sf::Sound, 13> mandachordSounds = {malletRow1Note, malletRow2Note,  malletRow3Note,  resRow1Note,  resRow2Note,  resRow3Note,  resRow4Note,
-											resRow5Note,  metRow1Note,  metRow2Note,  metRow3Note,  metRow4Note,  metRow5Note, };
+	array<sf::Sound, 13> mandachordSounds = {malletRow1Note,
+											malletRow2Note, 
+											malletRow3Note, 
+											resRow1Note, 
+											resRow2Note, 
+											resRow3Note, 
+											resRow4Note,
+											resRow5Note, 
+											metRow1Note, 
+											metRow2Note, 
+											metRow3Note, 
+											metRow4Note, 
+											metRow5Note};
 
+	// A map for live notes so they don't get cutoff
+	deque<sf::Sound> nowPlaying;
+	unsigned int NPIndex = 0;
+
+	// A couple consts for board size
 	const size_t BAR = 16;
 	const size_t MEASURE = 4 * BAR;
 
+	// The line that passes over the notes to play them
 	sf::RectangleShape line(sf::Vector2f(780, 2));
 	line.rotate(90);
 	line.setPosition(10, 35);
@@ -318,24 +345,81 @@ int main() {
 			}
 		}
 
-		// This makes me physically sick but it's the best i got right now
-		for (size_t i = 0; i < MANSIZE; i++) {
+		// This makes me physically sick but I'll clean it up later...
+		for (unsigned int i = 0; i < MANSIZE; i++) {
 			if (mandachord[i].isToggled() && mandachord[i].isColliding(line)) {
 				cout << "Collision!" << endl;
-				if (i < 64) mandachord[i].play(mandachordSounds[0]);
-				else if (i < 2 * 64) mandachord[i].play(mandachordSounds[1]);
-				else if (i < 3 * 64) mandachord[i].play(mandachordSounds[2]);
-				else if (i < 4 * 64) mandachord[i].play(mandachordSounds[3]);
-				else if (i < 5 * 64) mandachord[i].play(mandachordSounds[4]);
-				else if (i < 6 * 64) mandachord[i].play(mandachordSounds[5]);
-				else if (i < 7 * 64) mandachord[i].play(mandachordSounds[6]);
-				else if (i < 8 * 64) mandachord[i].play(mandachordSounds[7]);
-				else if (i < 9 * 64) mandachord[i].play(mandachordSounds[8]);
-				else if (i < 10 * 64) mandachord[i].play(mandachordSounds[9]);
-				else if (i < 11 * 64) mandachord[i].play(mandachordSounds[10]);
-				else if (i < 12 * 64) mandachord[i].play(mandachordSounds[11]);
-				else  mandachord[i].play(mandachordSounds[12]);
+				if (i < 64) {
+					nowPlaying.emplace_back(mandachordSounds[0]);
+					NPIndex++;
+					nowPlaying[NPIndex - 1].play();
+				}
+				else if (i < 2 * 64) {
+					nowPlaying.emplace_back(mandachordSounds[1]);
+					NPIndex++;
+					nowPlaying[NPIndex - 1].play();
+				}
+				else if (i < 3 * 64) {
+					nowPlaying.emplace_back(mandachordSounds[2]);
+					NPIndex++;
+					nowPlaying[NPIndex - 1].play();
+				}
+				else if (i < 4 * 64) {
+					nowPlaying.emplace_back(mandachordSounds[3]);
+					NPIndex++;
+					nowPlaying[NPIndex - 1].play();
+				}
+				else if (i < 5 * 64) {
+					nowPlaying.emplace_back(mandachordSounds[4]);
+					NPIndex++;
+					nowPlaying[NPIndex - 1].play();
+				}
+				else if (i < 6 * 64) {
+					nowPlaying.emplace_back(mandachordSounds[5]);
+					NPIndex++;
+					nowPlaying[NPIndex - 1].play();
+				}
+				else if (i < 7 * 64) {
+					nowPlaying.emplace_back(mandachordSounds[6]);
+					NPIndex++;
+					nowPlaying[NPIndex - 1].play();
+				}
+				else if (i < 8 * 64) {
+					nowPlaying.emplace_back(mandachordSounds[7]);
+					NPIndex++;
+					nowPlaying[NPIndex - 1].play();
+				}
+				else if (i < 9 * 64) {
+					nowPlaying.emplace_back(mandachordSounds[8]);
+					NPIndex++;
+					nowPlaying[NPIndex - 1].play();
+				}
+				else if (i < 10 * 64) {
+					nowPlaying.emplace_back(mandachordSounds[9]);
+					NPIndex++;
+					nowPlaying[NPIndex - 1].play();
+				}
+				else if (i < 11 * 64) {
+					nowPlaying.emplace_back(mandachordSounds[10]);
+					NPIndex++;
+					nowPlaying[NPIndex - 1].play();
+				}
+				else if (i < 12 * 64) {
+					nowPlaying.emplace_back(mandachordSounds[11]);
+					NPIndex++;
+					nowPlaying[NPIndex - 1].play();
+				}
+				else {
+					nowPlaying.emplace_back(mandachordSounds[12]);
+					NPIndex++;
+					nowPlaying[NPIndex - 1].play();
+				}
 			}
+		}
+
+		if (!nowPlaying.empty() && nowPlaying.front().getStatus() == sf::Sound::Status::Stopped) {
+			nowPlaying.pop_front();
+			NPIndex--;
 		}
 
 		window.clear();

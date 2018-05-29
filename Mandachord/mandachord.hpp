@@ -27,7 +27,6 @@ public:
 	void toggle();
 	bool isToggled();
 	bool isColliding(const sf::RectangleShape &);
-	void play(sf::Sound &);
 };
 
 #endif //MANDACHORD_HPP_INCLUDED

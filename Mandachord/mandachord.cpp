@@ -42,8 +42,3 @@ bool Note::isToggled() {
 bool Note::isColliding(const sf::RectangleShape & line) {
 	return _noteBox.getPosition().x == line.getPosition().x;
 }
-
-void Note::play(sf::Sound & noteSound) {
-	cout << "Playing sound" << endl;
-	noteSound.play();
-}
