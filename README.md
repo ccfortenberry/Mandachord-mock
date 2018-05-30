@@ -1,6 +1,10 @@
 # Mandachord  
 It's Octavia's Mandachord, but it's a crappy representation of it. Essentially this is just a desktop application for people who want to make their Mandachord remixes but are away from Warframe. Could probably still get this labelled as productivity.  
 
+## Dependencies  
+SFML 2.5.0  
+- Because I hate myself :^)
+
 ## Installation  
 There will be a releases section at some point when I'm done testing it and it is at a point at which I feel comfortable releasing it. Patience...  
 
