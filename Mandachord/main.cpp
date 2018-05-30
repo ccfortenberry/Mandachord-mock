@@ -12,18 +12,18 @@ using std::array;
 using std::deque;
 
 /* -------------- TODO --------------
-	* Add a structure for live sounds
 	* Add a structure for instrument packs
-	* Fix mallet drum sample
+	* Fix Adau mallet drum sample
 		- Well make them all better really...
 	* Clean this shit up
 */
 
 int main() {
 	/* ---------- Initialize the window ---------- */
-	float viewX = 0, viewY = 0;
+	float viewX = 160, viewY = 90;
 	float widthf = 1280, heightf = 720;
 	sf::View view(sf::FloatRect(viewX, viewY, widthf, heightf));
+	view.zoom(1.25f);
 	unsigned int width = 1280, height = 720;
 	sf::RenderWindow window(sf::VideoMode(width, height), "Mock Mandachord", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(60);
@@ -43,6 +43,17 @@ int main() {
 	text.setString("MANDACHORD MOCK");
 	text.setCharacterSize(24);
 	text.setStyle(sf::Text::Bold);
+
+	/* ---------- Play button ---------- */
+	sf::Text textPlay;
+	textPlay.setFont(font);
+	textPlay.setString("PLAY");
+	textPlay.setCharacterSize(18);
+	Button play(textPlay, sf::Color::White);
+
+	// ---------- Mandachord Megasection ----------
+	// Instruments
+	// TODO
 
 	// ---------- Mallets section ----------
 	const size_t MALSIZE = 3 * 64;		// Size
@@ -283,13 +294,6 @@ int main() {
 	sf::RectangleShape line(sf::Vector2f(780, 2));
 	line.rotate(90);
 	line.setPosition(10, 35);
-
-	/* ---------- Play button ---------- */
-	sf::Text textPlay;
-	textPlay.setFont(font);
-	textPlay.setString("PLAY");
-	textPlay.setCharacterSize(18);
-	Button play(textPlay, sf::Color::White);
 
 	/* ---------- Running application ---------- */
 	while (window.isOpen())
