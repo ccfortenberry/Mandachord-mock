@@ -4,8 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <cstdlib>
-#include <string>
 #include <array>
+#include <deque>
 
 class Note {
 private:
@@ -27,6 +27,28 @@ public:
 	void toggle();
 	bool isToggled();
 	bool isColliding(const sf::RectangleShape &);
+};
+
+class Mandachord {
+private:
+	using size_type = float;
+	
+	const size_t MALSIZE = 3 * 64;
+	const size_t RESSIZE = 5 * 64;
+	const size_t METSIZE = RESSIZE;
+	const static size_t MANSIZE = 13 * 64;
+	
+	std::array<Note, MANSIZE> _mandachord;
+	std::array<sf::Sound, 13> _mandachordSounds;
+	std::deque<sf::Sound> _nowPlaying;
+	unsigned int _NPIndex = 0;
+
+public:
+	Mandachord();
+	~Mandachord() = default;
+
+	void draw(sf::RenderWindow &, size_type &, size_type &);
+	void play();
 };
 
 #endif //MANDACHORD_HPP_INCLUDED

@@ -16,6 +16,8 @@ using std::deque;
 	* Fix Adau mallet drum sample
 		- Well make them all better really...
 	* Clean this shit up
+		- Make mandachord class
+		- clean up button/note
 */
 
 int main() {
@@ -54,6 +56,8 @@ int main() {
 	// ---------- Mandachord Megasection ----------
 	// Instruments
 	// TODO
+
+	// Mandachord mandachord;
 
 	// ---------- Mallets section ----------
 	const size_t MALSIZE = 3 * 64;		// Size
@@ -287,8 +291,8 @@ int main() {
 	unsigned int NPIndex = 0;
 
 	// A couple consts for board size
-	const size_t BAR = 16;
-	const size_t MEASURE = 4 * BAR;
+	const size_t MEASURE = 16;
+	const size_t BOARD = 4 * MEASURE;
 
 	// The line that passes over the notes to play them
 	sf::RectangleShape line(sf::Vector2f(780, 2));
@@ -299,7 +303,7 @@ int main() {
 	while (window.isOpen())
 	{
 		if (play.isToggled()) {
-			if (line.getPosition().x < BAR * 60)
+			if (line.getPosition().x < MEASURE * 60)
 				line.move(sf::Vector2f(5, 0));
 			else
 				line.setPosition(10, 35);
@@ -429,6 +433,7 @@ int main() {
 		window.clear();
 		window.draw(text);
 		play.draw(window, 500, 5);
+		//mandachord.draw(window, 10, 40);
 		float posX=10, posY=40;
 		for (size_t i = 0; i < MANSIZE; i++) {
 			mandachord[i].draw(window, posX, posY);
