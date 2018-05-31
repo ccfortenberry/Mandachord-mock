@@ -1,7 +1,6 @@
 #ifndef MANDACHORD_HPP_INCLUDED
 #define MANDACHORD_HPP_INCLUDED
 
-#include "button.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <cstdlib>
@@ -23,11 +22,10 @@ public:
 	~Note() = default;
 
 	sf::FloatRect getPos();
-
-	void draw(sf::RenderWindow &, const size_type &, const size_type &);
 	void toggle();
 	bool isToggled();
 	bool isColliding(const sf::RectangleShape &);
+	void draw(sf::RenderWindow &, const size_type &, const size_type &);
 };
 
 class Mandachord {
