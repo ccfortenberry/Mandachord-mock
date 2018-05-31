@@ -1,6 +1,7 @@
 #ifndef MANDACHORD_HPP_INCLUDED
 #define MANDACHORD_HPP_INCLUDED
 
+#include "button.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <cstdlib>
@@ -37,16 +38,21 @@ private:
 	const size_t RESSIZE = 5 * 64;
 	const size_t METSIZE = RESSIZE;
 	const static size_t MANSIZE = 13 * 64;
+	const size_t MEASURE = 16;
+	const size_t BOARD = 4 * MEASURE;
 	
 	std::array<Note, MANSIZE> _mandachord;
 	std::array<sf::Sound, 13> _mandachordSounds;
 	std::deque<sf::Sound> _nowPlaying;
 	unsigned int _NPIndex = 0;
+	sf::RectangleShape _line;
 
 public:
 	Mandachord();
 	~Mandachord() = default;
 
+	void advance(const bool &);
+	void checkMouse(sf::RenderWindow &);
 	void draw(sf::RenderWindow &, size_type &, size_type &);
 	void play();
 };

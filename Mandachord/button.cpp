@@ -10,13 +10,6 @@ sf::FloatRect Button::getPos() {
 	return _box.getGlobalBounds();
 }
 
-void Button::draw(sf::RenderWindow & window, const size_type & posX, const size_type & posY) {
-	_box.setPosition(posX, posY);
-	_text.setPosition(posX, posY);
-	window.draw(_box);
-	window.draw(_text);
-}
-
 void Button::toggle() {
 	if (!_toggled) {
 		_toggled = true;
@@ -30,4 +23,18 @@ void Button::toggle() {
 
 bool Button::isToggled() {
 	return _toggled;
+}
+
+void Button::checkMouse(sf::RenderWindow & window, Button & button) {
+	if (button.getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+		button.toggle();
+		//cout << "Toggled Play" << endl;
+	}
+}
+
+void Button::draw(sf::RenderWindow & window, const size_type & posX, const size_type & posY) {
+	_box.setPosition(posX, posY);
+	_text.setPosition(posX, posY);
+	window.draw(_box);
+	window.draw(_text);
 }

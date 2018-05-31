@@ -46,6 +46,7 @@ bool Note::isColliding(const sf::RectangleShape & line) {
 }
 
 /* ------ Mandachord ------ */
+// Helper functions
 void loadIcon(sf::Texture & icon, const string & path) {
 	if (!icon.loadFromFile(path)) {
 		cout << "Unable to load " << path << endl;
@@ -63,6 +64,7 @@ void loadSound(sf::Sound & sound, sf::SoundBuffer & buffer, const string & path)
 	else sound.setBuffer(buffer);
 }
 
+// Default Ctor
 Mandachord::Mandachord() {
 	sf::Color gray(91, 91, 91, 225);	// Color
 
@@ -205,6 +207,32 @@ Mandachord::Mandachord() {
 						metRow3Note,
 						metRow4Note,
 						metRow5Note };
+
+	// Setup the line that passes over the notes
+	_line = { sf::RectangleShape(sf::Vector2f(780, 2)) };
+	_line.rotate(90);
+	_line.setPosition(10, 35);
+}
+
+// Advance
+void Mandachord::advance(const bool & toggled) {
+	if (toggled) {
+		if (_line.getPosition().x < MEASURE * 60)
+			_line.move(sf::Vector2f(5, 0));
+		else
+			_line.setPosition(10, 35);
+	}
+}
+
+// Check mouse for clicking on the mandachord
+void Mandachord::checkMouse(sf::RenderWindow & window) {
+	for (size_t i = 0; i < MANSIZE; i++) {
+		// Chugga chugga here comes the trainwreck of an if statement :^)
+		if (_mandachord[i].getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+			_mandachord[i].toggle();
+			cout << "Toggled note: " << i << endl;
+		}
+	}
 }
 
 void Mandachord::draw(sf::RenderWindow & window, size_type & posX, size_type & posY) {
@@ -217,4 +245,8 @@ void Mandachord::draw(sf::RenderWindow & window, size_type & posX, size_type & p
 			posY += 60;
 		}
 	}
+}
+
+void Mandachord::play() {
+
 }

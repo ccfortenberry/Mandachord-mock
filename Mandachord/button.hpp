@@ -19,10 +19,10 @@ public:
 	~Button() = default;
 
 	sf::FloatRect getPos();
-
-	void draw(sf::RenderWindow &, const size_type &, const size_type &);
 	void toggle();
 	bool isToggled();
+	void checkMouse(sf::RenderWindow &, Button &);
+	void draw(sf::RenderWindow &, const size_type &, const size_type &);	
 };
 
 #endif //BUTTON_HPP_INCLUDED
