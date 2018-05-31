@@ -16,9 +16,6 @@ using std::deque;
 	* Add a structure for instrument packs
 	* Fix Adau mallet drum sample
 		- Well make them all better really...
-	* Clean this shit up
-		- Make mandachord class
-		- clean up button/note
 */
 
 int main() {
