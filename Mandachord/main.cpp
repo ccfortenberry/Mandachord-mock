@@ -14,8 +14,6 @@ using std::deque;
 
 /* -------------- TODO --------------
 	* Add a structure for instrument packs
-	* Fix Adau mallet drum sample
-		- Well make them all better really...
 */
 
 int main() {
