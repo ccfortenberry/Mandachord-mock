@@ -3,7 +3,9 @@ It's Octavia's Mandachord, but it's a crappy representation of it. Essentially t
 
 ## Dependencies  
 SFML 2.5.0 - Visual Studio 2015 64bit  
-- Because I hate myself :^)
+
+## Build  
+Clone the repo and follow the tutorial for dynamic linkage into Visual Studio on the SFML site (or static linking if you feel spicy).
 
 ## Installation  
 There will be a releases section at some point when I'm done testing it and it is at a point at which I feel comfortable releasing it. Patience...  
