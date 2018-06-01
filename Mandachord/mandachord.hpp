@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include <cstdlib>
 #include <array>
 #include <deque>
 
@@ -46,11 +45,17 @@ private:
 	sf::RectangleShape _line;
 
 public:
+	// Instruments
+	enum Instruments {Adau, Alpha, Beta, Delta, Druk, Epsilon, Gamma, Horos, Plogg};
+	
 	Mandachord();
 	~Mandachord() = default;
 
 	void advance(const bool &);
 	void checkMouse(sf::RenderWindow &);
+	void changeMallets(const unsigned int &);
+	void changeResonator(const unsigned int &);
+	void changeMetronome(const unsigned int &);
 	void draw(sf::RenderWindow &, size_type &, size_type &);
 	void play();
 };

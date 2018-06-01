@@ -1,10 +1,14 @@
 #include "button.hpp"
 
 // Ctor from data
-Button::Button(const sf::Text & text, const sf::Color & color)
-	:_text(text), _box(sf::Vector2f(_text.getLocalBounds().width+2, _text.getLocalBounds().height+8)), _toggled(true)  {
-	_box.setFillColor(color);
+Button::Button(const text_type & text, const sf::Font & font, const unsigned int & size, const sf::Color & color)
+	:_toggled(true)  {
+	_text.setString(text);
+	_text.setFont(font);
+	_text.setCharacterSize(size);
 	_text.setFillColor(sf::Color::Green);
+	_box = { sf::RectangleShape(sf::Vector2f(_text.getLocalBounds().width + 2, _text.getLocalBounds().height + 8)) };
+	_box.setFillColor(color);
 }
 
 // GetPos
