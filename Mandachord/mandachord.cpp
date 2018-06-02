@@ -4,6 +4,8 @@ using std::cout;
 using std::endl;
 #include <string>
 using std::string;
+#include <algorithm>
+using std::move;
 
 
 /* ------ Note ------ */
@@ -72,115 +74,86 @@ void loadSound(sf::Sound & sound, sf::SoundBuffer & buffer, const string & path)
 	//cout << "Sound loaded" << endl;
 }
 
+void loadSoundBuffer(sf::SoundBuffer & buffer, const string & path) {
+	if (!buffer.loadFromFile(path)) {
+		cout << "Unable to load " << path << endl;
+		system("pause");
+		throw EXIT_FAILURE;
+	}
+	//cout << "Sound loaded" << endl;
+}
+
 // Default Ctor
 Mandachord::Mandachord() {
 	// ---------- Mallets section ----------
-	// Color
-	static sf::Color gray(91, 91, 91, 225);
-
 	// Icon
-	static sf::Texture malTexture;
-	loadIcon(malTexture, "icons/mallets_icon.png");
+	loadIcon(_malTexture, "icons/mallets_icon.png");
 
 	// Sound for first row
-	static sf::Sound malRow1Note;
-	static sf::SoundBuffer malRow1Buffer;
-	loadSound(malRow1Note, malRow1Buffer, "instruments/adau/adau_mal_1.wav");
+	loadSound(_malRow1Note, _malRow1Buffer, "instruments/adau/adau_mal_1.wav");
 
 	// Sound for second row
-	static sf::Sound malRow2Note;
-	static sf::SoundBuffer malRow2Buffer;
-	loadSound(malRow2Note, malRow2Buffer, "instruments/adau/adau_mal_2.wav");
+	loadSound(_malRow2Note, _malRow2Buffer, "instruments/adau/adau_mal_2.wav");
 
 	// Sound for third row
-	static sf::Sound malRow3Note;
-	static sf::SoundBuffer malRow3Buffer;
-	loadSound(malRow3Note, malRow3Buffer, "instruments/adau/adau_mal_3.wav");
+	loadSound(_malRow3Note, _malRow3Buffer, "instruments/adau/adau_mal_3.wav");
 
 	// Mallet notes
-	Note malNote1(malTexture, gray);
-	Note malNote2(malTexture, gray);
-	Note malNote3(malTexture, gray);
+	Note malNote1(_malTexture, _gray);
+	Note malNote2(_malTexture, _gray);
+	Note malNote3(_malTexture, _gray);
 
 	// ---------- Resonator section ----------
-	// Color
-	static sf::Color blue(39, 89, 114, 225);
-
 	// Icon
-	static sf::Texture resTexture;
-	loadIcon(resTexture, "icons/resonator_icon.png");
+	loadIcon(_resTexture, "icons/resonator_icon.png");
 
 	// Sound for first row
-	static sf::Sound resRow1Note;
-	static sf::SoundBuffer resRow1Buffer;
-	loadSound(resRow1Note, resRow1Buffer, "instruments/adau/adau_res_1.wav");
+	loadSound(_resRow1Note, _resRow1Buffer, "instruments/adau/adau_res_1.wav");
 
 	// Sound for second row
-	static sf::Sound resRow2Note;
-	static sf::SoundBuffer resRow2Buffer;
-	loadSound(resRow2Note, resRow2Buffer, "instruments/adau/adau_res_2.wav");
+	loadSound(_resRow2Note, _resRow2Buffer, "instruments/adau/adau_res_2.wav");
 
 	// Sound for third row
-	static sf::Sound resRow3Note;
-	static sf::SoundBuffer resRow3Buffer;
-	loadSound(resRow3Note, resRow3Buffer, "instruments/adau/adau_res_3.wav");
+	loadSound(_resRow3Note, _resRow3Buffer, "instruments/adau/adau_res_3.wav");
 
 	// Sound for fourth row
-	static sf::Sound resRow4Note;
-	static sf::SoundBuffer resRow4Buffer;
-	loadSound(resRow4Note, resRow4Buffer, "instruments/adau/adau_res_4.wav");
+	loadSound(_resRow4Note, _resRow4Buffer, "instruments/adau/adau_res_4.wav");
 
 	// Sound for fifth row
-	static sf::Sound resRow5Note;
-	static sf::SoundBuffer resRow5Buffer;
-	loadSound(resRow5Note, resRow5Buffer, "instruments/adau/adau_res_5.wav");
+	loadSound(_resRow5Note, _resRow5Buffer, "instruments/adau/adau_res_5.wav");
 
 	// Resonator notes
-	Note resNote1(resTexture, blue);
-	Note resNote2(resTexture, blue);
-	Note resNote3(resTexture, blue);
-	Note resNote4(resTexture, blue);
-	Note resNote5(resTexture, blue);
+	Note resNote1(_resTexture, _blue);
+	Note resNote2(_resTexture, _blue);
+	Note resNote3(_resTexture, _blue);
+	Note resNote4(_resTexture, _blue);
+	Note resNote5(_resTexture, _blue);
 
 	// ---------- Metronome section ----------
-	// Color
-	static sf::Color pink(107, 58, 113, 225);
-
 	// Icon
-	static sf::Texture metTexture;
-	loadIcon(metTexture, "icons/metronome_icon.png");
+	loadIcon(_metTexture, "icons/metronome_icon.png");
 
 	// Sound for first row
-	static sf::Sound metRow1Note;
-	static sf::SoundBuffer metRow1Buffer;
-	loadSound(metRow1Note, metRow1Buffer, "instruments/adau/adau_met_1.wav");
+	loadSound(_metRow1Note, _metRow1Buffer, "instruments/adau/adau_met_1.wav");
 
 	// Sound for second row
-	static sf::Sound metRow2Note;
-	static sf::SoundBuffer metRow2Buffer;
-	loadSound(metRow2Note, metRow2Buffer, "instruments/adau/adau_met_2.wav");
+	loadSound(_metRow2Note, _metRow2Buffer, "instruments/adau/adau_met_2.wav");
 
 	// Sound for third row
-	static sf::Sound metRow3Note;
-	static sf::SoundBuffer metRow3Buffer;
-	loadSound(metRow3Note, metRow3Buffer, "instruments/adau/adau_met_3.wav");
+	loadSound(_metRow3Note, _metRow3Buffer, "instruments/adau/adau_met_3.wav");
 
 	// Sound for fourth row
-	static sf::Sound metRow4Note;
-	static sf::SoundBuffer metRow4Buffer;
-	loadSound(metRow4Note, metRow4Buffer, "instruments/adau/adau_met_4.wav");
+	loadSound(_metRow4Note, _metRow4Buffer, "instruments/adau/adau_met_4.wav");
 
 	// Sound for fifth row
-	static sf::Sound metRow5Note;
-	static sf::SoundBuffer metRow5Buffer;
-	loadSound(metRow5Note, metRow5Buffer, "instruments/adau/adau_met_5.wav");
+	loadSound(_metRow5Note, _metRow5Buffer, "instruments/adau/adau_met_5.wav");
 
 	// Metronome notes
-	Note metNote1(metTexture, pink);
-	Note metNote2(metTexture, pink);
-	Note metNote3(metTexture, pink);
-	Note metNote4(metTexture, pink);
-	Note metNote5(metTexture, pink);
+	Note metNote1(_metTexture, _pink);
+	Note metNote2(_metTexture, _pink);
+	Note metNote3(_metTexture, _pink);
+	Note metNote4(_metTexture, _pink);
+	Note metNote5(_metTexture, _pink);
 
 	// Setup the instrument
 	for (unsigned int i = 0; i < MANSIZE; i++) {
@@ -206,19 +179,19 @@ Mandachord::Mandachord() {
 	}
 
 	// Setup the sounds
-	_mandachordSounds = { malRow1Note,
-						malRow2Note,
-						malRow3Note,
-						resRow1Note,
-						resRow2Note,
-						resRow3Note,
-						resRow4Note,
-						resRow5Note,
-						metRow1Note,
-						metRow2Note,
-						metRow3Note,
-						metRow4Note,
-						metRow5Note };
+	_mandachordSounds = { _malRow1Note,
+						_malRow2Note,
+						_malRow3Note,
+						_resRow1Note,
+						_resRow2Note,
+						_resRow3Note,
+						_resRow4Note,
+						_resRow5Note,
+						_metRow1Note,
+						_metRow2Note,
+						_metRow3Note,
+						_metRow4Note,
+						_metRow5Note };
 
 	// Setup the line that passes over the notes
 	_line = { sf::RectangleShape(sf::Vector2f(780, 2)) };
@@ -249,86 +222,60 @@ void Mandachord::checkMouse(sf::RenderWindow & window) {
 
 void Mandachord::changeMallets(const inst_type & instrument) {
 	// Sound for first row
-	static sf::Sound malRow1Note;
-	static sf::SoundBuffer malRow1Buffer;
-	loadSound(malRow1Note, malRow1Buffer, "instruments/" + instrument + "/" + instrument + "_mal_1.wav");
-	_mandachordSounds[0] = malRow1Note;
+	loadSoundBuffer(_malRow1Buffer, "instruments/" + instrument + "/" + instrument + "_mal_1.wav");
+	_mandachordSounds[0].setBuffer(_malRow1Buffer);
 
 	// Sound for second row
-	static sf::Sound malRow2Note;
-	static sf::SoundBuffer malRow2Buffer;
-	loadSound(malRow2Note, malRow2Buffer, "instruments/" + instrument + "/" + instrument + "_mal_2.wav");
-	_mandachordSounds[1] = malRow2Note;
+	loadSoundBuffer(_malRow2Buffer, "instruments/" + instrument + "/" + instrument + "_mal_2.wav");
+	_mandachordSounds[1].setBuffer(_malRow2Buffer);
 
 	// Sound for third row
-	static sf::Sound malRow3Note;
-	static sf::SoundBuffer malRow3Buffer;
-	loadSound(malRow3Note, malRow3Buffer, "instruments/" + instrument + "/" + instrument + "_mal_3.wav");
-	_mandachordSounds[2] = malRow3Note;
+	loadSoundBuffer(_malRow3Buffer, "instruments/" + instrument + "/" + instrument + "_mal_3.wav");
+	_mandachordSounds[2].setBuffer(_malRow3Buffer);
 }
 
 void Mandachord::changeResonator(const inst_type & instrument) {
 	// Sound for first row
-	static sf::Sound resRow1Note;
-	static sf::SoundBuffer resRow1Buffer;
-	loadSound(resRow1Note, resRow1Buffer, "instruments/" + instrument + "/" + instrument + "_res_1.wav");
-	_mandachordSounds[3] = resRow1Note;
+	loadSoundBuffer(_resRow1Buffer, "instruments/" + instrument + "/" + instrument + "_res_1.wav");
+	_mandachordSounds[3].setBuffer(_resRow1Buffer);
 
 	// Sound for second row
-	static sf::Sound resRow2Note;
-	static sf::SoundBuffer resRow2Buffer;
-	loadSound(resRow2Note, resRow2Buffer, "instruments/" + instrument + "/" + instrument + "_res_2.wav");
-	_mandachordSounds[4] = resRow2Note;
+	loadSoundBuffer(_resRow2Buffer, "instruments/" + instrument + "/" + instrument + "_res_2.wav");
+	_mandachordSounds[4].setBuffer(_resRow2Buffer);
 
 	// Sound for third row
-	static sf::Sound resRow3Note;
-	static sf::SoundBuffer resRow3Buffer;
-	loadSound(resRow3Note, resRow3Buffer, "instruments/" + instrument + "/" + instrument + "_res_3.wav");
-	_mandachordSounds[5] = resRow3Note;
+	loadSoundBuffer(_resRow3Buffer, "instruments/" + instrument + "/" + instrument + "_res_3.wav");
+	_mandachordSounds[5].setBuffer(_resRow3Buffer);
 
 	// Sound for fourth row
-	static sf::Sound resRow4Note;
-	static sf::SoundBuffer resRow4Buffer;
-	loadSound(resRow4Note, resRow4Buffer, "instruments/" + instrument + "/" + instrument + "_res_4.wav");
-	_mandachordSounds[6] = resRow4Note;
+	loadSoundBuffer(_resRow4Buffer, "instruments/" + instrument + "/" + instrument + "_res_4.wav");
+	_mandachordSounds[6].setBuffer(_resRow4Buffer);
 
 	// Sound for fifth row
-	static sf::Sound resRow5Note;
-	static sf::SoundBuffer resRow5Buffer;
-	loadSound(resRow5Note, resRow5Buffer, "instruments/" + instrument + "/" + instrument + "_res_5.wav");
-	_mandachordSounds[7] = resRow5Note;
+	loadSoundBuffer(_resRow5Buffer, "instruments/" + instrument + "/" + instrument + "_res_5.wav");
+	_mandachordSounds[7].setBuffer(_resRow5Buffer);
 }
 
 void Mandachord::changeMetronome(const inst_type & instrument) {
 	// Sound for first row
-	static sf::Sound metRow1Note;
-	static sf::SoundBuffer metRow1Buffer;
-	loadSound(metRow1Note, metRow1Buffer, "instruments/" + instrument + "/" + instrument + "_met_1.wav");
-	_mandachordSounds[8] = metRow1Note;
+	loadSoundBuffer(_metRow1Buffer, "instruments/" + instrument + "/" + instrument + "_met_1.wav");
+	_mandachordSounds[8].setBuffer(_metRow1Buffer);
 
 	// Sound for second row
-	static sf::Sound metRow2Note;
-	static sf::SoundBuffer metRow2Buffer;
-	loadSound(metRow2Note, metRow2Buffer, "instruments/" + instrument + "/" + instrument + "_met_2.wav");
-	_mandachordSounds[9] = metRow2Note;
+	loadSoundBuffer(_metRow2Buffer, "instruments/" + instrument + "/" + instrument + "_met_2.wav");
+	_mandachordSounds[9].setBuffer(_metRow2Buffer);
 
 	// Sound for third row
-	static sf::Sound metRow3Note;
-	static sf::SoundBuffer metRow3Buffer;
-	loadSound(metRow3Note, metRow3Buffer, "instruments/" + instrument + "/" + instrument + "_met_3.wav");
-	_mandachordSounds[10] = metRow3Note;
+	loadSoundBuffer(_metRow3Buffer, "instruments/" + instrument + "/" + instrument + "_met_3.wav");
+	_mandachordSounds[10].setBuffer(_metRow3Buffer);
 
 	// Sound for fourth row
-	static sf::Sound metRow4Note;
-	static sf::SoundBuffer metRow4Buffer;
-	loadSound(metRow4Note, metRow4Buffer, "instruments/" + instrument + "/" + instrument + "_met_4.wav");
-	_mandachordSounds[11] = metRow4Note;
+	loadSoundBuffer(_metRow4Buffer, "instruments/" + instrument + "/" + instrument + "_met_4.wav");
+	_mandachordSounds[11].setBuffer(_metRow4Buffer);
 
 	// Sound for fifth row
-	static sf::Sound metRow5Note;
-	static sf::SoundBuffer metRow5Buffer;
-	loadSound(metRow5Note, metRow5Buffer, "instruments/" + instrument + "/" + instrument + "_met_5.wav");
-	_mandachordSounds[12] = metRow5Note;
+	loadSoundBuffer(_metRow5Buffer, "instruments/" + instrument + "/" + instrument + "_met_5.wav");
+	_mandachordSounds[12].setBuffer(_metRow5Buffer);
 }
 
 // Draw
