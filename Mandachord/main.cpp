@@ -180,12 +180,12 @@ int main() {
 			ploggButton.draw(window, 10, 265);
 			cancel.draw(window, 10, 295);
 			if (!adauButton.isToggled()) {
-				// change to adau
+				mandachord.changeMallets("adau");
 				mallets.toggle();
 				adauButton.toggle();
 			}
 			else if (!alphaButton.isToggled()) {
-				// change to alpha
+				mandachord.changeMallets("alpha");
 				mallets.toggle();
 				alphaButton.toggle();
 			}
@@ -242,12 +242,12 @@ int main() {
 			ploggButton.draw(window, 10, 265);
 			cancel.draw(window, 10, 295);
 			if (!adauButton.isToggled()) {
-				// change to adau
+				mandachord.changeResonator("adau");
 				resonator.toggle();
 				adauButton.toggle();
 			}
 			else if (!alphaButton.isToggled()) {
-				// change to alpha
+				mandachord.changeResonator("alpha");
 				resonator.toggle();
 				alphaButton.toggle();
 			}
@@ -304,12 +304,12 @@ int main() {
 			ploggButton.draw(window, 10, 265);
 			cancel.draw(window, 10, 295);
 			if (!adauButton.isToggled()) {
-				// change to adau
+				mandachord.changeMetronome("adau");
 				metronome.toggle();
 				adauButton.toggle();
 			}
 			else if (!alphaButton.isToggled()) {
-				// change to alpha
+				mandachord.changeMetronome("alpha");
 				metronome.toggle();
 				alphaButton.toggle();
 			}

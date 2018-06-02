@@ -183,7 +183,7 @@ Mandachord::Mandachord() {
 	Note metNote5(metTexture, pink);
 
 	// Setup the instrument
-	for (size_t i = 0; i < MANSIZE; i++) {
+	for (unsigned int i = 0; i < MANSIZE; i++) {
 		if (i < MALSIZE) {
 			if (i < 64) _mandachord[i] = malNote1;
 			else if (i < 2 * 64) _mandachord[i] = malNote2;
@@ -245,6 +245,90 @@ void Mandachord::checkMouse(sf::RenderWindow & window) {
 			cout << "Toggled note: " << i << endl;
 		}
 	}
+}
+
+void Mandachord::changeMallets(const inst_type & instrument) {
+	// Sound for first row
+	static sf::Sound malRow1Note;
+	static sf::SoundBuffer malRow1Buffer;
+	loadSound(malRow1Note, malRow1Buffer, "instruments/" + instrument + "/" + instrument + "_mal_1.wav");
+	_mandachordSounds[0] = malRow1Note;
+
+	// Sound for second row
+	static sf::Sound malRow2Note;
+	static sf::SoundBuffer malRow2Buffer;
+	loadSound(malRow2Note, malRow2Buffer, "instruments/" + instrument + "/" + instrument + "_mal_2.wav");
+	_mandachordSounds[1] = malRow2Note;
+
+	// Sound for third row
+	static sf::Sound malRow3Note;
+	static sf::SoundBuffer malRow3Buffer;
+	loadSound(malRow3Note, malRow3Buffer, "instruments/" + instrument + "/" + instrument + "_mal_3.wav");
+	_mandachordSounds[2] = malRow3Note;
+}
+
+void Mandachord::changeResonator(const inst_type & instrument) {
+	// Sound for first row
+	static sf::Sound resRow1Note;
+	static sf::SoundBuffer resRow1Buffer;
+	loadSound(resRow1Note, resRow1Buffer, "instruments/" + instrument + "/" + instrument + "_res_1.wav");
+	_mandachordSounds[3] = resRow1Note;
+
+	// Sound for second row
+	static sf::Sound resRow2Note;
+	static sf::SoundBuffer resRow2Buffer;
+	loadSound(resRow2Note, resRow2Buffer, "instruments/" + instrument + "/" + instrument + "_res_2.wav");
+	_mandachordSounds[4] = resRow2Note;
+
+	// Sound for third row
+	static sf::Sound resRow3Note;
+	static sf::SoundBuffer resRow3Buffer;
+	loadSound(resRow3Note, resRow3Buffer, "instruments/" + instrument + "/" + instrument + "_res_3.wav");
+	_mandachordSounds[5] = resRow3Note;
+
+	// Sound for fourth row
+	static sf::Sound resRow4Note;
+	static sf::SoundBuffer resRow4Buffer;
+	loadSound(resRow4Note, resRow4Buffer, "instruments/" + instrument + "/" + instrument + "_res_4.wav");
+	_mandachordSounds[6] = resRow4Note;
+
+	// Sound for fifth row
+	static sf::Sound resRow5Note;
+	static sf::SoundBuffer resRow5Buffer;
+	loadSound(resRow5Note, resRow5Buffer, "instruments/" + instrument + "/" + instrument + "_res_5.wav");
+	_mandachordSounds[7] = resRow5Note;
+}
+
+void Mandachord::changeMetronome(const inst_type & instrument) {
+	// Sound for first row
+	static sf::Sound metRow1Note;
+	static sf::SoundBuffer metRow1Buffer;
+	loadSound(metRow1Note, metRow1Buffer, "instruments/" + instrument + "/" + instrument + "_met_1.wav");
+	_mandachordSounds[8] = metRow1Note;
+
+	// Sound for second row
+	static sf::Sound metRow2Note;
+	static sf::SoundBuffer metRow2Buffer;
+	loadSound(metRow2Note, metRow2Buffer, "instruments/" + instrument + "/" + instrument + "_met_2.wav");
+	_mandachordSounds[9] = metRow2Note;
+
+	// Sound for third row
+	static sf::Sound metRow3Note;
+	static sf::SoundBuffer metRow3Buffer;
+	loadSound(metRow3Note, metRow3Buffer, "instruments/" + instrument + "/" + instrument + "_met_3.wav");
+	_mandachordSounds[10] = metRow3Note;
+
+	// Sound for fourth row
+	static sf::Sound metRow4Note;
+	static sf::SoundBuffer metRow4Buffer;
+	loadSound(metRow4Note, metRow4Buffer, "instruments/" + instrument + "/" + instrument + "_met_4.wav");
+	_mandachordSounds[11] = metRow4Note;
+
+	// Sound for fifth row
+	static sf::Sound metRow5Note;
+	static sf::SoundBuffer metRow5Buffer;
+	loadSound(metRow5Note, metRow5Buffer, "instruments/" + instrument + "/" + instrument + "_met_5.wav");
+	_mandachordSounds[12] = metRow5Note;
 }
 
 // Draw

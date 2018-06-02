@@ -5,6 +5,7 @@
 #include <SFML/Audio.hpp>
 #include <array>
 #include <deque>
+#include <string>
 
 class Note {
 private:
@@ -30,6 +31,7 @@ public:
 class Mandachord {
 private:
 	using size_type = float;
+	using inst_type = std::string;
 	
 	const size_t MALSIZE = 3 * 64;
 	const size_t RESSIZE = 5 * 64;
@@ -45,17 +47,14 @@ private:
 	sf::RectangleShape _line;
 
 public:
-	// Instruments
-	enum Instruments {Adau, Alpha, Beta, Delta, Druk, Epsilon, Gamma, Horos, Plogg};
-	
 	Mandachord();
 	~Mandachord() = default;
 
 	void advance(const bool &);
 	void checkMouse(sf::RenderWindow &);
-	void changeMallets(const unsigned int &);
-	void changeResonator(const unsigned int &);
-	void changeMetronome(const unsigned int &);
+	void changeMallets(const inst_type &);
+	void changeResonator(const inst_type &);
+	void changeMetronome(const inst_type &);
 	void draw(sf::RenderWindow &, size_type &, size_type &);
 	void play();
 };
