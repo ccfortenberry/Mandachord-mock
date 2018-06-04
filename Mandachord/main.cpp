@@ -1,26 +1,22 @@
 #include "button.hpp"
 #include "mandachord.hpp"
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include <Windows.h>
-#include <Shlwapi.h>
-#pragma comment(lib, "shlwapi.lib")
+
 #include <string>
 using std::string;
 #include <iostream>
 using std::cout;
 using std::endl;
 #include <fstream>
+using std::fstream;
 using std::ifstream;
 using std::ofstream;
 #include <array>
 using std::array;
 #include <deque>
 using std::deque;
-
-/* -------------- TODO --------------
-	* Add a structure for instrument packs
-*/
 
 int main() {
 	/* ---------- Initialize the window ---------- */
@@ -103,6 +99,9 @@ int main() {
 
 	// ---------- Mandachord Megasection ----------
 	Mandachord mandachord;
+	string currentMallets = "adau";
+	string currentResonator = "adau";
+	string currentMetronome = "adau";
 
 	/* ---------- File IO stuff ---------- */
 	sf::String input;
@@ -177,19 +176,12 @@ int main() {
 						inputDisplay.setString(input);
 					}
 					else if (event.text.unicode == '\r' && input.getSize() > 0) {
-						//string path = "songs/" + input.toAnsiString() + ".txt";
-						char buff[FILENAME_MAX];
-						//GetCurrentDirectoryA(FILENAME_MAX, buff);
-						GetModuleFileNameA(NULL, buff, FILENAME_MAX);
-						PathRemoveFileSpecA(buff);
-						PathAddBackslashA(buff);
-						string currentDir = buff;
-						string path = currentDir + "songs\\test.txt"; // try getting current directory
-						//cout << path << endl;
-						ofstream outToFile(path);
+						string path = "songs/" + input.toAnsiString() + ".uwu";
+						ofstream outToFile;
+						outToFile.open(path);
 						cout << "Writing to file " << path << endl;
 						if (outToFile.is_open()) {
-							mandachord.saveToFile(outToFile);
+							mandachord.saveToFile(outToFile, currentMallets, currentResonator, currentMetronome);
 							outToFile.close();
 							cout << "Written to file: " << path << endl;
 						}
@@ -255,11 +247,13 @@ int main() {
 			cancel.draw(window, 10, 295);
 			if (!adauButton.isToggled()) {
 				mandachord.changeMallets("adau");
+				currentMallets = "adau";
 				mallets.toggle();
 				adauButton.toggle();
 			}
 			else if (!alphaButton.isToggled()) {
 				mandachord.changeMallets("alpha");
+				currentMallets = "alpha";
 				mallets.toggle();
 				alphaButton.toggle();
 			}
@@ -317,11 +311,13 @@ int main() {
 			cancel.draw(window, 10, 295);
 			if (!adauButton.isToggled()) {
 				mandachord.changeResonator("adau");
+				currentResonator = "adau";
 				resonator.toggle();
 				adauButton.toggle();
 			}
 			else if (!alphaButton.isToggled()) {
 				mandachord.changeResonator("alpha");
+				currentResonator = "alpha";
 				resonator.toggle();
 				alphaButton.toggle();
 			}
@@ -379,11 +375,13 @@ int main() {
 			cancel.draw(window, 10, 295);
 			if (!adauButton.isToggled()) {
 				mandachord.changeMetronome("adau");
+				currentMetronome = "adau";
 				metronome.toggle();
 				adauButton.toggle();
 			}
 			else if (!alphaButton.isToggled()) {
 				mandachord.changeMetronome("alpha");
+				currentMetronome = "alpha";
 				metronome.toggle();
 				alphaButton.toggle();
 			}

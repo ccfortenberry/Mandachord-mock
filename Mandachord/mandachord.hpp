@@ -101,8 +101,8 @@ public:
 	void changeMetronome(const inst_type &);
 	void draw(sf::RenderWindow &, size_type &, size_type &);
 	void play();
-	void saveToFile(std::ofstream &);
-	void loadFmFile(const std::ifstream &);
+	void saveToFile(std::ofstream &, const inst_type &, const inst_type &, const inst_type &);
+	void loadFmFile(const std::ifstream &, inst_type &, inst_type &, inst_type &);
 };
 
 #endif //MANDACHORD_HPP_INCLUDED

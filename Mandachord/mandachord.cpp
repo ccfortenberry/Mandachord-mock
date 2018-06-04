@@ -347,15 +347,15 @@ void Mandachord::play() {
 	}
 }
 
-void Mandachord::saveToFile(std::ofstream & out) {
-	out << "Mallets: " << endl;
-	out << "Resonator: " << endl;
-	out << "Metronome: " << endl;
+void Mandachord::saveToFile(std::ofstream & out, const inst_type & mallets, const inst_type & resonator, const inst_type & metronome) {
+	out << "Mallets: " << mallets << endl;
+	out << "Resonator: " << resonator << endl;
+	out << "Metronome: " << metronome << endl;
 	for (unsigned int i = 0; i < MANSIZE; i++) {
 		out << i << ": " << _mandachord[i].isToggled() << endl;
 	}
 }
 
-void Mandachord::loadFmFile(const std::ifstream & in) {
+void Mandachord::loadFmFile(const std::ifstream & in, inst_type &, inst_type &, inst_type &) {
 
 }
