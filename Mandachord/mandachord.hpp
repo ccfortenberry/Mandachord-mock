@@ -6,6 +6,7 @@
 #include <array>
 #include <deque>
 #include <string>
+#include <fstream>
 
 class Note {
 private:
@@ -100,6 +101,8 @@ public:
 	void changeMetronome(const inst_type &);
 	void draw(sf::RenderWindow &, size_type &, size_type &);
 	void play();
+	void saveToFile(std::ofstream &);
+	void loadFmFile(const std::ifstream &);
 };
 
 #endif //MANDACHORD_HPP_INCLUDED

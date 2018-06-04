@@ -61,7 +61,6 @@ void loadIcon(sf::Texture & icon, const string & path) {
 		system("pause");
 		throw EXIT_FAILURE;
 	}
-	//cout << "Icon loaded" << endl;
 }
 
 void loadSound(sf::Sound & sound, sf::SoundBuffer & buffer, const string & path) {
@@ -71,16 +70,6 @@ void loadSound(sf::Sound & sound, sf::SoundBuffer & buffer, const string & path)
 		throw EXIT_FAILURE;
 	}
 	else sound.setBuffer(buffer);
-	//cout << "Sound loaded" << endl;
-}
-
-void loadSoundBuffer(sf::SoundBuffer & buffer, const string & path) {
-	if (!buffer.loadFromFile(path)) {
-		cout << "Unable to load " << path << endl;
-		system("pause");
-		throw EXIT_FAILURE;
-	}
-	//cout << "Sound loaded" << endl;
 }
 
 // Default Ctor
@@ -215,67 +204,54 @@ void Mandachord::checkMouse(sf::RenderWindow & window) {
 		// Chugga chugga here comes the trainwreck of an if statement :^)
 		if (_mandachord[i].getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
 			_mandachord[i].toggle();
-			cout << "Toggled note: " << i << endl;
+			//cout << "Toggled note: " << i << endl;
 		}
 	}
 }
 
 void Mandachord::changeMallets(const inst_type & instrument) {
 	// Sound for first row
-	loadSoundBuffer(_malRow1Buffer, "instruments/" + instrument + "/" + instrument + "_mal_1.wav");
-	_mandachordSounds[0].setBuffer(_malRow1Buffer);
+	loadSound(_malRow1Note, _malRow1Buffer, "instruments/" + instrument + "/" + instrument + "_mal_1.wav");
 
 	// Sound for second row
-	loadSoundBuffer(_malRow2Buffer, "instruments/" + instrument + "/" + instrument + "_mal_2.wav");
-	_mandachordSounds[1].setBuffer(_malRow2Buffer);
+	loadSound(_malRow2Note, _malRow2Buffer, "instruments/" + instrument + "/" + instrument + "_mal_2.wav");
 
 	// Sound for third row
-	loadSoundBuffer(_malRow3Buffer, "instruments/" + instrument + "/" + instrument + "_mal_3.wav");
-	_mandachordSounds[2].setBuffer(_malRow3Buffer);
+	loadSound(_malRow3Note, _malRow3Buffer, "instruments/" + instrument + "/" + instrument + "_mal_3.wav");
 }
 
 void Mandachord::changeResonator(const inst_type & instrument) {
 	// Sound for first row
-	loadSoundBuffer(_resRow1Buffer, "instruments/" + instrument + "/" + instrument + "_res_1.wav");
-	_mandachordSounds[3].setBuffer(_resRow1Buffer);
+	loadSound(_resRow1Note, _resRow1Buffer, "instruments/" + instrument + "/" + instrument + "_res_1.wav");
 
 	// Sound for second row
-	loadSoundBuffer(_resRow2Buffer, "instruments/" + instrument + "/" + instrument + "_res_2.wav");
-	_mandachordSounds[4].setBuffer(_resRow2Buffer);
+	loadSound(_resRow2Note, _resRow2Buffer, "instruments/" + instrument + "/" + instrument + "_res_2.wav");
 
 	// Sound for third row
-	loadSoundBuffer(_resRow3Buffer, "instruments/" + instrument + "/" + instrument + "_res_3.wav");
-	_mandachordSounds[5].setBuffer(_resRow3Buffer);
+	loadSound(_resRow3Note, _resRow3Buffer, "instruments/" + instrument + "/" + instrument + "_res_3.wav");
 
 	// Sound for fourth row
-	loadSoundBuffer(_resRow4Buffer, "instruments/" + instrument + "/" + instrument + "_res_4.wav");
-	_mandachordSounds[6].setBuffer(_resRow4Buffer);
+	loadSound(_resRow4Note, _resRow4Buffer, "instruments/" + instrument + "/" + instrument + "_res_4.wav");
 
 	// Sound for fifth row
-	loadSoundBuffer(_resRow5Buffer, "instruments/" + instrument + "/" + instrument + "_res_5.wav");
-	_mandachordSounds[7].setBuffer(_resRow5Buffer);
+	loadSound(_resRow5Note, _resRow5Buffer, "instruments/" + instrument + "/" + instrument + "_res_5.wav");
 }
 
 void Mandachord::changeMetronome(const inst_type & instrument) {
 	// Sound for first row
-	loadSoundBuffer(_metRow1Buffer, "instruments/" + instrument + "/" + instrument + "_met_1.wav");
-	_mandachordSounds[8].setBuffer(_metRow1Buffer);
+	loadSound(_metRow1Note, _metRow1Buffer, "instruments/" + instrument + "/" + instrument + "_met_1.wav");
 
 	// Sound for second row
-	loadSoundBuffer(_metRow2Buffer, "instruments/" + instrument + "/" + instrument + "_met_2.wav");
-	_mandachordSounds[9].setBuffer(_metRow2Buffer);
+	loadSound(_metRow2Note, _metRow2Buffer, "instruments/" + instrument + "/" + instrument + "_met_2.wav");
 
 	// Sound for third row
-	loadSoundBuffer(_metRow3Buffer, "instruments/" + instrument + "/" + instrument + "_met_3.wav");
-	_mandachordSounds[10].setBuffer(_metRow3Buffer);
+	loadSound(_metRow3Note, _metRow3Buffer, "instruments/" + instrument + "/" + instrument + "_met_3.wav");
 
 	// Sound for fourth row
-	loadSoundBuffer(_metRow4Buffer, "instruments/" + instrument + "/" + instrument + "_met_4.wav");
-	_mandachordSounds[11].setBuffer(_metRow4Buffer);
+	loadSound(_metRow4Note, _metRow4Buffer, "instruments/" + instrument + "/" + instrument + "_met_4.wav");
 
 	// Sound for fifth row
-	loadSoundBuffer(_metRow5Buffer, "instruments/" + instrument + "/" + instrument + "_met_5.wav");
-	_mandachordSounds[12].setBuffer(_metRow5Buffer);
+	loadSound(_metRow5Note, _metRow5Buffer, "instruments/" + instrument + "/" + instrument + "_met_5.wav");
 }
 
 // Draw
@@ -297,7 +273,6 @@ void Mandachord::play() {
 	// This makes me physically sick but I'll clean it up later...
 	for (unsigned int i = 0; i < MANSIZE; i++) {
 		if (_mandachord[i].isToggled() && _mandachord[i].isColliding(_line)) {
-			cout << "Collision!" << endl;
 			if (i < 64) {
 				_nowPlaying.emplace_back(_mandachordSounds[0]);
 				_NPIndex++;
@@ -370,4 +345,17 @@ void Mandachord::play() {
 		_nowPlaying.pop_front();
 		_NPIndex--;
 	}
+}
+
+void Mandachord::saveToFile(std::ofstream & out) {
+	out << "Mallets: " << endl;
+	out << "Resonator: " << endl;
+	out << "Metronome: " << endl;
+	for (unsigned int i = 0; i < MANSIZE; i++) {
+		out << i << ": " << _mandachord[i].isToggled() << endl;
+	}
+}
+
+void Mandachord::loadFmFile(const std::ifstream & in) {
+
 }

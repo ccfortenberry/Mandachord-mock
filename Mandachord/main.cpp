@@ -2,11 +2,17 @@
 #include "mandachord.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <Windows.h>
+#include <Shlwapi.h>
+#pragma comment(lib, "shlwapi.lib")
 #include <string>
 using std::string;
 #include <iostream>
 using std::cout;
 using std::endl;
+#include <fstream>
+using std::ifstream;
+using std::ofstream;
 #include <array>
 using std::array;
 #include <deque>
@@ -39,9 +45,9 @@ int main() {
 	/* ---------- Text caption ---------- */
 	sf::Text text;
 	text.setFont(font);
-	text.setString("MANDACHORD MOCK");
 	text.setCharacterSize(24);
 	text.setStyle(sf::Text::Bold);
+	text.setString("MANDACHORD MOCK");
 
 	/* ---------- Play button ---------- */
 	Button play("PLAY", font, 18, sf::Color::White);
@@ -98,6 +104,18 @@ int main() {
 	// ---------- Mandachord Megasection ----------
 	Mandachord mandachord;
 
+	/* ---------- File IO stuff ---------- */
+	sf::String input;
+	sf::Text inputDisplay;
+	inputDisplay.setFont(font);
+	inputDisplay.setCharacterSize(24);
+
+	sf::Text inputPrompt;
+	inputPrompt.setFont(font);
+	inputPrompt.setCharacterSize(24);
+	inputPrompt.setStyle(sf::Text::Bold);
+	inputPrompt.setString("FILENAME: ");
+
 	/* ---------- Running application ---------- */
 	while (window.isOpen())
 	{
@@ -126,7 +144,7 @@ int main() {
 				}
 				break;
 			case (sf::Event::MouseButtonPressed):
-				if (mallets.isToggled() && resonator.isToggled() && metronome.isToggled()) {
+				if (mallets.isToggled() && resonator.isToggled() && metronome.isToggled() && save.isToggled() && load.isToggled()) {
 					mandachord.checkMouse(window);
 					play.checkMouse(window);
 					save.checkMouse(window);
@@ -146,6 +164,62 @@ int main() {
 					horosButton.checkMouse(window);
 					ploggButton.checkMouse(window);
 					cancel.checkMouse(window);
+				}
+				break;
+			case (sf::Event::TextEntered):
+				if (!save.isToggled()) {
+					if (event.text.unicode == '\b' && input.getSize() > 0) {
+						input.erase(input.getSize() - 1, 1);
+						inputDisplay.setString(input);
+					}
+					else if (event.text.unicode < 128 && event.text.unicode != '\b' && event.text.unicode != '\r') {
+						input += event.text.unicode;
+						inputDisplay.setString(input);
+					}
+					else if (event.text.unicode == '\r' && input.getSize() > 0) {
+						//string path = "songs/" + input.toAnsiString() + ".txt";
+						char buff[FILENAME_MAX];
+						//GetCurrentDirectoryA(FILENAME_MAX, buff);
+						GetModuleFileNameA(NULL, buff, FILENAME_MAX);
+						PathRemoveFileSpecA(buff);
+						PathAddBackslashA(buff);
+						string currentDir = buff;
+						string path = currentDir + "songs\\test.txt"; // try getting current directory
+						//cout << path << endl;
+						ofstream outToFile(path);
+						cout << "Writing to file " << path << endl;
+						if (outToFile.is_open()) {
+							mandachord.saveToFile(outToFile);
+							outToFile.close();
+							cout << "Written to file: " << path << endl;
+						}
+						else cout << "Could not write to file: " << path << endl;
+						input.clear();
+						inputDisplay.setString(input);
+						save.toggle();
+					}
+				}
+				else if (!load.isToggled()) {
+					if (event.text.unicode == '\b' && input.getSize() > 0) {
+						input.erase(input.getSize() - 1, 1);
+						inputDisplay.setString(input);
+					}
+					else if (event.text.unicode < 128 && event.text.unicode != '\b' && event.text.unicode != '\r') {
+						input += event.text.unicode;
+						inputDisplay.setString(input);
+					}
+					else if (event.text.unicode == '\r' && input.getSize() > 0) {
+						string path = "songs\\" + input.toAnsiString() + ".txt";
+						ifstream inFromFile(path);
+						if (inFromFile.is_open()) {
+							// Do something
+							inFromFile.close();
+						}
+						else cout << "Could not open file: " << path << endl;
+						input.clear();
+						inputDisplay.setString(input);
+						load.toggle();
+					}
 				}
 				break;
 			case (sf::Event::Closed):
@@ -351,6 +425,34 @@ int main() {
 			else if (!cancel.isToggled()) {
 				metronome.toggle();
 				cancel.toggle();
+			}
+		}
+		else if (!save.isToggled()) {
+			window.draw(screen);
+			inputPrompt.setPosition(100, 200);
+			window.draw(inputPrompt);
+			inputDisplay.setPosition(340, 200);
+			window.draw(inputDisplay);
+			cancel.draw(window, view.getSize().x - 140, view.getSize().y - 50);
+			if (!cancel.isToggled()) {
+				save.toggle();
+				cancel.toggle();
+				input.clear();
+				inputDisplay.setString(input);
+			}
+		}
+		else if (!load.isToggled()) {
+			window.draw(screen);
+			inputPrompt.setPosition(100, 200);
+			window.draw(inputPrompt);
+			inputDisplay.setPosition(340, 200);
+			window.draw(inputDisplay);
+			cancel.draw(window, view.getSize().x - 140, view.getSize().y - 50);
+			if (!cancel.isToggled()) {
+				load.toggle();
+				cancel.toggle();
+				input.clear();
+				inputDisplay.setString(input);
 			}
 		}
 		window.display();
