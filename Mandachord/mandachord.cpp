@@ -4,6 +4,7 @@ using std::cout;
 using std::endl;
 #include <string>
 using std::string;
+using std::getline;
 #include <algorithm>
 using std::move;
 
@@ -348,14 +349,29 @@ void Mandachord::play() {
 }
 
 void Mandachord::saveToFile(std::ofstream & out, const inst_type & mallets, const inst_type & resonator, const inst_type & metronome) {
-	out << "Mallets: " << mallets << endl;
-	out << "Resonator: " << resonator << endl;
-	out << "Metronome: " << metronome << endl;
+	out << mallets << endl;
+	out << resonator << endl;
+	out << metronome << endl;
 	for (unsigned int i = 0; i < MANSIZE; i++) {
-		out << i << ": " << _mandachord[i].isToggled() << endl;
+		out << _mandachord[i].isToggled() << endl;
 	}
 }
 
-void Mandachord::loadFmFile(const std::ifstream & in, inst_type &, inst_type &, inst_type &) {
-
+void Mandachord::loadFmFile(std::ifstream & in, inst_type & mallets, inst_type & resonator, inst_type & metronome) {
+	getline(in, mallets);
+	getline(in, resonator);
+	getline(in, metronome);
+	changeMallets(mallets);
+	changeResonator(resonator);
+	changeMetronome(metronome);
+	string buffer;
+	for (unsigned int i = 0; i < MANSIZE; i++) {
+		getline(in, buffer);
+		if (buffer == "1") {
+			if (!_mandachord[i].isToggled()) _mandachord[i].toggle();
+		}
+		else {
+			if (_mandachord[i].isToggled()) _mandachord[i].toggle();
+		}
+	}
 }

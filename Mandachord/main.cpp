@@ -183,7 +183,6 @@ int main() {
 						if (outToFile.is_open()) {
 							mandachord.saveToFile(outToFile, currentMallets, currentResonator, currentMetronome);
 							outToFile.close();
-							cout << "Written to file: " << path << endl;
 						}
 						else cout << "Could not write to file: " << path << endl;
 						input.clear();
@@ -201,10 +200,10 @@ int main() {
 						inputDisplay.setString(input);
 					}
 					else if (event.text.unicode == '\r' && input.getSize() > 0) {
-						string path = "songs\\" + input.toAnsiString() + ".txt";
+						string path = "songs/" + input.toAnsiString() + ".uwu";
 						ifstream inFromFile(path);
 						if (inFromFile.is_open()) {
-							// Do something
+							mandachord.loadFmFile(inFromFile, currentMallets, currentResonator, currentMetronome);
 							inFromFile.close();
 						}
 						else cout << "Could not open file: " << path << endl;
