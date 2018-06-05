@@ -269,30 +269,35 @@ int main() {
 			cancel.draw(window, view.getSize().x - 140, view.getSize().y - 50);
 			if (!measure1Button.isToggled()) {
 				measure = "1";
+				loop.updateText("LOOP: " + measure);
 				loopMeasure = 1;
 				loop.toggle();
 				measure1Button.toggle();
 			}
 			else if (!measure2Button.isToggled()) {
 				measure = "2";
+				loop.updateText("LOOP: " + measure);
 				loopMeasure = 2;
 				loop.toggle();
 				measure2Button.toggle();
 			}
 			else if (!measure3Button.isToggled()) {
 				measure = "3";
+				loop.updateText("LOOP: " + measure);
 				loopMeasure = 3;
 				loop.toggle();
 				measure3Button.toggle();
 			}
 			else if (!measure4Button.isToggled()) {
 				measure = "4";
+				loop.updateText("LOOP: " + measure);
 				loopMeasure = 4;
 				loop.toggle();
 				measure4Button.toggle();
 			}
 			else if (!measureAllButton.isToggled()) {
 				measure = "FULL";
+				loop.updateText("LOOP: " + measure);
 				loopMeasure = 0;
 				loop.toggle();
 				measureAllButton.toggle();

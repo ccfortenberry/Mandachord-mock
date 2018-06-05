@@ -21,6 +21,7 @@ public:
 	sf::FloatRect getPos();
 	void toggle();
 	bool isToggled();
+	void updateText(const text_type &);
 	void checkMouse(sf::RenderWindow &);
 	void draw(sf::RenderWindow &, const size_type &, const size_type &);
 };

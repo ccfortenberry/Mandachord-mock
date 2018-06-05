@@ -33,6 +33,11 @@ bool Button::isToggled() {
 	return _toggled;
 }
 
+// UpdateText
+void Button::updateText(const text_type & text) {
+	_text.setString(text);
+}
+
 // Check mouse position on button
 void Button::checkMouse(sf::RenderWindow & window) {
 	if (getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) 
