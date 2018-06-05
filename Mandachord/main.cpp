@@ -327,37 +327,44 @@ int main() {
 				alphaButton.toggle();
 			}
 			else if (!betaButton.isToggled()) {
-				// change to beta
+				mandachord.changeMallets("beta");
+				currentMallets = "beta";
 				mallets.toggle();
 				betaButton.toggle();
 			}
 			else if (!deltaButton.isToggled()) {
-				// change to delta
+				mandachord.changeMallets("delta");
+				currentMallets = "delta";
 				mallets.toggle();
 				deltaButton.toggle();
 			}
 			else if (!drukButton.isToggled()) {
-				// change to druk
+				mandachord.changeMallets("druk");
+				currentMallets = "druk";
 				mallets.toggle();
 				drukButton.toggle();
 			}
 			else if (!epsilonButton.isToggled()) {
-				// change to epsilon
+				mandachord.changeMallets("epsilon");
+				currentMallets = "epsilon";
 				mallets.toggle();
 				epsilonButton.toggle();
 			}
 			else if (!gammaButton.isToggled()) {
-				// change to gamma
+				mandachord.changeMallets("gamma");
+				currentMallets = "gamma";
 				mallets.toggle();
 				gammaButton.toggle();
 			}
 			else if (!horosButton.isToggled()) {
-				// change to horos
+				mandachord.changeMallets("horos");
+				currentMallets = "horos";
 				mallets.toggle();
 				horosButton.toggle();
 			}
 			else if (!ploggButton.isToggled()) {
-				// change to plogg
+				mandachord.changeMallets("plogg");
+				currentMallets = "plogg";
 				mallets.toggle();
 				ploggButton.toggle();
 			}
@@ -391,37 +398,44 @@ int main() {
 				alphaButton.toggle();
 			}
 			else if (!betaButton.isToggled()) {
-				// change to beta
+				mandachord.changeResonator("beta");
+				currentResonator = "beta";
 				resonator.toggle();
 				betaButton.toggle();
 			}
 			else if (!deltaButton.isToggled()) {
-				// change to delta
+				mandachord.changeResonator("delta");
+				currentResonator = "delta";
 				resonator.toggle();
 				deltaButton.toggle();
 			}
 			else if (!drukButton.isToggled()) {
-				// change to druk
+				mandachord.changeResonator("druk");
+				currentResonator = "druk";
 				resonator.toggle();
 				drukButton.toggle();
 			}
 			else if (!epsilonButton.isToggled()) {
-				// change to epsilon
+				mandachord.changeResonator("epsilon");
+				currentResonator = "epsilon";
 				resonator.toggle();
 				epsilonButton.toggle();
 			}
 			else if (!gammaButton.isToggled()) {
-				// change to gamma
+				mandachord.changeResonator("gamma");
+				currentResonator = "gamma";
 				resonator.toggle();
 				gammaButton.toggle();
 			}
 			else if (!horosButton.isToggled()) {
-				// change to horos
+				mandachord.changeResonator("horos");
+				currentResonator = "horos";
 				resonator.toggle();
 				horosButton.toggle();
 			}
 			else if (!ploggButton.isToggled()) {
-				// change to plogg
+				mandachord.changeResonator("plogg");
+				currentResonator = "plogg";
 				resonator.toggle();
 				ploggButton.toggle();
 			}
@@ -455,37 +469,44 @@ int main() {
 				alphaButton.toggle();
 			}
 			else if (!betaButton.isToggled()) {
-				// change to beta
+				mandachord.changeMetronome("beta");
+				currentMetronome = "beta";
 				metronome.toggle();
 				betaButton.toggle();
 			}
 			else if (!deltaButton.isToggled()) {
-				// change to delta
+				mandachord.changeMetronome("delta");
+				currentMetronome = "delta";
 				metronome.toggle();
 				deltaButton.toggle();
 			}
 			else if (!drukButton.isToggled()) {
-				// change to druk
+				mandachord.changeMetronome("druk");
+				currentMetronome = "druk";
 				metronome.toggle();
 				drukButton.toggle();
 			}
 			else if (!epsilonButton.isToggled()) {
-				// change to epsilon
+				mandachord.changeMetronome("epsilon");
+				currentMetronome = "epsilon";
 				metronome.toggle();
 				epsilonButton.toggle();
 			}
 			else if (!gammaButton.isToggled()) {
-				// change to gamma
+				mandachord.changeMetronome("gamma");
+				currentMetronome = "gamma";
 				metronome.toggle();
 				gammaButton.toggle();
 			}
 			else if (!horosButton.isToggled()) {
-				// change to horos
+				mandachord.changeMetronome("horos");
+				currentMetronome = "horos";
 				metronome.toggle();
 				horosButton.toggle();
 			}
 			else if (!ploggButton.isToggled()) {
-				// change to plogg
+				mandachord.changeMetronome("plogg");
+				currentMetronome = "plogg";
 				metronome.toggle();
 				ploggButton.toggle();
 			}
