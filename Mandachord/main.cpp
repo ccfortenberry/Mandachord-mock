@@ -145,20 +145,17 @@ int main() {
 		{
 			switch (event.type) {
 			case (sf::Event::KeyPressed):
-				if (event.key.code == sf::Keyboard::Right) {
-					view.move(10, 0);
-					window.setView(view);
+				if (event.key.code == sf::Keyboard::Space) {
+					play.toggle();
 				}
-				if (event.key.code == sf::Keyboard::Left) {
+				break;
+			case (sf::Event::MouseWheelScrolled):
+				if (event.mouseWheelScroll.delta > 0) {
 					view.move(-10, 0);
 					window.setView(view);
 				}
-				if (event.key.code == sf::Keyboard::Up) {
-					view.move(0, -10);
-					window.setView(view);
-				}
-				if (event.key.code == sf::Keyboard::Down) {
-					view.move(0, 10);
+				else if (event.mouseWheelScroll.delta < 0) {
+					view.move(10, 0);
 					window.setView(view);
 				}
 				break;
@@ -205,7 +202,6 @@ int main() {
 						string path = "songs/" + input.toAnsiString() + ".uwu";
 						ofstream outToFile;
 						outToFile.open(path);
-						cout << "Writing to file " << path << endl;
 						if (outToFile.is_open()) {
 							mandachord.saveToFile(outToFile, currentMallets, currentResonator, currentMetronome);
 							outToFile.close();
