@@ -5,10 +5,13 @@ It's Octavia's Mandachord, but it's a crappy representation of it. Essentially t
 SFML 2.5.0 - Visual Studio 2015 64bit  
 
 ## Build  
-Clone the repo and follow the tutorial for dynamic linkage into Visual Studio on the SFML site (or static linking if you feel spicy).
+Clone the repo and follow the tutorial for dynamic linkage into Visual Studio on the SFML site (or static linking if you're feeling spicy).
 
 ## Installation  
-There will be a releases section at some point when I'm done testing it and it is at a point at which I feel comfortable releasing it. Patience...  
+If you don't want to deal with messing around in the source code and just want an app that works, there will be an entry in the Releases section soon. Patience...  
 
-## Controls  
-[THIS IS WILL BE CHANGED] Arrow keys to move the screen around, click on buttons to toggle things. Easy enough.
+## Controls and Features  
+- Spacebar: Toggles play/pause  
+- Scroll wheel: Up to go left, down to go right  
+- Click on things to toggle them  
+- Save and load songs with ease  
