@@ -31,7 +31,7 @@ int main() {
 
 	/* ---------- Generate the stuff that goes on the screen ---------- */
 	/* ---------- Fan font ---------- */
-	sf::Font font; // font source (u: Pitchers): https://forums.warframe.com/topic/880893-warframe-logo-fan-font/
+	sf::Font font;
 	if (!font.loadFromFile("fonts/DroidSans.ttf")) {
 		cout << "Unable to load font" << endl;
 		system("pause");
@@ -524,7 +524,7 @@ int main() {
 			window.draw(screen);
 			inputPrompt.setPosition(100, 200);
 			window.draw(inputPrompt);
-			inputDisplay.setPosition(340, 200);
+			inputDisplay.setPosition(inputPrompt.getGlobalBounds().width + 100, 200);
 			window.draw(inputDisplay);
 			cancel.draw(window, view.getSize().x - 140, view.getSize().y - 50);
 			if (!cancel.isToggled()) {
@@ -538,7 +538,7 @@ int main() {
 			window.draw(screen);
 			inputPrompt.setPosition(100, 200);
 			window.draw(inputPrompt);
-			inputDisplay.setPosition(340, 200);
+			inputDisplay.setPosition(inputPrompt.getGlobalBounds().width + 100, 200);
 			window.draw(inputDisplay);
 			cancel.draw(window, view.getSize().x - 140, view.getSize().y - 50);
 			if (!cancel.isToggled()) {
