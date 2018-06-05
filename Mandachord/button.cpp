@@ -7,7 +7,7 @@ Button::Button(const text_type & text, const sf::Font & font, const unsigned int
 	_text.setFont(font);
 	_text.setCharacterSize(size);
 	_text.setFillColor(sf::Color::Green);
-	_box = { sf::RectangleShape(sf::Vector2f(_text.getLocalBounds().width + 2, _text.getLocalBounds().height + 8)) };
+	_box = { sf::RectangleShape(sf::Vector2f(_text.getLocalBounds().width + 4, _text.getLocalBounds().height + 10)) };
 	_box.setFillColor(color);
 }
 

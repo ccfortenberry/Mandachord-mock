@@ -32,89 +32,93 @@ int main() {
 	/* ---------- Generate the stuff that goes on the screen ---------- */
 	/* ---------- Fan font ---------- */
 	sf::Font font; // font source (u: Pitchers): https://forums.warframe.com/topic/880893-warframe-logo-fan-font/
-	if (!font.loadFromFile("fonts/WarframeFanFont_b1.ttf")) {
+	if (!font.loadFromFile("fonts/DroidSans.ttf")) {
 		cout << "Unable to load font" << endl;
 		system("pause");
 		return EXIT_FAILURE;
 	}
 
 	/* ---------- Text caption ---------- */
+	unsigned int captionSize = 30;
+	
 	sf::Text text;
 	text.setFont(font);
-	text.setCharacterSize(24);
+	text.setCharacterSize(captionSize);
 	text.setStyle(sf::Text::Bold);
 	text.setString("MANDACHORD MOCK");
 
+	unsigned int textSize = 20;
+
 	/* ---------- Play button ---------- */
-	Button play("PLAY", font, 18, sf::Color::White);
+	Button play("PLAY", font, textSize, sf::Color::White);
 
 	/* ---------- Save button ---------- */
-	Button save("SAVE", font, 18, sf::Color::White);
+	Button save("SAVE", font, textSize, sf::Color::White);
 
 	/* ---------- Load button ---------- */
-	Button load("LOAD", font, 18, sf::Color::White);
+	Button load("LOAD", font, textSize, sf::Color::White);
 
 	/* ---------- Mallets button ---------- */
-	Button mallets("MALLETS", font, 18, sf::Color::White);
+	Button mallets("MALLETS", font, textSize, sf::Color::White);
 
 	/* ---------- Resonator button ---------- */
-	Button resonator("RESONATOR", font, 18, sf::Color::White);
+	Button resonator("RESONATOR", font, textSize, sf::Color::White);
 
 	/* ---------- Metronome button ---------- */
-	Button metronome("METRONOME", font, 18, sf::Color::White);
+	Button metronome("METRONOME", font, textSize, sf::Color::White);
 
 	/* ---------- Loop button ---------- */
 	string measure = "FULL";
-	Button loop("LOOP: " + measure, font, 18, sf::Color::White);
+	Button loop("LOOP: " + measure, font, textSize, sf::Color::White);
 
 	/* ---------- Toggle Screen ---------- */
 	sf::RectangleShape screen(sf::Vector2f(view.getSize()));
 	screen.setFillColor(sf::Color(0, 128, 128, 255));
 
 	/* ---------- Measure 1 button ---------- */
-	Button measure1Button("1", font, 18, sf::Color::White);
+	Button measure1Button("1", font, textSize, sf::Color::White);
 
 	/* ---------- Measure 2 button ---------- */
-	Button measure2Button("2", font, 18, sf::Color::White);
+	Button measure2Button("2", font, textSize, sf::Color::White);
 
 	/* ---------- Measure 3 button ---------- */
-	Button measure3Button("3", font, 18, sf::Color::White);
+	Button measure3Button("3", font, textSize, sf::Color::White);
 
 	/* ---------- Measure 4 button ---------- */
-	Button measure4Button("4", font, 18, sf::Color::White);
+	Button measure4Button("4", font, textSize, sf::Color::White);
 
 	/* ---------- Full loop button ---------- */
-	Button measureAllButton("FULL", font, 18, sf::Color::White);
+	Button measureAllButton("FULL", font, textSize, sf::Color::White);
 
 	/* ---------- Adau button ---------- */
-	Button adauButton("ADAU", font, 18, sf::Color::White);
+	Button adauButton("ADAU", font, textSize, sf::Color::White);
 
 	/* ---------- Alpha button ---------- */
-	Button alphaButton("ALPHA", font, 18, sf::Color::White);
+	Button alphaButton("ALPHA", font, textSize, sf::Color::White);
 
 	/* ---------- Beta button ---------- */
-	Button betaButton("BETA", font, 18, sf::Color::White);
+	Button betaButton("BETA", font, textSize, sf::Color::White);
 
 	/* ---------- Delta button ---------- */
-	Button deltaButton("DELTA", font, 18, sf::Color::White);
+	Button deltaButton("DELTA", font, textSize, sf::Color::White);
 
 	/* ---------- Druk button ---------- */
-	Button drukButton("DRUK", font, 18, sf::Color::White);
+	Button drukButton("DRUK", font, textSize, sf::Color::White);
 
 	/* ---------- Epsilon button ---------- */
-	Button epsilonButton("EPSILON", font, 18, sf::Color::White);
+	Button epsilonButton("EPSILON", font, textSize, sf::Color::White);
 
 	/* ---------- Gamma button ---------- */
-	Button gammaButton("GAMMA", font, 18, sf::Color::White);
+	Button gammaButton("GAMMA", font, textSize, sf::Color::White);
 
 	/* ---------- Horos button ---------- */
-	Button horosButton("HOROS", font, 18, sf::Color::White);
+	Button horosButton("HOROS", font, textSize, sf::Color::White);
 
 	/* ---------- Plogg button ---------- */
-	Button ploggButton("PLOGG", font, 18, sf::Color::White);
+	Button ploggButton("PLOGG", font, textSize, sf::Color::White);
 
 	/* ---------- Cancel button ---------- */
-	Button cancel("CANCEL", font, 18, sf::Color::White);
+	Button cancel("CANCEL", font, textSize, sf::Color::White);
 
 	// ---------- Mandachord Megasection ----------
 	Mandachord mandachord;
@@ -127,11 +131,11 @@ int main() {
 	sf::String input;
 	sf::Text inputDisplay;
 	inputDisplay.setFont(font);
-	inputDisplay.setCharacterSize(24);
+	inputDisplay.setCharacterSize(captionSize);
 
 	sf::Text inputPrompt;
 	inputPrompt.setFont(font);
-	inputPrompt.setCharacterSize(24);
+	inputPrompt.setCharacterSize(captionSize);
 	inputPrompt.setStyle(sf::Text::Bold);
 	inputPrompt.setString("FILENAME: ");
 
