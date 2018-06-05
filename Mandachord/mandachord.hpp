@@ -32,16 +32,16 @@ public:
 class Mandachord {
 private:
 	// Types
-	using size_type = float;
+	using size_type = unsigned int;
 	using inst_type = std::string;
 	
 	// Size consts
-	const size_t MALSIZE = 3 * 64;
-	const size_t RESSIZE = 5 * 64;
-	const size_t METSIZE = RESSIZE;
-	const static size_t MANSIZE = 13 * 64;
-	const size_t MEASURE = 16;
-	const size_t BOARD = 4 * MEASURE;
+	const static size_type MALSIZE = 3 * 64;
+	const static size_type RESSIZE = 5 * 64;
+	const static size_type METSIZE = RESSIZE;
+	const static size_type MANSIZE = MALSIZE + RESSIZE + METSIZE;
+	const size_type MEASURE = 16 * 60;
+	const size_type BOARD = 4 * 16 * 60;
 
 	// Colors
 	sf::Color _gray = {sf::Color(91, 91, 91, 225)};
@@ -94,12 +94,12 @@ public:
 	Mandachord();
 	~Mandachord() = default;
 
-	void advance(const bool &);
+	void advance(const bool &, const unsigned int &);
 	void checkMouse(sf::RenderWindow &);
 	void changeMallets(const inst_type &);
 	void changeResonator(const inst_type &);
 	void changeMetronome(const inst_type &);
-	void draw(sf::RenderWindow &, size_type &, size_type &);
+	void draw(sf::RenderWindow &, float &, float &);
 	void play();
 	void saveToFile(std::ofstream &, const inst_type &, const inst_type &, const inst_type &);
 	void loadFmFile(std::ifstream &, inst_type &, inst_type &, inst_type &);

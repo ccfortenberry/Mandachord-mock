@@ -190,12 +190,38 @@ Mandachord::Mandachord() {
 }
 
 // Advance
-void Mandachord::advance(const bool & toggled) {
+void Mandachord::advance(const bool & toggled, const unsigned int & loopMeasure) {
 	if (toggled) {
-		if (_line.getPosition().x < MEASURE * 60)
-			_line.move(sf::Vector2f(5, 0));
-		else
-			_line.setPosition(10, 35);
+		if (loopMeasure == 0) {
+			if (_line.getPosition().x < BOARD)
+				_line.move(sf::Vector2f(5, 0));
+			else
+				_line.setPosition(10, 35);
+		}
+		else if (loopMeasure == 1) {
+			if (_line.getPosition().x < MEASURE)
+				_line.move(sf::Vector2f(5, 0));
+			else
+				_line.setPosition(10, 35);
+		}
+		else if (loopMeasure == 2) {
+			if (_line.getPosition().x > MEASURE && _line.getPosition().x < 2 * MEASURE)
+				_line.move(sf::Vector2f(5, 0));
+			else
+				_line.setPosition(10 + MEASURE, 35);
+		}
+		else if (loopMeasure == 3) {
+			if (_line.getPosition().x > 2 * MEASURE && _line.getPosition().x < 3 * MEASURE)
+				_line.move(sf::Vector2f(5, 0));
+			else
+				_line.setPosition(10 + 2 * MEASURE, 35);
+		}
+		else if (loopMeasure == 4) {
+			if (_line.getPosition().x > 3 * MEASURE && _line.getPosition().x < 4 * MEASURE)
+				_line.move(sf::Vector2f(5, 0));
+			else
+				_line.setPosition(10 + 3 * MEASURE, 35);
+		}
 	}
 }
 
@@ -256,7 +282,7 @@ void Mandachord::changeMetronome(const inst_type & instrument) {
 }
 
 // Draw
-void Mandachord::draw(sf::RenderWindow & window, size_type & posX, size_type & posY) {
+void Mandachord::draw(sf::RenderWindow & window, float & posX, float & posY) {
 	for (size_t i = 0; i < MANSIZE; i++) {
 		_mandachord[i].draw(window, posX, posY);
 		if ((i + 1) % 64 != 0)

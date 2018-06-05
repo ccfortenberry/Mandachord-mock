@@ -63,9 +63,28 @@ int main() {
 	/* ---------- Metronome button ---------- */
 	Button metronome("METRONOME", font, 18, sf::Color::White);
 
+	/* ---------- Loop button ---------- */
+	string measure = "FULL";
+	Button loop("LOOP: " + measure, font, 18, sf::Color::White);
+
 	/* ---------- Toggle Screen ---------- */
 	sf::RectangleShape screen(sf::Vector2f(view.getSize()));
 	screen.setFillColor(sf::Color(0, 128, 128, 255));
+
+	/* ---------- Measure 1 button ---------- */
+	Button measure1Button("1", font, 18, sf::Color::White);
+
+	/* ---------- Measure 2 button ---------- */
+	Button measure2Button("2", font, 18, sf::Color::White);
+
+	/* ---------- Measure 3 button ---------- */
+	Button measure3Button("3", font, 18, sf::Color::White);
+
+	/* ---------- Measure 4 button ---------- */
+	Button measure4Button("4", font, 18, sf::Color::White);
+
+	/* ---------- Full loop button ---------- */
+	Button measureAllButton("FULL", font, 18, sf::Color::White);
 
 	/* ---------- Adau button ---------- */
 	Button adauButton("ADAU", font, 18, sf::Color::White);
@@ -99,6 +118,7 @@ int main() {
 
 	// ---------- Mandachord Megasection ----------
 	Mandachord mandachord;
+	unsigned int loopMeasure = 0;
 	string currentMallets = "adau";
 	string currentResonator = "adau";
 	string currentMetronome = "adau";
@@ -118,7 +138,7 @@ int main() {
 	/* ---------- Running application ---------- */
 	while (window.isOpen())
 	{
-		mandachord.advance(play.isToggled());
+		mandachord.advance(play.isToggled(), loopMeasure);
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -143,16 +163,22 @@ int main() {
 				}
 				break;
 			case (sf::Event::MouseButtonPressed):
-				if (mallets.isToggled() && resonator.isToggled() && metronome.isToggled() && save.isToggled() && load.isToggled()) {
+				if (loop.isToggled() && mallets.isToggled() && resonator.isToggled() && metronome.isToggled() && save.isToggled() && load.isToggled()) {
 					mandachord.checkMouse(window);
 					play.checkMouse(window);
 					save.checkMouse(window);
 					load.checkMouse(window);
+					loop.checkMouse(window);
 					mallets.checkMouse(window);
 					resonator.checkMouse(window);
 					metronome.checkMouse(window);
 				}
 				else {
+					measure1Button.checkMouse(window);
+					measure2Button.checkMouse(window);
+					measure3Button.checkMouse(window);
+					measure4Button.checkMouse(window);
+					measureAllButton.checkMouse(window);
 					adauButton.checkMouse(window);
 					alphaButton.checkMouse(window);
 					betaButton.checkMouse(window);
@@ -227,11 +253,55 @@ int main() {
 		play.draw(window, 500, 5);
 		save.draw(window, 600, 5);
 		load.draw(window, 700, 5);
+		loop.draw(window, 800, 5);
 		mallets.draw(window, 5, 820);
 		resonator.draw(window, mallets.getPos().width + 10, 820);
 		metronome.draw(window, mallets.getPos().width + resonator.getPos().width + 15, 820);
 		float posX = 10, posY = 40;
 		mandachord.draw(window, posX, posY);
+		if (!loop.isToggled()) {
+			window.draw(screen);
+			measure1Button.draw(window, 10, 25);
+			measure2Button.draw(window, 10, 55);
+			measure3Button.draw(window, 10, 85);
+			measure4Button.draw(window, 10, 115);
+			measureAllButton.draw(window, 10, 145);
+			cancel.draw(window, view.getSize().x - 140, view.getSize().y - 50);
+			if (!measure1Button.isToggled()) {
+				measure = "1";
+				loopMeasure = 1;
+				loop.toggle();
+				measure1Button.toggle();
+			}
+			else if (!measure2Button.isToggled()) {
+				measure = "2";
+				loopMeasure = 2;
+				loop.toggle();
+				measure2Button.toggle();
+			}
+			else if (!measure3Button.isToggled()) {
+				measure = "3";
+				loopMeasure = 3;
+				loop.toggle();
+				measure3Button.toggle();
+			}
+			else if (!measure4Button.isToggled()) {
+				measure = "4";
+				loopMeasure = 4;
+				loop.toggle();
+				measure4Button.toggle();
+			}
+			else if (!measureAllButton.isToggled()) {
+				measure = "FULL";
+				loopMeasure = 0;
+				loop.toggle();
+				measureAllButton.toggle();
+			}
+			else if (!cancel.isToggled()) {
+				loop.toggle();
+				cancel.toggle();
+			}
+		}
 		if (!mallets.isToggled()) {
 			window.draw(screen);
 			adauButton.draw(window, 10, 25);
