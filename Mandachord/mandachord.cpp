@@ -187,6 +187,16 @@ Mandachord::Mandachord() {
 	_line = { sf::RectangleShape(sf::Vector2f(780, 2)) };
 	_line.rotate(90);
 	_line.setPosition(10, 35);
+
+	// Setup the bars
+	_m1 = _line;
+	_m2 = _line;
+	_m3 = _line;
+	_m4 = _line;
+	_m1.setPosition(MEASURE + 6, 35);
+	_m2.setPosition(2 * MEASURE + 6, 35);
+	_m3.setPosition(3 * MEASURE + 6, 35);
+	_m4.setPosition(4 * MEASURE + 6, 35);
 }
 
 // Advance
@@ -292,6 +302,10 @@ void Mandachord::draw(sf::RenderWindow & window, float & posX, float & posY) {
 			posY += 60;
 		}
 	}
+	window.draw(_m1);
+	window.draw(_m2);
+	window.draw(_m3);
+	window.draw(_m4);
 	window.draw(_line);
 }
 

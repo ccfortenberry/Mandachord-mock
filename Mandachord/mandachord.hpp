@@ -89,6 +89,10 @@ private:
 
 	// Line
 	sf::RectangleShape _line;
+	sf::RectangleShape _m1;
+	sf::RectangleShape _m2;
+	sf::RectangleShape _m3;
+	sf::RectangleShape _m4;
 
 public:
 	Mandachord();
