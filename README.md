@@ -15,7 +15,7 @@ It's Octavia's Mandachord, but it's a crappy representation of it. Essentially t
 Clone the repo and get it setup in Visual Studio. All of the footwork of getting stuff linked should be taken care of already, so you should be able to "plug and play." You will need to find and drop openal32.lib from the SFML download (found in \bin) into the same folder as where ever the executable gets built however.
 
 ## Installation  
-If you don't want to deal with messing around in the source code and just want an app that works, there will be an entry in the Releases section soon. Patience...  
+Head to the Releases tab and download the latest version. Extract the .zip somewhere accessible, and launch the program. No muss, no fuss, it should just work.  
 
 ## Controls and Features  
 - Spacebar: Toggles play/pause  
