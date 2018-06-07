@@ -2,10 +2,17 @@
 It's Octavia's Mandachord, but it's a crappy representation of it. Essentially this is just a desktop application for people who want to make their Mandachord remixes but are away from Warframe. Could probably still get this labelled as productivity.  
 
 ## Dependencies  
-SFML 2.5.0 - Visual Studio 2015 64bit  
+[SFML - Visual Studio 2017 64bit](https://nightlybuilds.ch/project/show/1/SFML/)  
+
+## System Requirements  
+- Windows 10  
+- 128 MB RAM  
+- A functioning CPU  
+- Spare potato for power  
+- An open and creative mind  
 
 ## Build  
-Clone the repo and follow the tutorial for dynamic linkage into Visual Studio on the SFML site (or static linking if you're feeling spicy).
+Clone the repo and get it setup in Visual Studio. All of the footwork of getting stuff linked should be taken care of already, so you should be able to "plug and play." You will need to find and drop openal32.lib from the SFML download (found in \bin) into the same folder as where ever the executable gets built however.
 
 ## Installation  
 If you don't want to deal with messing around in the source code and just want an app that works, there will be an entry in the Releases section soon. Patience...  
