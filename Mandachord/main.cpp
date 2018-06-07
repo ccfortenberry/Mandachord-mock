@@ -215,49 +215,38 @@ int main() {
 				}
 				break;
 			case (sf::Event::TextEntered):
-				if (!save->isToggled()) {
-					if (event.text.unicode == '\b' && input.getSize() > 0) {
-						input.erase(input.getSize() - 1, 1);
-						inputDisplay.setString(input);
-					}
-					else if (event.text.unicode < 128 && event.text.unicode != '\b' && event.text.unicode != '\r') {
-						input += event.text.unicode;
-						inputDisplay.setString(input);
-					}
-					else if (event.text.unicode == '\r' && input.getSize() > 0) {
+				if (event.text.unicode == '\b' && input.getSize() > 0) {
+					input.erase(input.getSize() - 1, 1);
+					inputDisplay.setString(input);
+				}
+				else if (event.text.unicode < 128 && event.text.unicode != '\b' && event.text.unicode != '\r') {
+					input += event.text.unicode;
+					inputDisplay.setString(input);
+				}
+				else if (event.text.unicode == '\r' && input.getSize() > 0) {
+					if (!save->isToggled() || !load->isToggled()) {
 						string path = "songs/" + input.toAnsiString() + ".uwu";
 						ofstream outToFile;
-						outToFile.open(path);
-						if (outToFile.is_open()) {
-							mandachord.saveToFile(outToFile, currentMallets, currentResonator, currentMetronome);
-							outToFile.close();
+						if (!save->isToggled()) {
+							outToFile.open(path, std::ios::binary);
+							if (outToFile.is_open()) {
+								mandachord.saveToFile(outToFile, currentMallets, currentResonator, currentMetronome);
+								outToFile.close();
+							}
+							else cout << "Could not write to file: " << path << endl;
+							save->toggle();
 						}
-						else cout << "Could not write to file: " << path << endl;
+						else if (!load->isToggled()) {
+							ifstream inFromFile(path, std::ios::binary);
+							if (inFromFile.is_open()) {
+								mandachord.loadFmFile(inFromFile, currentMallets, currentResonator, currentMetronome);
+								inFromFile.close();
+							}
+							else cout << "Could not open file: " << path << endl;
+							load->toggle();
+						}
 						input.clear();
 						inputDisplay.setString(input);
-						save->toggle();
-					}
-				}
-				else if (!load->isToggled()) {
-					if (event.text.unicode == '\b' && input.getSize() > 0) {
-						input.erase(input.getSize() - 1, 1);
-						inputDisplay.setString(input);
-					}
-					else if (event.text.unicode < 128 && event.text.unicode != '\b' && event.text.unicode != '\r') {
-						input += event.text.unicode;
-						inputDisplay.setString(input);
-					}
-					else if (event.text.unicode == '\r' && input.getSize() > 0) {
-						string path = "songs/" + input.toAnsiString() + ".uwu";
-						ifstream inFromFile(path);
-						if (inFromFile.is_open()) {
-							mandachord.loadFmFile(inFromFile, currentMallets, currentResonator, currentMetronome);
-							inFromFile.close();
-						}
-						else cout << "Could not open file: " << path << endl;
-						input.clear();
-						inputDisplay.setString(input);
-						load->toggle();
 					}
 				}
 				break;
