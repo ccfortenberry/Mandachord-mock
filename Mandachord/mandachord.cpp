@@ -236,7 +236,6 @@ void Mandachord::advance(const bool & toggled, const unsigned int & loopMeasure)
 // Check mouse for clicking on the mandachord
 void Mandachord::checkMouse(sf::RenderWindow & window) {
 	for (size_t i = 0; i < MANSIZE; i++) {
-		// Chugga chugga here comes the trainwreck of an if statement :^)
 		if (_mandachord[i].getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window))))
 			_mandachord[i].toggle();
 	}

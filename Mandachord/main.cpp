@@ -302,6 +302,7 @@ int main() {
 			}
 		}
 		if (!mallets->isToggled() || !resonator->isToggled() || !metronome->isToggled()) {
+			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
 			window.draw(screen);
 			float loopposX = 10, loopposY = 25;
 			for (unsigned int i = 0; i < instrButtons.size(); i++) {
@@ -358,6 +359,7 @@ int main() {
 			}
 		}
 		else if (!save->isToggled()) {
+			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
 			window.draw(screen);
 			inputPrompt.setPosition(100, 200);
 			window.draw(inputPrompt);
@@ -372,6 +374,7 @@ int main() {
 			}
 		}
 		else if (!load->isToggled()) {
+			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
 			window.draw(screen);
 			inputPrompt.setPosition(100, 200);
 			window.draw(inputPrompt);

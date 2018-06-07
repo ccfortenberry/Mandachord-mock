@@ -94,6 +94,24 @@ private:
 	sf::RectangleShape _m3;
 	sf::RectangleShape _m4;
 
+	// Note limits: TODO at some point
+	/*size_type malLimit = 16;
+	size_type resLimit = 16;
+	size_type metLimit = 16;
+
+	size_type mal1Count;
+	size_type mal2Count;
+	size_type mal3Count;
+	size_type mal4Count;
+	size_type res1Count;
+	size_type res2Count;
+	size_type res3Count;
+	size_type res4Count;
+	size_type met1Count;
+	size_type met2Count;
+	size_type met3Count;
+	size_type met4Count;*/
+
 public:
 	Mandachord();
 	~Mandachord() = default;
