@@ -5,8 +5,6 @@ using std::endl;
 #include <string>
 using std::string;
 using std::getline;
-#include <algorithm>
-using std::move;
 
 
 /* ------ Note ------ */
@@ -239,10 +237,8 @@ void Mandachord::advance(const bool & toggled, const unsigned int & loopMeasure)
 void Mandachord::checkMouse(sf::RenderWindow & window) {
 	for (size_t i = 0; i < MANSIZE; i++) {
 		// Chugga chugga here comes the trainwreck of an if statement :^)
-		if (_mandachord[i].getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+		if (_mandachord[i].getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window))))
 			_mandachord[i].toggle();
-			//cout << "Toggled note: " << i << endl;
-		}
 	}
 }
 

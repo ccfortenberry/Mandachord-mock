@@ -1,4 +1,7 @@
 #include "button.hpp"
+#include <iostream>
+using std::cout;
+using std::endl;
 
 // Ctor from data
 Button::Button(const text_type & text, const sf::Font & font, const unsigned int & size, const sf::Color & color)
@@ -40,7 +43,7 @@ void Button::updateText(const text_type & text) {
 
 // Check mouse position on button
 void Button::checkMouse(sf::RenderWindow & window) {
-	if (getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) 
+	if (getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window))))
 		toggle();
 }
 
