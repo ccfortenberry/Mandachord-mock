@@ -23,7 +23,7 @@ using std::vector;
 using std::shared_ptr;
 using std::make_shared;
 
-int main() {
+int WinMain() {
 	/* ---------- Initialize the window ---------- */
 	float viewX = 160, viewY = 90;
 	float widthf = 1280, heightf = 720;
@@ -233,24 +233,24 @@ int main() {
 				}
 				else if (event.text.unicode == '\r' && input.getSize() > 0) {
 					if (!save->isToggled() || !load->isToggled()) {
-						string path = "songs/" + input.toAnsiString() + ".uwu";
+						string filepath = "songs/" + input.toAnsiString() + ".uwu";
 						ofstream outToFile;
 						if (!save->isToggled()) {
-							outToFile.open(path, std::ios::binary);
+							outToFile.open(filepath, std::ios::binary);
 							if (outToFile.is_open()) {
 								mandachord.saveToFile(outToFile, currentMallets, currentResonator, currentMetronome);
 								outToFile.close();
 							}
-							else cout << "Could not write to file: " << path << endl;
+							else cout << "Could not write to file: " << filepath << endl;
 							save->toggle();
 						}
 						else if (!load->isToggled()) {
-							ifstream inFromFile(path, std::ios::binary);
+							ifstream inFromFile(filepath, std::ios::binary);
 							if (inFromFile.is_open()) {
 								mandachord.loadFmFile(inFromFile, currentMallets, currentResonator, currentMetronome);
 								inFromFile.close();
 							}
-							else cout << "Could not open file: " << path << endl;
+							else cout << "Could not open file: " << filepath << endl;
 							load->toggle();
 						}
 						input.clear();
@@ -392,7 +392,7 @@ int main() {
 	}
 
 	/* ---------- Exit success ---------- */
-	cout << "Exit success!" << endl;
-	system("pause");
+	/*cout << "Exit success!" << endl;
+	system("pause");*/
 	return EXIT_SUCCESS;
 }

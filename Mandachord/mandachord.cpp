@@ -62,9 +62,9 @@ void loadIcon(sf::Texture & icon, const string & path) {
 	}
 }
 
-void loadSound(sf::Sound & sound, sf::SoundBuffer & buffer, const string & path) {
-	if (!buffer.loadFromFile(path)) {
-		cout << "Unable to load " << path << endl;
+void loadSound(sf::Sound & sound, sf::SoundBuffer & buffer, const string & soundpath) {
+	if (!buffer.loadFromFile(soundpath)) {
+		cout << "Unable to load " << soundpath << endl;
 		system("pause");
 		throw EXIT_FAILURE;
 	}
