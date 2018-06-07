@@ -27,8 +27,10 @@ int main() {
 	/* ---------- Initialize the window ---------- */
 	float viewX = 160, viewY = 90;
 	float widthf = 1280, heightf = 720;
+	float viewOffsetX = 0.0f; // No need for a Y offset
 	sf::View view(sf::FloatRect(viewX, viewY, widthf, heightf));
 	view.zoom(1.25f);
+	auto viewStartX = view.getCenter().x;
 	unsigned int width = 1280, height = 720;
 	sf::RenderWindow window(sf::VideoMode(width, height), "Mock Mandachord", sf::Style::Titlebar | sf::Style::Close);
 	window.setFramerateLimit(60);
@@ -188,12 +190,18 @@ int main() {
 				break;
 			case (sf::Event::MouseWheelScrolled):
 				if (event.mouseWheelScroll.delta > 0) {
-					view.move(-10, 0);
-					window.setView(view);
+					if (!(view.getCenter().x - 20 < viewStartX)) {
+						view.move(-20, 0);
+						window.setView(view);
+						viewOffsetX -= 20;
+					}
 				}
 				else if (event.mouseWheelScroll.delta < 0) {
-					view.move(10, 0);
-					window.setView(view);
+					if (!(view.getCenter().x + 20 > (4 * 16 * 60 - 13 * 60))) {
+						view.move(20, 0);
+						window.setView(view);
+						viewOffsetX += 20;
+					}
 				}
 				break;
 			case (sf::Event::MouseButtonPressed):
@@ -269,11 +277,12 @@ int main() {
 		float manposX = 10, manposY = 40;
 		mandachord.draw(window, manposX, manposY);
 		if (!loop->isToggled()) {
+			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
 			window.draw(screen);
 			float loopposX = 10, loopposY = 25;
 			for (unsigned int i = 0; i < loopButtons.size(); i++) {
-				loopButtons[i]->draw(window, loopposX, loopposY);
-				loopposY += loopButtons[i]->getPos().height + 30;
+				loopButtons[i]->draw(window, loopposX + viewOffsetX, loopposY);
+				loopposY += loopButtons[i]->getPos().height + 25;
 			}
 			for (unsigned int i = 0; i < loopButtons.size(); i++) {
 				if (!loopButtons[i]->isToggled()) {
