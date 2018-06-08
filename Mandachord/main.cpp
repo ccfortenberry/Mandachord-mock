@@ -4,9 +4,13 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
+#include <algorithm>
+using std::transform;
 #include <string>
 using std::string;
 using std::to_string;
+#include <cctype>
+using std::toupper;
 #include <iostream>
 using std::cout;
 using std::endl;
@@ -61,6 +65,14 @@ int WinMain() {
 
 	unsigned int textSize = 20;
 
+	// ---------- Mandachord Megasection ----------
+	Mandachord mandachord;
+	unsigned int loopMeasure = 0;
+	array<string, 10> instrTable = { "adau", "alpha", "beta", "delta", "druk", "epsilon", "gamma", "horos", "plogg", "cancel" };
+	string currentMallets = "ADAU";
+	string currentResonator = "ADAU";
+	string currentMetronome = "ADAU";
+
 	/* ---------- Play button ---------- */
 	auto play = make_shared<Button>("PLAY", font, textSize, sf::Color::White);
 	uiButtons.push_back(play);
@@ -74,15 +86,15 @@ int WinMain() {
 	uiButtons.push_back(load);
 
 	/* ---------- Mallets button ---------- */
-	auto mallets = make_shared<Button>("MALLETS: ", font, textSize, sf::Color::White);
+	auto mallets = make_shared<Button>("MALLETS: " + currentMallets, font, textSize, sf::Color::White);
 	uiButtons.push_back(mallets);
 
 	/* ---------- Resonator button ---------- */
-	auto resonator = make_shared<Button>("RESONATOR: ", font, textSize, sf::Color::White);
+	auto resonator = make_shared<Button>("RESONATOR: " + currentResonator, font, textSize, sf::Color::White);
 	uiButtons.push_back(resonator);
 
 	/* ---------- Metronome button ---------- */
-	auto metronome = make_shared<Button>("METRONOME: ", font, textSize, sf::Color::White);
+	auto metronome = make_shared<Button>("METRONOME: " + currentMetronome, font, textSize, sf::Color::White);
 	uiButtons.push_back(metronome);
 
 	/* ---------- Loop button ---------- */
@@ -163,14 +175,6 @@ int WinMain() {
 	/* ---------- Confirm button ---------- */
 	auto confirm = make_shared<Button>("CONFIRM", font, textSize, sf::Color::White);
 	clearButtons.push_back(confirm);
-
-	// ---------- Mandachord Megasection ----------
-	Mandachord mandachord;
-	unsigned int loopMeasure = 0;
-	array<string, 10> instrTable = { "adau", "alpha", "beta", "delta", "druk", "epsilon", "gamma", "horos", "plogg", "cancel" };
-	string currentMallets = "adau";
-	string currentResonator = "adau";
-	string currentMetronome = "adau";
 
 	/* ---------- Text prompts ---------- */
 	sf::String input;
@@ -269,6 +273,9 @@ int WinMain() {
 							if (inFromFile.is_open()) {
 								mandachord.loadFmFile(inFromFile, currentMallets, currentResonator, currentMetronome);
 								inFromFile.close();
+								mallets->updateText("MALLETS: " + currentMallets);
+								resonator->updateText("RESONATOR: " + currentResonator);
+								metronome->updateText("METRONOME: " + currentMetronome);
 							}
 							else cout << "Could not open file: " << filepath << endl;
 							load->toggle();
@@ -328,6 +335,8 @@ int WinMain() {
 						if (i < instrButtons.size() - 1) {
 							mandachord.changeMallets(instrTable[i]);
 							currentMallets = instrTable[i];
+							transform(currentMallets.begin(), currentMallets.end(), currentMallets.begin(), [&](unsigned char c) { return toupper(c); });
+							mallets->updateText("MALLETS: " + currentMallets);
 							mallets->toggle();
 							instrButtons[i]->toggle();
 						}
@@ -344,6 +353,8 @@ int WinMain() {
 						if (i < instrButtons.size() - 1) {
 							mandachord.changeResonator(instrTable[i]);
 							currentResonator = instrTable[i];
+							transform(currentResonator.begin(), currentResonator.end(), currentResonator.begin(), [&](unsigned char c) { return toupper(c); });
+							resonator->updateText("RESONATOR: " + currentResonator);
 							resonator->toggle();
 							instrButtons[i]->toggle();
 						}
@@ -360,6 +371,8 @@ int WinMain() {
 						if (i < instrButtons.size() - 1) {
 							mandachord.changeMetronome(instrTable[i]);
 							currentMetronome = instrTable[i];
+							transform(currentMetronome.begin(), currentMetronome.end(), currentMetronome.begin(), [&](unsigned char c) { return toupper(c); });
+							metronome->updateText("METRONOME: " + currentMetronome);
 							metronome->toggle();
 							instrButtons[i]->toggle();
 						}

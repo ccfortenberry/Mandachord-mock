@@ -39,6 +39,7 @@ bool Button::isToggled() {
 // UpdateText
 void Button::updateText(const text_type & text) {
 	_text.setString(text);
+	_box = { sf::RectangleShape(sf::Vector2f(_text.getLocalBounds().width + 4, _text.getLocalBounds().height + 10)) };
 }
 
 // Check mouse position on button
