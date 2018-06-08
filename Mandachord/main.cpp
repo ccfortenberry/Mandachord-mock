@@ -74,7 +74,7 @@ int WinMain() {
 	string currentMetronome = "ADAU";
 
 	/* ---------- Play button ---------- */
-	auto play = make_shared<Button>("PLAY", font, textSize, sf::Color::White);
+	auto play = make_shared<Button>("PAUSE", font, textSize, sf::Color::White);
 	uiButtons.push_back(play);
 
 	/* ---------- Save button ---------- */
@@ -206,6 +206,10 @@ int WinMain() {
 			case (sf::Event::KeyPressed):
 				if (event.key.code == sf::Keyboard::Space) {
 					play->toggle();
+					if (play->isToggled())
+						play->updateText("PAUSE");
+					else
+						play->updateText("PLAY");
 				}
 				break;
 			case (sf::Event::MouseWheelScrolled):
@@ -229,6 +233,10 @@ int WinMain() {
 					mandachord.checkMouse(window);
 					for (auto i : uiButtons)
 						i->checkMouse(window);
+					if (play->isToggled())
+						play->updateText("PAUSE");
+					else
+						play->updateText("PLAY");
 				}
 				else if (!save->isToggled() || !load->isToggled()) {
 					cancel->checkMouse(window);
@@ -247,16 +255,16 @@ int WinMain() {
 				}
 				break;
 			case (sf::Event::TextEntered):
-				if (event.text.unicode == '\b' && input.getSize() > 0) {
-					input.erase(input.getSize() - 1, 1);
-					inputDisplay.setString(input);
-				}
-				else if (event.text.unicode < 128 && event.text.unicode != '\b' && event.text.unicode != '\r') {
-					input += event.text.unicode;
-					inputDisplay.setString(input);
-				}
-				else if (event.text.unicode == '\r' && input.getSize() > 0) {
-					if (!save->isToggled() || !load->isToggled()) {
+				if (!save->isToggled() || !load->isToggled()) {
+					if (event.text.unicode == '\b' && input.getSize() > 0) {
+						input.erase(input.getSize() - 1, 1);
+						inputDisplay.setString(input);
+					}
+					else if (event.text.unicode < 128 && event.text.unicode != '\b' && event.text.unicode != '\r') {
+						input += event.text.unicode;
+						inputDisplay.setString(input);
+					}
+					else if (event.text.unicode == '\r' && input.getSize() > 0) {
 						string filepath = "songs/" + input.toAnsiString() + ".uwu";
 						ofstream outToFile;
 						if (!save->isToggled()) {
@@ -412,7 +420,7 @@ int WinMain() {
 		else if (!clear->isToggled()) {
 			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
 			window.draw(screen);
-			clearPrompt.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
+			clearPrompt.setPosition((view.getViewport().left + viewOffsetX) + width / 2, view.getViewport().top + height / 2);
 			window.draw(clearPrompt);
 			confirm->draw(window, view.getSize().x - cancel->getPos().width - 160, view.getSize().y - 50);
 			cancel->draw(window, view.getSize().x - 140, view.getSize().y - 50);
