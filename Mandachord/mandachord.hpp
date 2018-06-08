@@ -121,6 +121,7 @@ public:
 	void changeMallets(const inst_type &);
 	void changeResonator(const inst_type &);
 	void changeMetronome(const inst_type &);
+	void clear();
 	void draw(sf::RenderWindow &, float &, float &);
 	void play();
 	void saveToFile(std::ofstream &, const inst_type &, const inst_type &, const inst_type &);

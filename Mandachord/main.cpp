@@ -39,6 +39,7 @@ int WinMain() {
 	vector<shared_ptr<Button>> uiButtons;
 	vector<shared_ptr<Button>> loopButtons;
 	vector<shared_ptr<Button>> instrButtons;
+	vector<shared_ptr<Button>> clearButtons;
 
 	/* ---------- Generate the stuff that goes on the screen ---------- */
 	/* ---------- Fan font ---------- */
@@ -73,21 +74,25 @@ int WinMain() {
 	uiButtons.push_back(load);
 
 	/* ---------- Mallets button ---------- */
-	auto mallets = make_shared<Button>("MALLETS", font, textSize, sf::Color::White);
+	auto mallets = make_shared<Button>("MALLETS: ", font, textSize, sf::Color::White);
 	uiButtons.push_back(mallets);
 
 	/* ---------- Resonator button ---------- */
-	auto resonator = make_shared<Button>("RESONATOR", font, textSize, sf::Color::White);
+	auto resonator = make_shared<Button>("RESONATOR: ", font, textSize, sf::Color::White);
 	uiButtons.push_back(resonator);
 
 	/* ---------- Metronome button ---------- */
-	auto metronome = make_shared<Button>("METRONOME", font, textSize, sf::Color::White);
+	auto metronome = make_shared<Button>("METRONOME: ", font, textSize, sf::Color::White);
 	uiButtons.push_back(metronome);
 
 	/* ---------- Loop button ---------- */
 	string measure = "FULL";
 	auto loop = make_shared<Button>("LOOP: " + measure, font, textSize, sf::Color::White);
 	uiButtons.push_back(loop);
+
+	/* ---------- Clear button ---------- */
+	auto clear = make_shared<Button>("CLEAR", font, textSize, sf::Color::White);
+	uiButtons.push_back(clear);
 
 	/* ---------- Toggle Screen ---------- */
 	sf::RectangleShape screen(sf::Vector2f(view.getSize()));
@@ -153,6 +158,11 @@ int WinMain() {
 	auto cancel = make_shared<Button>("CANCEL", font, textSize, sf::Color::White);
 	loopButtons.push_back(cancel);
 	instrButtons.push_back(cancel);
+	clearButtons.push_back(cancel);
+
+	/* ---------- Confirm button ---------- */
+	auto confirm = make_shared<Button>("CONFIRM", font, textSize, sf::Color::White);
+	clearButtons.push_back(confirm);
 
 	// ---------- Mandachord Megasection ----------
 	Mandachord mandachord;
@@ -162,7 +172,7 @@ int WinMain() {
 	string currentResonator = "adau";
 	string currentMetronome = "adau";
 
-	/* ---------- File IO stuff ---------- */
+	/* ---------- Text prompts ---------- */
 	sf::String input;
 	sf::Text inputDisplay;
 	inputDisplay.setFont(font);
@@ -173,6 +183,12 @@ int WinMain() {
 	inputPrompt.setCharacterSize(captionSize);
 	inputPrompt.setStyle(sf::Text::Bold);
 	inputPrompt.setString("FILENAME: ");
+
+	sf::Text clearPrompt;
+	clearPrompt.setFont(font);
+	clearPrompt.setCharacterSize(captionSize);
+	clearPrompt.setStyle(sf::Text::Bold);
+	clearPrompt.setString("Clear all notes? (No undo)");
 
 	/* ---------- Running application ---------- */
 	while (window.isOpen())
@@ -205,21 +221,25 @@ int WinMain() {
 				}
 				break;
 			case (sf::Event::MouseButtonPressed):
-				if (loop->isToggled() && mallets->isToggled() && resonator->isToggled() && metronome->isToggled() && save->isToggled() && load->isToggled()) {
+				if (save->isToggled() && load->isToggled() && mallets->isToggled() && resonator->isToggled() && metronome->isToggled() && loop->isToggled() && clear->isToggled()) {
 					mandachord.checkMouse(window);
-					for (unsigned int i = 0; i < uiButtons.size(); i++)
-						uiButtons[i]->checkMouse(window);
-				}
-				else if (!loop->isToggled()) {
-					for (auto i : loopButtons)
+					for (auto i : uiButtons)
 						i->checkMouse(window);
+				}
+				else if (!save->isToggled() || !load->isToggled()) {
+					cancel->checkMouse(window);
 				}
 				else if (!mallets->isToggled() || !resonator->isToggled() || !metronome->isToggled()) {
 					for (auto i : instrButtons)
 						i->checkMouse(window);
 				}
-				else {
-					cancel->checkMouse(window);
+				else if (!loop->isToggled()) {
+					for (auto i : loopButtons)
+						i->checkMouse(window);
+				}
+				else if (!clear->isToggled()) {
+					for (auto i : clearButtons)
+						i->checkMouse(window);
 				}
 				break;
 			case (sf::Event::TextEntered):
@@ -276,32 +296,25 @@ int WinMain() {
 		}
 		float manposX = 10, manposY = 40;
 		mandachord.draw(window, manposX, manposY);
-		if (!loop->isToggled()) {
+		if (!save->isToggled() || !load->isToggled()) {
 			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
 			window.draw(screen);
-			float loopposX = 10, loopposY = 25;
-			for (unsigned int i = 0; i < loopButtons.size(); i++) {
-				loopButtons[i]->draw(window, loopposX + viewOffsetX, loopposY);
-				loopposY += loopButtons[i]->getPos().height + 25;
-			}
-			for (unsigned int i = 0; i < loopButtons.size(); i++) {
-				if (!loopButtons[i]->isToggled()) {
-					if (i < loopButtons.size() - 1) {
-						if (i == 0) measure = "FULL";
-						else measure = to_string(i);
-						loop->updateText("LOOP: " + measure);
-						loopMeasure = i;
-						loop->toggle();
-						loopButtons[i]->toggle();
-					}
-					else {
-						loop->toggle();
-						cancel->toggle();
-					}
-				}
+			inputPrompt.setPosition(100, 200);
+			window.draw(inputPrompt);
+			inputDisplay.setPosition(inputPrompt.getGlobalBounds().width + 100, 200);
+			window.draw(inputDisplay);
+			cancel->draw(window, view.getSize().x - 140, view.getSize().y - 50);
+			if (!cancel->isToggled()) {
+				if (!save->isToggled())
+					save->toggle();
+				else if (!load->isToggled())
+					load->toggle();
+				cancel->toggle();
+				input.clear();
+				inputDisplay.setString(input);
 			}
 		}
-		if (!mallets->isToggled() || !resonator->isToggled() || !metronome->isToggled()) {
+		else if (!mallets->isToggled() || !resonator->isToggled() || !metronome->isToggled()) {
 			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
 			window.draw(screen);
 			float loopposX = 10, loopposY = 25;
@@ -358,34 +371,46 @@ int WinMain() {
 				}
 			}
 		}
-		else if (!save->isToggled()) {
+		else if (!loop->isToggled()) {
 			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
 			window.draw(screen);
-			inputPrompt.setPosition(100, 200);
-			window.draw(inputPrompt);
-			inputDisplay.setPosition(inputPrompt.getGlobalBounds().width + 100, 200);
-			window.draw(inputDisplay);
-			cancel->draw(window, view.getSize().x - 140, view.getSize().y - 50);
-			if (!cancel->isToggled()) {
-				save->toggle();
-				cancel->toggle();
-				input.clear();
-				inputDisplay.setString(input);
+			float loopposX = 10, loopposY = 25;
+			for (unsigned int i = 0; i < loopButtons.size(); i++) {
+				loopButtons[i]->draw(window, loopposX + viewOffsetX, loopposY);
+				loopposY += loopButtons[i]->getPos().height + 25;
+			}
+			for (unsigned int i = 0; i < loopButtons.size(); i++) {
+				if (!loopButtons[i]->isToggled()) {
+					if (i < loopButtons.size() - 1) {
+						if (i == 0) measure = "FULL";
+						else measure = to_string(i);
+						loop->updateText("LOOP: " + measure);
+						loopMeasure = i;
+						loop->toggle();
+						loopButtons[i]->toggle();
+					}
+					else {
+						loop->toggle();
+						cancel->toggle();
+					}
+				}
 			}
 		}
-		else if (!load->isToggled()) {
+		else if (!clear->isToggled()) {
 			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
 			window.draw(screen);
-			inputPrompt.setPosition(100, 200);
-			window.draw(inputPrompt);
-			inputDisplay.setPosition(inputPrompt.getGlobalBounds().width + 100, 200);
-			window.draw(inputDisplay);
+			clearPrompt.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
+			window.draw(clearPrompt);
+			confirm->draw(window, view.getSize().x - cancel->getPos().width - 160, view.getSize().y - 50);
 			cancel->draw(window, view.getSize().x - 140, view.getSize().y - 50);
-			if (!cancel->isToggled()) {
-				load->toggle();
+			if (!confirm->isToggled()) {
+				mandachord.clear();
+				clear->toggle();
+				confirm->toggle();
+			}
+			else if (!cancel->isToggled()) {
+				clear->toggle();
 				cancel->toggle();
-				input.clear();
-				inputDisplay.setString(input);
 			}
 		}
 		window.display();

@@ -235,12 +235,13 @@ void Mandachord::advance(const bool & toggled, const unsigned int & loopMeasure)
 
 // Check mouse for clicking on the mandachord
 void Mandachord::checkMouse(sf::RenderWindow & window) {
-	for (size_t i = 0; i < MANSIZE; i++) {
+	for (unsigned int i = 0; i < MANSIZE; i++) {
 		if (_mandachord[i].getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window))))
 			_mandachord[i].toggle();
 	}
 }
 
+// ChangeMallets
 void Mandachord::changeMallets(const inst_type & instrument) {
 	// Sound for first row
 	loadSound(_malRow1Note, _malRow1Buffer, "instruments/" + instrument + "/" + instrument + "_mal_1.wav");
@@ -252,6 +253,7 @@ void Mandachord::changeMallets(const inst_type & instrument) {
 	loadSound(_malRow3Note, _malRow3Buffer, "instruments/" + instrument + "/" + instrument + "_mal_3.wav");
 }
 
+// ChangeResonator
 void Mandachord::changeResonator(const inst_type & instrument) {
 	// Sound for first row
 	loadSound(_resRow1Note, _resRow1Buffer, "instruments/" + instrument + "/" + instrument + "_res_1.wav");
@@ -269,6 +271,7 @@ void Mandachord::changeResonator(const inst_type & instrument) {
 	loadSound(_resRow5Note, _resRow5Buffer, "instruments/" + instrument + "/" + instrument + "_res_5.wav");
 }
 
+// ChangeMetronome
 void Mandachord::changeMetronome(const inst_type & instrument) {
 	// Sound for first row
 	loadSound(_metRow1Note, _metRow1Buffer, "instruments/" + instrument + "/" + instrument + "_met_1.wav");
@@ -286,9 +289,18 @@ void Mandachord::changeMetronome(const inst_type & instrument) {
 	loadSound(_metRow5Note, _metRow5Buffer, "instruments/" + instrument + "/" + instrument + "_met_5.wav");
 }
 
+// Clear
+void Mandachord::clear() {
+	for (auto & i : _mandachord) {
+		if (i.isToggled()) {
+			i.toggle();
+		}
+	}
+}
+
 // Draw
 void Mandachord::draw(sf::RenderWindow & window, float & posX, float & posY) {
-	for (size_t i = 0; i < MANSIZE; i++) {
+	for (unsigned int i = 0; i < MANSIZE; i++) {
 		_mandachord[i].draw(window, posX, posY);
 		if ((i + 1) % 64 != 0)
 			posX += 60;
