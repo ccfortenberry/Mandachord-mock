@@ -246,20 +246,20 @@ void incTotal(unsigned int & i, array<unsigned int, 12> & _noteTotal) {
 	else if (i < 15 * 16 || (i >= 18 * 16 && i < 19 * 16) || (i >= 22 * 16 && i < 23 * 16) || (i >= 26 * 16 && i < 27 * 16) || (i >= 30 * 16 && i < 31 * 16)) {
 		_noteTotal[6]++;
 	}
-	else if (i < 16 * 16 || (i >= 19 * 16 && i < 20 * 16) || (i >= 24 * 16 && i < 25 * 16) || (i >= 27 * 16 && i < 28 * 16) || (i >= 31 * 16 && i < 32 * 16)) {
+	else if (i < 16 * 16 || (i >= 19 * 16 && i < 20 * 16) || (i >= 23 * 16 && i < 24 * 16) || (i >= 27 * 16 && i < 28 * 16) || (i >= 31 * 16 && i < 32 * 16)) {
 		_noteTotal[7]++;
 	}
 	// Met total inc
-	else if (i < 33 * 16 || (i > 36 * 16 && i < 37 * 16) || (i > 40 * 16 && i < 41 * 16) || (i > 44 * 16 && i < 45 * 16) || (i > 48 * 16 && i < 49 * 16)) {
+	else if (i < 33 * 16 || (i >= 36 * 16 && i < 37 * 16) || (i >= 40 * 16 && i < 41 * 16) || (i >= 44 * 16 && i < 45 * 16) || (i >= 48 * 16 && i < 49 * 16)) {
 		_noteTotal[8]++;
 	}
-	else if (i < 34 * 16 || (i > 37 * 16 && i < 38 * 16) || (i > 41 * 16 && i < 42 * 16) || (i > 45 * 16 && i < 46 * 16) || (i > 47 * 16 && i < 50 * 16)) {
+	else if (i < 34 * 16 || (i >= 37 * 16 && i < 38 * 16) || (i >= 41 * 16 && i < 42 * 16) || (i >= 45 * 16 && i < 46 * 16) || (i >= 49 * 16 && i < 50 * 16)) {
 		_noteTotal[9]++;
 	}
-	else if (i < 35 * 16 || (i > 38 * 16 && i < 39 * 16) || (i > 42 * 16 && i < 43 * 16) || (i > 46 * 16 && i < 47 * 16) || (i > 50 * 16 && i < 51 * 16)) {
+	else if (i < 35 * 16 || (i >= 38 * 16 && i < 39 * 16) || (i >= 42 * 16 && i < 43 * 16) || (i >= 46 * 16 && i < 47 * 16) || (i >= 50 * 16 && i < 51 * 16)) {
 		_noteTotal[10]++;
 	}
-	else if (i < 36 * 16 || (i > 39 * 16 && i < 40 * 16) || (i > 43 * 16 && i < 44 * 16) || (i > 47 * 16 && i < 48 * 16) || (i > 51 * 16 && i < 52 * 16)) {
+	else if (i < 36 * 16 || (i >= 39 * 16 && i < 40 * 16) || (i >= 43 * 16 && i < 44 * 16) || (i >= 47 * 16 && i < 48 * 16) || (i >= 51 * 16 && i < 52 * 16)) {
 		_noteTotal[11]++;
 	}
 }
@@ -320,18 +320,6 @@ void Mandachord::checkMouse(sf::RenderWindow & window) {
 			}
 		}
 	}
-	cout << "Mal 1: " << _noteTotal[0] << endl;
-	cout << "Mal 2: " << _noteTotal[1] << endl;
-	cout << "Mal 3: " << _noteTotal[2] << endl;
-	cout << "Mal 4: " << _noteTotal[3] << endl;
-	cout << "Res 1: " << _noteTotal[4] << endl;
-	cout << "Res 2: " << _noteTotal[5] << endl;
-	cout << "Res 3: " << _noteTotal[6] << endl;
-	cout << "Res 4: " << _noteTotal[7] << endl;
-	cout << "Met 1: " << _noteTotal[8] << endl;
-	cout << "Met 2: " << _noteTotal[9] << endl;
-	cout << "Met 3: " << _noteTotal[10] << endl;
-	cout << "Met 4: " << _noteTotal[11] << endl;
 }
 
 // ChangeMallets
