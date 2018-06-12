@@ -308,12 +308,38 @@ void decTotal(unsigned int & i, array<unsigned int, 12> & _noteTotal) {
 }
 
 // Check mouse for clicking on the mandachord
-void Mandachord::checkMouse(sf::RenderWindow & window) {
+void Mandachord::checkMouse(sf::RenderWindow & window, bool & isOverMaxNotes, sf::Text & errorPrompt) {
 	for (unsigned int i = 0; i < MANSIZE; i++) {
 		if (_mandachord[i].getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
 			_mandachord[i].toggle();
 			if (_mandachord[i].isToggled()) {
 				incTotal(i, _noteTotal);
+				for (unsigned int j = 0; j < _noteTotal.size(); j++) {
+					if (j < 4) {
+						if (_noteTotal[j] > _malLimit) {
+							_mandachord[i].toggle();
+							decTotal(i, _noteTotal);
+							isOverMaxNotes = true;
+							errorPrompt.setString("Only 26 mallet notes allowed per measure");
+						}
+					}
+					else if (j < 8) {
+						if (_noteTotal[j] > _resLimit) {
+							_mandachord[i].toggle();
+							decTotal(i, _noteTotal);
+							isOverMaxNotes = true;
+							errorPrompt.setString("Only 16 resonator notes allowed per measure");
+						}
+					}
+					else {
+						if (_noteTotal[j] > _metLimit) {
+							_mandachord[i].toggle();
+							decTotal(i, _noteTotal);
+							isOverMaxNotes = true;
+							errorPrompt.setString("Only 16 metronome notes allowed per measure");
+						}
+					}
+				}
 			}
 			else {
 				decTotal(i, _noteTotal);

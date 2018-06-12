@@ -27,7 +27,7 @@ using std::vector;
 using std::shared_ptr;
 using std::make_shared;
 
-int main() {
+int WinMain() {
 	/* ---------- Initialize the window ---------- */
 	float viewX = 160, viewY = 90;
 	float widthf = 1280, heightf = 720;
@@ -194,6 +194,13 @@ int main() {
 	clearPrompt.setStyle(sf::Text::Bold);
 	clearPrompt.setString("Clear all notes? (No undo)");
 
+	sf::Text errorPrompt;
+	errorPrompt.setFont(font);
+	errorPrompt.setCharacterSize(captionSize);
+	errorPrompt.setStyle(sf::Text::Bold);
+	errorPrompt.setString("");
+	bool isOverMaxNotes = false;
+
 	/* ---------- Running application ---------- */
 	while (window.isOpen())
 	{
@@ -230,13 +237,15 @@ int main() {
 				break;
 			case (sf::Event::MouseButtonPressed):
 				if (save->isToggled() && load->isToggled() && mallets->isToggled() && resonator->isToggled() && metronome->isToggled() && loop->isToggled() && clear->isToggled()) {
-					mandachord.checkMouse(window);
+					mandachord.checkMouse(window, isOverMaxNotes, errorPrompt);
 					for (auto i : uiButtons)
 						i->checkMouse(window);
 					if (play->isToggled())
 						play->updateText("PAUSE");
 					else
 						play->updateText("PLAY");
+					if (isOverMaxNotes)
+						confirm->checkMouse(window);
 				}
 				else if (!save->isToggled() || !load->isToggled()) {
 					cancel->checkMouse(window);
@@ -432,6 +441,17 @@ int main() {
 			else if (!cancel->isToggled()) {
 				clear->toggle();
 				cancel->toggle();
+			}
+		}
+		else if (isOverMaxNotes) {
+			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
+			window.draw(screen);
+			errorPrompt.setPosition((view.getViewport().left + viewOffsetX) + width / 2, view.getViewport().top + height / 2);
+			window.draw(errorPrompt);
+			confirm->draw(window, view.getSize().x - 140, view.getSize().y - 50);
+			if (!confirm->isToggled()) {
+				isOverMaxNotes = false;
+				confirm->toggle();
 			}
 		}
 		window.display();

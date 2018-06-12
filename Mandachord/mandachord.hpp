@@ -68,9 +68,9 @@ private:
 	sf::RectangleShape _m4;
 
 	// Note limits: TODO at some point
-	size_type malLimit = 26;
-	size_type resLimit = 16;
-	size_type metLimit = 16;
+	size_type _malLimit = 26;
+	size_type _resLimit = 16;
+	size_type _metLimit = 16;
 
 	std::array<size_type, 12> _noteTotal;
 
@@ -79,7 +79,7 @@ public:
 	~Mandachord() = default;
 
 	void advance(const bool &, const unsigned int &);
-	void checkMouse(sf::RenderWindow &);
+	void checkMouse(sf::RenderWindow &, bool &, sf::Text &);
 	void changeMallets(const inst_type &);
 	void changeResonator(const inst_type &);
 	void changeMetronome(const inst_type &);
