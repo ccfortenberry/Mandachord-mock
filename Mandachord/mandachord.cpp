@@ -5,6 +5,9 @@ using std::endl;
 #include <string>
 using std::string;
 using std::getline;
+using std::to_string;
+#include <array>
+using std::array;
 
 
 /* ------ Note ------ */
@@ -78,13 +81,13 @@ Mandachord::Mandachord() {
 	loadIcon(_malTexture, "icons/mallets_icon.png");
 
 	// Sound for first row
-	loadSound(_malRow1Note, _malRow1Buffer, "instruments/adau/adau_mal_1.wav");
+	loadSound(_mandachordSounds[0], _mandachordSoundsBuffer[0], "instruments/adau/adau_mal_1.wav");
 
 	// Sound for second row
-	loadSound(_malRow2Note, _malRow2Buffer, "instruments/adau/adau_mal_2.wav");
+	loadSound(_mandachordSounds[1], _mandachordSoundsBuffer[1], "instruments/adau/adau_mal_2.wav");
 
 	// Sound for third row
-	loadSound(_malRow3Note, _malRow3Buffer, "instruments/adau/adau_mal_3.wav");
+	loadSound(_mandachordSounds[2], _mandachordSoundsBuffer[2], "instruments/adau/adau_mal_3.wav");
 
 	// Mallet notes
 	Note malNote1(_malTexture, _gray);
@@ -96,19 +99,19 @@ Mandachord::Mandachord() {
 	loadIcon(_resTexture, "icons/resonator_icon.png");
 
 	// Sound for first row
-	loadSound(_resRow1Note, _resRow1Buffer, "instruments/adau/adau_res_1.wav");
+	loadSound(_mandachordSounds[3], _mandachordSoundsBuffer[3], "instruments/adau/adau_res_1.wav");
 
 	// Sound for second row
-	loadSound(_resRow2Note, _resRow2Buffer, "instruments/adau/adau_res_2.wav");
+	loadSound(_mandachordSounds[4], _mandachordSoundsBuffer[4], "instruments/adau/adau_res_2.wav");
 
 	// Sound for third row
-	loadSound(_resRow3Note, _resRow3Buffer, "instruments/adau/adau_res_3.wav");
+	loadSound(_mandachordSounds[5], _mandachordSoundsBuffer[5], "instruments/adau/adau_res_3.wav");
 
 	// Sound for fourth row
-	loadSound(_resRow4Note, _resRow4Buffer, "instruments/adau/adau_res_4.wav");
+	loadSound(_mandachordSounds[6], _mandachordSoundsBuffer[6], "instruments/adau/adau_res_4.wav");
 
 	// Sound for fifth row
-	loadSound(_resRow5Note, _resRow5Buffer, "instruments/adau/adau_res_5.wav");
+	loadSound(_mandachordSounds[7], _mandachordSoundsBuffer[7], "instruments/adau/adau_res_5.wav");
 
 	// Resonator notes
 	Note resNote1(_resTexture, _blue);
@@ -122,19 +125,19 @@ Mandachord::Mandachord() {
 	loadIcon(_metTexture, "icons/metronome_icon.png");
 
 	// Sound for first row
-	loadSound(_metRow1Note, _metRow1Buffer, "instruments/adau/adau_met_1.wav");
+	loadSound(_mandachordSounds[8], _mandachordSoundsBuffer[8], "instruments/adau/adau_met_1.wav");
 
 	// Sound for second row
-	loadSound(_metRow2Note, _metRow2Buffer, "instruments/adau/adau_met_2.wav");
+	loadSound(_mandachordSounds[9], _mandachordSoundsBuffer[9], "instruments/adau/adau_met_2.wav");
 
 	// Sound for third row
-	loadSound(_metRow3Note, _metRow3Buffer, "instruments/adau/adau_met_3.wav");
+	loadSound(_mandachordSounds[10], _mandachordSoundsBuffer[10], "instruments/adau/adau_met_3.wav");
 
 	// Sound for fourth row
-	loadSound(_metRow4Note, _metRow4Buffer, "instruments/adau/adau_met_4.wav");
+	loadSound(_mandachordSounds[11], _mandachordSoundsBuffer[11], "instruments/adau/adau_met_4.wav");
 
 	// Sound for fifth row
-	loadSound(_metRow5Note, _metRow5Buffer, "instruments/adau/adau_met_5.wav");
+	loadSound(_mandachordSounds[12], _mandachordSoundsBuffer[12], "instruments/adau/adau_met_5.wav");
 
 	// Metronome notes
 	Note metNote1(_metTexture, _pink);
@@ -165,21 +168,6 @@ Mandachord::Mandachord() {
 			else _mandachord[i] = metNote5;
 		}
 	}
-
-	// Setup the sounds
-	_mandachordSounds = { _malRow1Note,
-						_malRow2Note,
-						_malRow3Note,
-						_resRow1Note,
-						_resRow2Note,
-						_resRow3Note,
-						_resRow4Note,
-						_resRow5Note,
-						_metRow1Note,
-						_metRow2Note,
-						_metRow3Note,
-						_metRow4Note,
-						_metRow5Note };
 
 	// Setup the line that passes over the notes
 	_line = { sf::RectangleShape(sf::Vector2f(780, 2)) };
@@ -233,68 +221,141 @@ void Mandachord::advance(const bool & toggled, const unsigned int & loopMeasure)
 	}
 }
 
+// Increment total utility
+void incTotal(unsigned int & i, array<unsigned int, 12> & _noteTotal) {
+	// Mallet total inc
+	if (i < 16 || (i >= 4 * 16 && i < 5 * 16) || (i >= 8 * 16 && i < 9 * 16)) {
+		_noteTotal[0]++;
+	}
+	else if (i < 2 * 16 || (i >= 5 * 16 && i < 6 * 16) || (i >= 9 * 16 && i < 10 * 16)) {
+		_noteTotal[1]++;
+	}
+	else if (i < 3 * 16 || (i >= 6 * 16 && i < 7 * 16) || (i >= 10 * 16 && i < 11 * 16)) {
+		_noteTotal[2]++;
+	}
+	else if (i < 4 * 16 || (i >= 7 * 16 && i < 8 * 16) || (i >= 11 * 16 && i < 12 * 16)) {
+		_noteTotal[3]++;
+	}
+	// Res total inc
+	else if (i < 13 * 16 || (i >= 16 * 16 && i < 17 * 16) || (i >= 20 * 16 && i < 21 * 16) || (i >= 24 * 16 && i < 25 * 16) || (i >= 28 * 16 && i < 29 * 16)) {
+		_noteTotal[4]++;
+	}
+	else if (i < 14 * 16 || (i >= 17 * 16 && i < 18 * 16) || (i >= 21 * 16 && i < 22 * 16) || (i >= 25 * 16 && i < 26 * 16) || (i >= 29 * 16 && i < 30 * 16)) {
+		_noteTotal[5]++;
+	}
+	else if (i < 15 * 16 || (i >= 18 * 16 && i < 19 * 16) || (i >= 22 * 16 && i < 23 * 16) || (i >= 26 * 16 && i < 27 * 16) || (i >= 30 * 16 && i < 31 * 16)) {
+		_noteTotal[6]++;
+	}
+	else if (i < 16 * 16 || (i >= 19 * 16 && i < 20 * 16) || (i >= 24 * 16 && i < 25 * 16) || (i >= 27 * 16 && i < 28 * 16) || (i >= 31 * 16 && i < 32 * 16)) {
+		_noteTotal[7]++;
+	}
+	// Met total inc
+	else if (i < 33 * 16 || (i > 36 * 16 && i < 37 * 16) || (i > 40 * 16 && i < 41 * 16) || (i > 44 * 16 && i < 45 * 16) || (i > 48 * 16 && i < 49 * 16)) {
+		_noteTotal[8]++;
+	}
+	else if (i < 34 * 16 || (i > 37 * 16 && i < 38 * 16) || (i > 41 * 16 && i < 42 * 16) || (i > 45 * 16 && i < 46 * 16) || (i > 47 * 16 && i < 50 * 16)) {
+		_noteTotal[9]++;
+	}
+	else if (i < 35 * 16 || (i > 38 * 16 && i < 39 * 16) || (i > 42 * 16 && i < 43 * 16) || (i > 46 * 16 && i < 47 * 16) || (i > 50 * 16 && i < 51 * 16)) {
+		_noteTotal[10]++;
+	}
+	else if (i < 36 * 16 || (i > 39 * 16 && i < 40 * 16) || (i > 43 * 16 && i < 44 * 16) || (i > 47 * 16 && i < 48 * 16) || (i > 51 * 16 && i < 52 * 16)) {
+		_noteTotal[11]++;
+	}
+}
+
+// Decrement total utility
+void decTotal(unsigned int & i, array<unsigned int, 12> & _noteTotal) {
+	// Mallet total dec
+	if (i < 16 || (i > 4 * 16 && i < 5 * 16) || (i > 8 * 16 && i < 9 * 16)) {
+		_noteTotal[0]--;
+	}
+	else if (i < 2 * 16 || (i > 5 * 16 && i < 6 * 16) || (i > 9 * 16 && i < 10 * 16)) {
+		_noteTotal[1]--;
+	}
+	else if (i < 3 * 16 || (i > 6 * 16 && i < 7 * 16) || (i > 10 * 16 && i < 11 * 16)) {
+		_noteTotal[2]--;
+	}
+	else if (i < 4 * 16 || (i > 7 * 16 && i < 8 * 16) || (i > 11 * 16 && i < 12 * 16)) {
+		_noteTotal[3]--;
+	}
+	// Res total dec
+	else if (i < 13 * 16 || (i > 16 * 16 && i < 17 * 16) || (i > 20 * 16 && i < 21 * 16) || (i > 24 * 16 && i < 25 * 16) || (i > 28 * 16 && i < 29 * 16)) {
+		_noteTotal[4]--;
+	}
+	else if (i < 14 * 16 || (i > 17 * 16 && i < 18 * 16) || (i > 21 * 16 && i < 22 * 16) || (i > 25 * 16 && i < 26 * 16) || (i > 29 * 16 && i < 30 * 16)) {
+		_noteTotal[5]--;
+	}
+	else if (i < 15 * 16 || (i > 18 * 16 && i < 19 * 16) || (i > 22 * 16 && i < 23 * 16) || (i > 26 * 16 && i < 27 * 16) || (i > 30 * 16 && i < 31 * 16)) {
+		_noteTotal[6]--;
+	}
+	else if (i < 16 * 16 || (i > 19 * 16 && i < 20 * 16) || (i > 24 * 16 && i < 25 * 16) || (i > 27 * 16 && i < 28 * 16) || (i > 31 * 16 && i < 32 * 16)) {
+		_noteTotal[7]--;
+	}
+	// Met total dec
+	else if (i < 33 * 16 || (i > 36 * 16 && i < 37 * 16) || (i > 40 * 16 && i < 41 * 16) || (i > 44 * 16 && i < 45 * 16) || (i > 48 * 16 && i < 49 * 16)) {
+		_noteTotal[8]--;
+	}
+	else if (i < 34 * 16 || (i > 37 * 16 && i < 38 * 16) || (i > 41 * 16 && i < 42 * 16) || (i > 45 * 16 && i < 46 * 16) || (i > 47 * 16 && i < 50 * 16)) {
+		_noteTotal[9]--;
+	}
+	else if (i < 35 * 16 || (i > 38 * 16 && i < 39 * 16) || (i > 42 * 16 && i < 43 * 16) || (i > 46 * 16 && i < 47 * 16) || (i > 50 * 16 && i < 51 * 16)) {
+		_noteTotal[10]--;
+	}
+	else if (i < 36 * 16 || (i > 39 * 16 && i < 40 * 16) || (i > 43 * 16 && i < 44 * 16) || (i > 47 * 16 && i < 48 * 16) || (i > 51 * 16 && i < 52 * 16)) {
+		_noteTotal[11]--;
+	}
+}
+
 // Check mouse for clicking on the mandachord
 void Mandachord::checkMouse(sf::RenderWindow & window) {
 	for (unsigned int i = 0; i < MANSIZE; i++) {
-		if (_mandachord[i].getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window))))
+		if (_mandachord[i].getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
 			_mandachord[i].toggle();
+			if (_mandachord[i].isToggled()) {
+				incTotal(i, _noteTotal);
+			}
+			else {
+				decTotal(i, _noteTotal);
+			}
+		}
 	}
+	cout << "Mal 1: " << _noteTotal[0] << endl;
+	cout << "Mal 2: " << _noteTotal[1] << endl;
+	cout << "Mal 3: " << _noteTotal[2] << endl;
+	cout << "Mal 4: " << _noteTotal[3] << endl;
+	cout << "Res 1: " << _noteTotal[4] << endl;
+	cout << "Res 2: " << _noteTotal[5] << endl;
+	cout << "Res 3: " << _noteTotal[6] << endl;
+	cout << "Res 4: " << _noteTotal[7] << endl;
+	cout << "Met 1: " << _noteTotal[8] << endl;
+	cout << "Met 2: " << _noteTotal[9] << endl;
+	cout << "Met 3: " << _noteTotal[10] << endl;
+	cout << "Met 4: " << _noteTotal[11] << endl;
 }
 
 // ChangeMallets
 void Mandachord::changeMallets(const inst_type & instrument) {
-	// Sound for first row
-	loadSound(_malRow1Note, _malRow1Buffer, "instruments/" + instrument + "/" + instrument + "_mal_1.wav");
-
-	// Sound for second row
-	loadSound(_malRow2Note, _malRow2Buffer, "instruments/" + instrument + "/" + instrument + "_mal_2.wav");
-
-	// Sound for third row
-	loadSound(_malRow3Note, _malRow3Buffer, "instruments/" + instrument + "/" + instrument + "_mal_3.wav");
+	for (unsigned int i = 0; i < 3; i++)
+		loadSound(_mandachordSounds[i], _mandachordSoundsBuffer[i], "instruments/" + instrument + "/" + instrument + "_mal_" + to_string(i + 1) + ".wav");
 }
 
 // ChangeResonator
 void Mandachord::changeResonator(const inst_type & instrument) {
-	// Sound for first row
-	loadSound(_resRow1Note, _resRow1Buffer, "instruments/" + instrument + "/" + instrument + "_res_1.wav");
-
-	// Sound for second row
-	loadSound(_resRow2Note, _resRow2Buffer, "instruments/" + instrument + "/" + instrument + "_res_2.wav");
-
-	// Sound for third row
-	loadSound(_resRow3Note, _resRow3Buffer, "instruments/" + instrument + "/" + instrument + "_res_3.wav");
-
-	// Sound for fourth row
-	loadSound(_resRow4Note, _resRow4Buffer, "instruments/" + instrument + "/" + instrument + "_res_4.wav");
-
-	// Sound for fifth row
-	loadSound(_resRow5Note, _resRow5Buffer, "instruments/" + instrument + "/" + instrument + "_res_5.wav");
+	for (unsigned int i = 3; i < 8; i++)
+		loadSound(_mandachordSounds[i], _mandachordSoundsBuffer[i], "instruments/" + instrument + "/" + instrument + "_res_" + to_string(i - 2) + ".wav");
 }
 
 // ChangeMetronome
 void Mandachord::changeMetronome(const inst_type & instrument) {
-	// Sound for first row
-	loadSound(_metRow1Note, _metRow1Buffer, "instruments/" + instrument + "/" + instrument + "_met_1.wav");
-
-	// Sound for second row
-	loadSound(_metRow2Note, _metRow2Buffer, "instruments/" + instrument + "/" + instrument + "_met_2.wav");
-
-	// Sound for third row
-	loadSound(_metRow3Note, _metRow3Buffer, "instruments/" + instrument + "/" + instrument + "_met_3.wav");
-
-	// Sound for fourth row
-	loadSound(_metRow4Note, _metRow4Buffer, "instruments/" + instrument + "/" + instrument + "_met_4.wav");
-
-	// Sound for fifth row
-	loadSound(_metRow5Note, _metRow5Buffer, "instruments/" + instrument + "/" + instrument + "_met_5.wav");
+	for (unsigned int i = 8; i < 13; i++)
+		loadSound(_mandachordSounds[i], _mandachordSoundsBuffer[i], "instruments/" + instrument + "/" + instrument + "_met_" + to_string(i - 7) + ".wav");
 }
 
 // Clear
 void Mandachord::clear() {
 	for (auto & i : _mandachord) {
-		if (i.isToggled()) {
-			i.toggle();
-		}
+		if (i.isToggled()) i.toggle();
 	}
 }
 
@@ -415,10 +476,16 @@ void Mandachord::loadFmFile(std::ifstream & in, inst_type & mallets, inst_type &
 	for (unsigned int i = 0; i < MANSIZE; i++) {
 		getline(in, buffer);
 		if (buffer == "1") {
-			if (!_mandachord[i].isToggled()) _mandachord[i].toggle();
+			if (!_mandachord[i].isToggled()) {
+				_mandachord[i].toggle();
+				incTotal(i, _noteTotal);
+			}
 		}
 		else {
-			if (_mandachord[i].isToggled()) _mandachord[i].toggle();
+			if (_mandachord[i].isToggled()) {
+				_mandachord[i].toggle();
+				decTotal(i, _noteTotal);
+			}
 		}
 	}
 }

@@ -52,38 +52,11 @@ private:
 	sf::Texture _malTexture;
 	sf::Texture _resTexture;
 	sf::Texture _metTexture;
-
-	// Sounds and sound buffers
-	sf::Sound _malRow1Note;
-	sf::Sound _malRow2Note;
-	sf::Sound _malRow3Note;
-	sf::Sound _resRow1Note;
-	sf::Sound _resRow2Note;
-	sf::Sound _resRow3Note;
-	sf::Sound _resRow4Note;
-	sf::Sound _resRow5Note;
-	sf::Sound _metRow1Note;
-	sf::Sound _metRow2Note;
-	sf::Sound _metRow3Note;
-	sf::Sound _metRow4Note;
-	sf::Sound _metRow5Note;
-	sf::SoundBuffer _malRow1Buffer;
-	sf::SoundBuffer _malRow2Buffer;
-	sf::SoundBuffer _malRow3Buffer;
-	sf::SoundBuffer _resRow1Buffer;
-	sf::SoundBuffer _resRow2Buffer;
-	sf::SoundBuffer _resRow3Buffer;
-	sf::SoundBuffer _resRow4Buffer;
-	sf::SoundBuffer _resRow5Buffer;
-	sf::SoundBuffer _metRow1Buffer;
-	sf::SoundBuffer _metRow2Buffer;
-	sf::SoundBuffer _metRow3Buffer;
-	sf::SoundBuffer _metRow4Buffer;
-	sf::SoundBuffer _metRow5Buffer;
 	
 	// Containers
 	std::array<Note, MANSIZE> _mandachord;
 	std::array<sf::Sound, 13> _mandachordSounds;
+	std::array<sf::SoundBuffer, 13> _mandachordSoundsBuffer;
 	std::deque<sf::Sound> _nowPlaying;
 	unsigned int _NPIndex = 0;
 
@@ -98,6 +71,8 @@ private:
 	size_type malLimit = 26;
 	size_type resLimit = 16;
 	size_type metLimit = 16;
+
+	std::array<size_type, 12> _noteTotal;
 
 public:
 	Mandachord();
