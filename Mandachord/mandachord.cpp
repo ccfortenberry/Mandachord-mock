@@ -8,12 +8,14 @@ using std::getline;
 using std::to_string;
 #include <array>
 using std::array;
+#include <utility>
+using std::pair;
 
 
 /* ------ Note ------ */
 // Ctor from data
 Note::Note(const sf::Texture & icon, const sf::Color & color)
-	: _icon(sf::Vector2f(50, 50)), _color(color), _noteBox(sf::Vector2f(50, 50)), _toggled(false) {
+	: _icon(sf::Vector2f(50, 50)), _color(color), _noteBox(sf::Vector2f(50, 50)), _toggled(false), _playable(true) {
 	_noteBox.setOutlineThickness(2);
 	_noteBox.setOutlineColor(color);
 	_noteBox.setFillColor(sf::Color::Transparent);
@@ -42,9 +44,21 @@ bool Note::isToggled() {
 	return _toggled;
 }
 
+// TogglePlayable
+void Note::togglePlayable() {
+	if (!_playable) _playable = true;
+	else _playable = false;
+}
+
+// IsPlayable
+bool Note::isPlayable() {
+	return _playable;
+}
+
 // IsColliding
 bool Note::isColliding(const sf::RectangleShape & line) {
-	return _noteBox.getPosition().x == line.getPosition().x;
+	//return _noteBox.getPosition().x == line.getPosition().x;
+	return line.getGlobalBounds().intersects(_noteBox.getGlobalBounds());
 }
 
 // Draw
@@ -172,7 +186,7 @@ Mandachord::Mandachord() {
 	// Setup the line that passes over the notes
 	_line = { sf::RectangleShape(sf::Vector2f(780, 2)) };
 	_line.rotate(90);
-	_line.setPosition(10, 35);
+	_line.setPosition(5, 35);
 
 	// Setup the bars
 	_m1 = _line;
@@ -190,33 +204,53 @@ void Mandachord::advance(const bool & toggled, const unsigned int & loopMeasure)
 	if (toggled) {
 		if (loopMeasure == 0) {
 			if (_line.getPosition().x < BOARD)
-				_line.move(sf::Vector2f(5, 0));
-			else
-				_line.setPosition(10, 35);
+				_line.move(sf::Vector2f(8, 0));
+			else {
+				_line.setPosition(5, 35);
+				for (auto & i : _mandachord) {
+					if (!i.isPlayable()) i.togglePlayable();
+				}
+			}
 		}
 		else if (loopMeasure == 1) {
 			if (_line.getPosition().x < MEASURE)
-				_line.move(sf::Vector2f(5, 0));
-			else
-				_line.setPosition(10, 35);
+				_line.move(sf::Vector2f(8, 0));
+			else {
+				_line.setPosition(5, 35);
+				for (auto & i : _mandachord) {
+					if (!i.isPlayable()) i.togglePlayable();
+				}
+			}
 		}
 		else if (loopMeasure == 2) {
 			if (_line.getPosition().x > MEASURE && _line.getPosition().x < 2 * MEASURE)
-				_line.move(sf::Vector2f(5, 0));
-			else
-				_line.setPosition(10 + MEASURE, 35);
+				_line.move(sf::Vector2f(8, 0));
+			else {
+				_line.setPosition(5, 35);
+				for (auto & i : _mandachord) {
+					if (!i.isPlayable()) i.togglePlayable();
+				}
+			}
 		}
 		else if (loopMeasure == 3) {
 			if (_line.getPosition().x > 2 * MEASURE && _line.getPosition().x < 3 * MEASURE)
-				_line.move(sf::Vector2f(5, 0));
-			else
-				_line.setPosition(10 + 2 * MEASURE, 35);
+				_line.move(sf::Vector2f(8, 0));
+			else {
+				_line.setPosition(5, 35);
+				for (auto & i : _mandachord) {
+					if (!i.isPlayable()) i.togglePlayable();
+				}
+			}
 		}
 		else if (loopMeasure == 4) {
 			if (_line.getPosition().x > 3 * MEASURE && _line.getPosition().x < 4 * MEASURE)
-				_line.move(sf::Vector2f(5, 0));
-			else
-				_line.setPosition(10 + 3 * MEASURE, 35);
+				_line.move(sf::Vector2f(8, 0));
+			else {
+				_line.setPosition(5, 35);
+				for (auto & i : _mandachord) {
+					if (!i.isPlayable()) i.togglePlayable();
+				}
+			}
 		}
 	}
 }
@@ -395,76 +429,90 @@ void Mandachord::draw(sf::RenderWindow & window, float & posX, float & posY) {
 void Mandachord::play() {
 	// This makes me physically sick but I'll clean it up later...
 	for (unsigned int i = 0; i < MANSIZE; i++) {
-		if (_mandachord[i].isToggled() && _mandachord[i].isColliding(_line)) {
+		if (_mandachord[i].isToggled() && _mandachord[i].isColliding(_line) && _mandachord[i].isPlayable()) {
 			if (i < 64) {
-				_nowPlaying.emplace_back(_mandachordSounds[0]);
+				_mandachord[i].togglePlayable(); // Let's make it even worse :^)
+				_nowPlaying.emplace_back(pair<unsigned int, sf::Sound>(i, _mandachordSounds[0]));
+				_nowPlaying[_NPIndex].second.play();
 				_NPIndex++;
-				_nowPlaying[_NPIndex - 1].play();
 			}
 			else if (i < 2 * 64) {
-				_nowPlaying.emplace_back(_mandachordSounds[1]);
+				_mandachord[i].togglePlayable();
+				_nowPlaying.emplace_back(pair<unsigned int, sf::Sound>(i, _mandachordSounds[1]));
+				_nowPlaying[_NPIndex].second.play();
 				_NPIndex++;
-				_nowPlaying[_NPIndex - 1].play();
 			}
 			else if (i < 3 * 64) {
-				_nowPlaying.emplace_back(_mandachordSounds[2]);
+				_mandachord[i].togglePlayable();
+				_nowPlaying.emplace_back(pair<unsigned int, sf::Sound>(i, _mandachordSounds[2]));
+				_nowPlaying[_NPIndex].second.play();
 				_NPIndex++;
-				_nowPlaying[_NPIndex - 1].play();
 			}
 			else if (i < 4 * 64) {
-				_nowPlaying.emplace_back(_mandachordSounds[3]);
+				_mandachord[i].togglePlayable();
+				_nowPlaying.emplace_back(pair<unsigned int, sf::Sound>(i, _mandachordSounds[3]));
+				_nowPlaying[_NPIndex].second.play();
 				_NPIndex++;
-				_nowPlaying[_NPIndex - 1].play();
 			}
 			else if (i < 5 * 64) {
-				_nowPlaying.emplace_back(_mandachordSounds[4]);
+				_mandachord[i].togglePlayable();
+				_nowPlaying.emplace_back(pair<unsigned int, sf::Sound>(i, _mandachordSounds[4]));
+				_nowPlaying[_NPIndex].second.play();
 				_NPIndex++;
-				_nowPlaying[_NPIndex - 1].play();
 			}
 			else if (i < 6 * 64) {
-				_nowPlaying.emplace_back(_mandachordSounds[5]);
+				_mandachord[i].togglePlayable();
+				_nowPlaying.emplace_back(pair<unsigned int, sf::Sound>(i, _mandachordSounds[5]));
+				_nowPlaying[_NPIndex].second.play();
 				_NPIndex++;
-				_nowPlaying[_NPIndex - 1].play();
 			}
 			else if (i < 7 * 64) {
-				_nowPlaying.emplace_back(_mandachordSounds[6]);
+				_mandachord[i].togglePlayable();
+				_nowPlaying.emplace_back(pair<unsigned int, sf::Sound>(i, _mandachordSounds[6]));
+				_nowPlaying[_NPIndex].second.play();
 				_NPIndex++;
-				_nowPlaying[_NPIndex - 1].play();
 			}
 			else if (i < 8 * 64) {
-				_nowPlaying.emplace_back(_mandachordSounds[7]);
+				_mandachord[i].togglePlayable();
+				_nowPlaying.emplace_back(pair<unsigned int, sf::Sound>(i, _mandachordSounds[7]));
+				_nowPlaying[_NPIndex].second.play();
 				_NPIndex++;
-				_nowPlaying[_NPIndex - 1].play();
 			}
 			else if (i < 9 * 64) {
-				_nowPlaying.emplace_back(_mandachordSounds[8]);
+				_mandachord[i].togglePlayable();
+				_nowPlaying.emplace_back(pair<unsigned int, sf::Sound>(i, _mandachordSounds[8]));
+				_nowPlaying[_NPIndex].second.play();
 				_NPIndex++;
-				_nowPlaying[_NPIndex - 1].play();
 			}
 			else if (i < 10 * 64) {
-				_nowPlaying.emplace_back(_mandachordSounds[9]);
+				_mandachord[i].togglePlayable();
+				_nowPlaying.emplace_back(pair<unsigned int, sf::Sound>(i, _mandachordSounds[9]));
+				_nowPlaying[_NPIndex].second.play();
 				_NPIndex++;
-				_nowPlaying[_NPIndex - 1].play();
 			}
 			else if (i < 11 * 64) {
-				_nowPlaying.emplace_back(_mandachordSounds[10]);
+				_mandachord[i].togglePlayable();
+				_nowPlaying.emplace_back(pair<unsigned int, sf::Sound>(i, _mandachordSounds[10]));
+				_nowPlaying[_NPIndex].second.play();
 				_NPIndex++;
-				_nowPlaying[_NPIndex - 1].play();
 			}
 			else if (i < 12 * 64) {
-				_nowPlaying.emplace_back(_mandachordSounds[11]);
+				_mandachord[i].togglePlayable();
+				_nowPlaying.emplace_back(pair<unsigned int, sf::Sound>(i, _mandachordSounds[11]));
+				_nowPlaying[_NPIndex].second.play();
 				_NPIndex++;
-				_nowPlaying[_NPIndex - 1].play();
 			}
 			else {
-				_nowPlaying.emplace_back(_mandachordSounds[12]);
+				_mandachord[i].togglePlayable();
+				_nowPlaying.emplace_back(pair<unsigned int, sf::Sound>(i, _mandachordSounds[12]));
+				_nowPlaying[_NPIndex].second.play();
 				_NPIndex++;
-				_nowPlaying[_NPIndex - 1].play();
 			}
 		}
 	}
 
-	if (!_nowPlaying.empty() && _nowPlaying.front().getStatus() == sf::Sound::Status::Stopped) {
+	if (!_nowPlaying.empty() && _nowPlaying.front().second.getStatus() == sf::Sound::Status::Stopped) {
+		if (!_mandachord[_nowPlaying.front().first].isPlayable()) _mandachord[_nowPlaying.front().first].togglePlayable();
 		_nowPlaying.pop_front();
 		_NPIndex--;
 	}

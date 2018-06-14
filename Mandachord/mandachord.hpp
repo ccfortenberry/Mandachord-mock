@@ -5,6 +5,7 @@
 #include <SFML/Audio.hpp>
 #include <array>
 #include <deque>
+#include <utility>
 #include <string>
 #include <fstream>
 
@@ -16,6 +17,7 @@ private:
 	sf::Color _color;
 	sf::RectangleShape _noteBox;
 	bool _toggled;
+	bool _playable;
 
 public:
 	Note() = default;
@@ -25,6 +27,8 @@ public:
 	sf::FloatRect getPos();
 	void toggle();
 	bool isToggled();
+	void togglePlayable();
+	bool isPlayable();
 	bool isColliding(const sf::RectangleShape &);
 	void draw(sf::RenderWindow &, const size_type &, const size_type &);
 };
@@ -57,7 +61,7 @@ private:
 	std::array<Note, MANSIZE> _mandachord;
 	std::array<sf::Sound, 13> _mandachordSounds;
 	std::array<sf::SoundBuffer, 13> _mandachordSoundsBuffer;
-	std::deque<sf::Sound> _nowPlaying;
+	std::deque<std::pair<unsigned int, sf::Sound>> _nowPlaying;
 	unsigned int _NPIndex = 0;
 
 	// Line
