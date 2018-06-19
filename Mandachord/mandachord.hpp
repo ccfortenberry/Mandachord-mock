@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <array>
-#include <unordered_map>
+#include <deque>
 #include <utility>
 #include <string>
 #include <fstream>
@@ -61,8 +61,8 @@ private:
 	std::array<Note, MANSIZE> _mandachord;
 	std::array<sf::Sound, 13> _mandachordSounds;
 	std::array<sf::SoundBuffer, 13> _mandachordSoundsBuffer;
-	std::unordered_map<unsigned int, sf::Sound> _nowPlaying;
-	unsigned int _NPIndex = 0;
+	std::deque<std::pair<unsigned int ,sf::Sound>> _nowPlaying;
+	unsigned int _npindex;
 
 	// Line
 	sf::RectangleShape _line;

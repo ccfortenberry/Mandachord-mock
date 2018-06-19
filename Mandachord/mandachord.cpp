@@ -59,7 +59,7 @@ bool Note::isPlayable() {
 
 // IsColliding
 bool Note::isColliding(const sf::RectangleShape & line) {
-	return line.getGlobalBounds().intersects(_noteBox.getGlobalBounds());
+	return _noteBox.getGlobalBounds().intersects(line.getGlobalBounds());
 }
 
 // Draw
@@ -432,54 +432,60 @@ void Mandachord::play() {
 		if (_mandachord[i].isToggled() && _mandachord[i].isPlayable() && _mandachord[i].isColliding(_line)) {
 			_mandachord[i].togglePlayable();
 			if (i < 64) {
-				_nowPlaying[i] = _mandachordSounds[0];
+				_nowPlaying.emplace_back(i, _mandachordSounds[0]);
 			}
 			else if (i < 2 * 64) {
-				_nowPlaying[i] = _mandachordSounds[1];
+				_nowPlaying.emplace_back(i, _mandachordSounds[1]);
 			}
 			else if (i < 3 * 64) {
-				_nowPlaying[i] = _mandachordSounds[2];
+				_nowPlaying.emplace_back(i, _mandachordSounds[2]);
 			}
 			else if (i < 4 * 64) {
-				_nowPlaying[i] = _mandachordSounds[3];
+				_nowPlaying.emplace_back(i, _mandachordSounds[3]);
 			}
 			else if (i < 5 * 64) {
-				_nowPlaying[i] = _mandachordSounds[4];
+				_nowPlaying.emplace_back(i, _mandachordSounds[4]);
 			}
 			else if (i < 6 * 64) {
-				_nowPlaying[i] = _mandachordSounds[5];
+				_nowPlaying.emplace_back(i, _mandachordSounds[5]);
 			}
 			else if (i < 7 * 64) {
-				_nowPlaying[i] = _mandachordSounds[6];
+				_nowPlaying.emplace_back(i, _mandachordSounds[6]);
 			}
 			else if (i < 8 * 64) {
-				_nowPlaying[i] = _mandachordSounds[7];
+				_nowPlaying.emplace_back(i, _mandachordSounds[7]);
 			}
 			else if (i < 9 * 64) {
-				_nowPlaying[i] = _mandachordSounds[8];
+				_nowPlaying.emplace_back(i, _mandachordSounds[8]);
 			}
 			else if (i < 10 * 64) {
-				_nowPlaying[i] = _mandachordSounds[9];
+				_nowPlaying.emplace_back(i, _mandachordSounds[9]);
 			}
 			else if (i < 11 * 64) {
-				_nowPlaying[i] = _mandachordSounds[10];
+				_nowPlaying.emplace_back(i, _mandachordSounds[10]);
 			}
 			else if (i < 12 * 64) {
-				_nowPlaying[i] = _mandachordSounds[11];
+				_nowPlaying.emplace_back(i, _mandachordSounds[11]);
 			}
 			else {
-				_nowPlaying[i] = _mandachordSounds[12];
+				_nowPlaying.emplace_back(i, _mandachordSounds[12]);
 			}
-			_nowPlaying[i].play();
+			_nowPlaying[_npindex].second.play();
+			_npindex++;
 		}
 	}
-	for (auto i = _nowPlaying.begin(); i != _nowPlaying.end(); ) {
-		if (i->second.getStatus() == sf::Sound::Status::Stopped) {
-			if (!_mandachord[i->first].isPlayable()) _mandachord[i->first].togglePlayable();
-			i = _nowPlaying.erase(i);
+	
+	if (!_nowPlaying.empty())
+		for (auto i = 0; i < _nowPlaying.size(); i++) {
+			if (_nowPlaying[i].second.getStatus() == sf::Sound::Status::Stopped) {
+				if (!_mandachord[_nowPlaying[i].first].isColliding(_line) && !_mandachord[_nowPlaying[i].first].isPlayable())
+					_mandachord[_nowPlaying[i].first].togglePlayable();
+				auto temp = _nowPlaying[0];
+				_nowPlaying[0] = _nowPlaying[i];
+				_nowPlaying[i] = temp;
+				_nowPlaying.pop_front();
+				_npindex--;
 		}
-		else
-			i++;
 	}
 }
 

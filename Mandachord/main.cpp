@@ -27,7 +27,7 @@ using std::vector;
 using std::shared_ptr;
 using std::make_shared;
 
-int main() {
+int WinMain() {
 	/* ---------- Initialize the window ---------- */
 	float viewX = 160, viewY = 90;
 	float widthf = 1280, heightf = 720;
