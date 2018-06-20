@@ -338,7 +338,7 @@ int WinMain() {
 		window.draw(text);
 		float butposX = 5, butposY = 820;
 		for (unsigned int i = 0; i < uiButtons.size(); i++) {
-			uiButtons[i]->draw(window, butposX, butposY);
+			uiButtons[i]->draw(window, butposX + viewOffsetX, butposY);
 			butposX += uiButtons[i]->getPos().width + 15;
 		}
 		float manposX = 10, manposY = 40;
@@ -346,13 +346,13 @@ int WinMain() {
 		if (!save->isToggled() || !load->isToggled()) {
 			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
 			window.draw(screen);
-			inputPrompt.setPosition(100, 200);
+			inputPrompt.setPosition(100 + viewOffsetX, 200);
 			window.draw(inputPrompt);
-			inputField.setPosition(inputPrompt.getGlobalBounds().width + 95, 200);
+			inputField.setPosition(inputPrompt.getGlobalBounds().width + 95 + viewOffsetX, 200);
 			window.draw(inputField);
-			inputDisplay.setPosition(inputPrompt.getGlobalBounds().width + 100, 200);
+			inputDisplay.setPosition(inputPrompt.getGlobalBounds().width + 100 + viewOffsetX, 200);
 			window.draw(inputDisplay);
-			cancel->draw(window, view.getSize().x - 140, view.getSize().y - 50);
+			cancel->draw(window, view.getSize().x - 140 + viewOffsetX, view.getSize().y - 50);
 			if (!cancel->isToggled()) {
 				if (!save->isToggled())
 					save->toggle();
@@ -368,7 +368,7 @@ int WinMain() {
 			window.draw(screen);
 			float loopposX = 10, loopposY = 25;
 			for (unsigned int i = 0; i < instrButtons.size(); i++) {
-				instrButtons[i]->draw(window, loopposX, loopposY);
+				instrButtons[i]->draw(window, loopposX + viewOffsetX, loopposY);
 				loopposY += instrButtons[i]->getPos().height + 30;
 			}
 			if (!mallets->isToggled()) {
@@ -455,8 +455,8 @@ int WinMain() {
 			window.draw(screen);
 			clearPrompt.setPosition((view.getViewport().left + viewOffsetX) + width / 2, view.getViewport().top + height / 2);
 			window.draw(clearPrompt);
-			confirm->draw(window, view.getSize().x - cancel->getPos().width - 160, view.getSize().y - 50);
-			cancel->draw(window, view.getSize().x - 140, view.getSize().y - 50);
+			confirm->draw(window, view.getSize().x - cancel->getPos().width - 160 + viewOffsetX, view.getSize().y - 50);
+			cancel->draw(window, view.getSize().x - 140 + viewOffsetX, view.getSize().y - 50);
 			if (!confirm->isToggled()) {
 				mandachord.clear();
 				clear->toggle();
@@ -472,7 +472,7 @@ int WinMain() {
 			window.draw(screen);
 			errorPrompt.setPosition((view.getViewport().left + viewOffsetX) + width / 2, view.getViewport().top + height / 2);
 			window.draw(errorPrompt);
-			confirm->draw(window, view.getSize().x - 140, view.getSize().y - 50);
+			confirm->draw(window, view.getSize().x - 140 + viewOffsetX, view.getSize().y - 50);
 			if (!confirm->isToggled()) {
 				isOverMaxNotes = false;
 				confirm->toggle();

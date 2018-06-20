@@ -483,4 +483,5 @@ void Mandachord::loadFmFile(std::ifstream & in, inst_type & mallets, inst_type &
 			}
 		}
 	}
+	_line.setPosition(5 + _posmin, 35);
 }
