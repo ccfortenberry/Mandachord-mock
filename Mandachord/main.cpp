@@ -133,6 +133,26 @@ int WinMain() {
 	auto measure4Button = make_shared<Button>("4", font, textSize, sf::Color::White);
 	loopButtons.push_back(measure4Button);
 
+	/* ---------- Measures 1 - 2 button ---------- */
+	auto measure12Button = make_shared<Button>("1 - 2", font, textSize, sf::Color::White);
+	loopButtons.push_back(measure12Button);
+
+	/* ---------- Measures 2 - 3 button ---------- */
+	auto measure23Button = make_shared<Button>("2 - 3", font, textSize, sf::Color::White);
+	loopButtons.push_back(measure23Button);
+
+	/* ---------- Measures 3 - 4 button ---------- */
+	auto measure34Button = make_shared<Button>("3 - 4", font, textSize, sf::Color::White);
+	loopButtons.push_back(measure34Button);
+
+	/* ---------- Measures 1 - 2 - 3 button ---------- */
+	auto measure123Button = make_shared<Button>("1 - 2 - 3", font, textSize, sf::Color::White);
+	loopButtons.push_back(measure123Button);
+
+	/* ---------- Measures 2 - 3 - 4 button ---------- */
+	auto measure234Button = make_shared<Button>("2 - 3 - 4", font, textSize, sf::Color::White);
+	loopButtons.push_back(measure234Button);
+
 	/* ---------- Adau button ---------- */
 	auto adauButton = make_shared<Button>("ADAU", font, textSize, sf::Color::White);
 	instrButtons.push_back(adauButton);
@@ -417,8 +437,7 @@ int WinMain() {
 			for (unsigned int i = 0; i < loopButtons.size(); i++) {
 				if (!loopButtons[i]->isToggled()) {
 					if (i < loopButtons.size() - 1) {
-						if (i == 0) measure = "FULL";
-						else measure = to_string(i);
+						measure = loopButtons[i]->getText();
 						loop->updateText("LOOP: " + measure);
 						loopMeasure = i;
 						loop->toggle();

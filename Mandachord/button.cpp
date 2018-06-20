@@ -36,6 +36,11 @@ bool Button::isToggled() {
 	return _toggled;
 }
 
+// GetString
+Button::text_type Button::getText() {
+	return _text.getString();
+}
+
 // UpdateText
 void Button::updateText(const text_type & text) {
 	_text.setString(text);

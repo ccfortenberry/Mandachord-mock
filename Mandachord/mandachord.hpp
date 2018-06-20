@@ -46,6 +46,8 @@ private:
 	const static size_type MANSIZE = MALSIZE + RESSIZE + METSIZE;
 	const size_type MEASURE = 16 * 60;
 	const size_type BOARD = 4 * 16 * 60;
+	size_type _posmin = 0;
+	size_type _posmax = BOARD;
 
 	// Colors
 	sf::Color _gray = {sf::Color(91, 91, 91, 225)};
