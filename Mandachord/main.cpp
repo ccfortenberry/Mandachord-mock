@@ -110,6 +110,9 @@ int WinMain() {
 	sf::RectangleShape screen(sf::Vector2f(view.getSize()));
 	screen.setFillColor(sf::Color(0, 128, 128, 255));
 
+	sf::RectangleShape inputField(sf::Vector2f(widthf * 0.8, heightf * 0.05));
+	inputField.setFillColor(sf::Color(0, 108, 108, 235));
+
 	/* ---------- Full loop button ---------- */
 	auto measureAllButton = make_shared<Button>("FULL", font, textSize, sf::Color::White);
 	loopButtons.push_back(measureAllButton);
@@ -325,6 +328,8 @@ int WinMain() {
 			window.draw(screen);
 			inputPrompt.setPosition(100, 200);
 			window.draw(inputPrompt);
+			inputField.setPosition(inputPrompt.getGlobalBounds().width + 95, 200);
+			window.draw(inputField);
 			inputDisplay.setPosition(inputPrompt.getGlobalBounds().width + 100, 200);
 			window.draw(inputDisplay);
 			cancel->draw(window, view.getSize().x - 140, view.getSize().y - 50);
