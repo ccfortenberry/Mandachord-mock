@@ -29,21 +29,23 @@ using std::make_shared;
 
 int WinMain() {
 	/* ---------- Initialize the window ---------- */
-	float viewX = 160, viewY = 90;
-	float widthf = 1280, heightf = 720;
-	float viewOffsetX = 0.0f; // No need for a Y offset
-	sf::View view(sf::FloatRect(viewX, viewY, widthf, heightf));
+	array<sf::View, 3> viewPresets = { sf::View(sf::FloatRect(160, 90, 1280, 720)), sf::View(sf::FloatRect(160, 90, 1600, 900)), sf::View(sf::FloatRect(160, 90, 1920, 1080)) };
+	sf::View view;
+	view = viewPresets[0];
 	view.zoom(1.25f);
 	auto viewStartX = view.getCenter().x;
+	float viewOffsetX = 0.0f; // No need for a Y offset
+
 	unsigned int width = 1280, height = 720;
 	sf::RenderWindow window(sf::VideoMode(width, height), "Mock Mandachord", sf::Style::Titlebar | sf::Style::Close);
-	window.setFramerateLimit(60);
 	window.setView(view);
+	window.setFramerateLimit(60);
 
 	vector<shared_ptr<Button>> uiButtons;
 	vector<shared_ptr<Button>> loopButtons;
 	vector<shared_ptr<Button>> instrButtons;
 	vector<shared_ptr<Button>> clearButtons;
+	vector<shared_ptr<Button>> optionButtons;
 
 	/* ---------- Generate the stuff that goes on the screen ---------- */
 	/* ---------- Fan font ---------- */
@@ -97,21 +99,46 @@ int WinMain() {
 	auto metronome = make_shared<Button>("METRONOME: " + currentMetronome, font, textSize, sf::Color::White);
 	uiButtons.push_back(metronome);
 
+	/* ---------- Adau button ---------- */
+	auto adauButton = make_shared<Button>("ADAU", font, textSize, sf::Color::White);
+	instrButtons.push_back(adauButton);
+
+	/* ---------- Alpha button ---------- */
+	auto alphaButton = make_shared<Button>("ALPHA", font, textSize, sf::Color::White);
+	instrButtons.push_back(alphaButton);
+
+	/* ---------- Beta button ---------- */
+	auto betaButton = make_shared<Button>("BETA", font, textSize, sf::Color::White);
+	instrButtons.push_back(betaButton);
+
+	/* ---------- Delta button ---------- */
+	auto deltaButton = make_shared<Button>("DELTA", font, textSize, sf::Color::White);
+	instrButtons.push_back(deltaButton);
+
+	/* ---------- Druk button ---------- */
+	auto drukButton = make_shared<Button>("DRUK", font, textSize, sf::Color::White);
+	instrButtons.push_back(drukButton);
+
+	/* ---------- Epsilon button ---------- */
+	auto epsilonButton = make_shared<Button>("EPSILON", font, textSize, sf::Color::White);
+	instrButtons.push_back(epsilonButton);
+
+	/* ---------- Gamma button ---------- */
+	auto gammaButton = make_shared<Button>("GAMMA", font, textSize, sf::Color::White);
+	instrButtons.push_back(gammaButton);
+
+	/* ---------- Horos button ---------- */
+	auto horosButton = make_shared<Button>("HOROS", font, textSize, sf::Color::White);
+	instrButtons.push_back(horosButton);
+
+	/* ---------- Plogg button ---------- */
+	auto ploggButton = make_shared<Button>("PLOGG", font, textSize, sf::Color::White);
+	instrButtons.push_back(ploggButton);
+
 	/* ---------- Loop button ---------- */
 	string measure = "FULL";
 	auto loop = make_shared<Button>("LOOP: " + measure, font, textSize, sf::Color::White);
 	uiButtons.push_back(loop);
-
-	/* ---------- Clear button ---------- */
-	auto clear = make_shared<Button>("CLEAR", font, textSize, sf::Color::White);
-	uiButtons.push_back(clear);
-
-	/* ---------- Toggle Screen ---------- */
-	sf::RectangleShape screen(sf::Vector2f(view.getSize()));
-	screen.setFillColor(sf::Color(0, 128, 128, 255));
-
-	sf::RectangleShape inputField(sf::Vector2f(widthf * 0.8, heightf * 0.05));
-	inputField.setFillColor(sf::Color(0, 108, 108, 235));
 
 	/* ---------- Full loop button ---------- */
 	auto measureAllButton = make_shared<Button>("FULL", font, textSize, sf::Color::White);
@@ -153,51 +180,43 @@ int WinMain() {
 	auto measure234Button = make_shared<Button>("2 - 3 - 4", font, textSize, sf::Color::White);
 	loopButtons.push_back(measure234Button);
 
-	/* ---------- Adau button ---------- */
-	auto adauButton = make_shared<Button>("ADAU", font, textSize, sf::Color::White);
-	instrButtons.push_back(adauButton);
+	/* ---------- Clear button ---------- */
+	auto clear = make_shared<Button>("CLEAR", font, textSize, sf::Color::White);
+	uiButtons.push_back(clear);
 
-	/* ---------- Alpha button ---------- */
-	auto alphaButton = make_shared<Button>("ALPHA", font, textSize, sf::Color::White);
-	instrButtons.push_back(alphaButton);
+	/* ---------- Confirm button ---------- */
+	auto confirm = make_shared<Button>("CONFIRM", font, textSize, sf::Color::White);
+	clearButtons.push_back(confirm);
 
-	/* ---------- Beta button ---------- */
-	auto betaButton = make_shared<Button>("BETA", font, textSize, sf::Color::White);
-	instrButtons.push_back(betaButton);
+	/* ---------- Options button ---------- */
+	auto options = make_shared<Button>("OPTIONS", font, textSize, sf::Color::White);
+	uiButtons.push_back(options);
 
-	/* ---------- Delta button ---------- */
-	auto deltaButton = make_shared<Button>("DELTA", font, textSize, sf::Color::White);
-	instrButtons.push_back(deltaButton);
+	/* ---------- 720 button ---------- */
+	auto small = make_shared<Button>("1280x720", font, textSize, sf::Color::White);
+	optionButtons.push_back(small);
 
-	/* ---------- Druk button ---------- */
-	auto drukButton = make_shared<Button>("DRUK", font, textSize, sf::Color::White);
-	instrButtons.push_back(drukButton);
+	/* ---------- Options button ---------- */
+	auto medium = make_shared<Button>("1600x900", font, textSize, sf::Color::White);
+	optionButtons.push_back(medium);
 
-	/* ---------- Epsilon button ---------- */
-	auto epsilonButton = make_shared<Button>("EPSILON", font, textSize, sf::Color::White);
-	instrButtons.push_back(epsilonButton);
-
-	/* ---------- Gamma button ---------- */
-	auto gammaButton = make_shared<Button>("GAMMA", font, textSize, sf::Color::White);
-	instrButtons.push_back(gammaButton);
-
-	/* ---------- Horos button ---------- */
-	auto horosButton = make_shared<Button>("HOROS", font, textSize, sf::Color::White);
-	instrButtons.push_back(horosButton);
-
-	/* ---------- Plogg button ---------- */
-	auto ploggButton = make_shared<Button>("PLOGG", font, textSize, sf::Color::White);
-	instrButtons.push_back(ploggButton);
+	/* ---------- 1080 button ---------- */
+	auto large = make_shared<Button>("1920x1080", font, textSize, sf::Color::White);
+	optionButtons.push_back(large);
 
 	/* ---------- Cancel button ---------- */
 	auto cancel = make_shared<Button>("CANCEL", font, textSize, sf::Color::White);
 	loopButtons.push_back(cancel);
 	instrButtons.push_back(cancel);
 	clearButtons.push_back(cancel);
+	optionButtons.push_back(cancel);
 
-	/* ---------- Confirm button ---------- */
-	auto confirm = make_shared<Button>("CONFIRM", font, textSize, sf::Color::White);
-	clearButtons.push_back(confirm);
+	/* ---------- Toggle Screen ---------- */
+	sf::RectangleShape screen(sf::Vector2f(view.getSize()));
+	screen.setFillColor(sf::Color(0, 128, 128, 255));
+
+	sf::RectangleShape inputField(sf::Vector2f(view.getSize().x * 0.8, view.getSize().y * 0.05));
+	inputField.setFillColor(sf::Color(0, 108, 108, 235));
 
 	/* ---------- Text prompts ---------- */
 	sf::String input;
@@ -283,6 +302,10 @@ int WinMain() {
 				}
 				else if (!clear->isToggled()) {
 					for (auto i : clearButtons)
+						i->checkMouse(window);
+				}
+				else if (!options->isToggled()) {
+					for (auto i : optionButtons)
 						i->checkMouse(window);
 				}
 				break;
@@ -464,6 +487,37 @@ int WinMain() {
 			}
 			else if (!cancel->isToggled()) {
 				clear->toggle();
+				cancel->toggle();
+			}
+		}
+		else if (!options->isToggled()) {
+			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
+			window.draw(screen);
+			float loopposX = 10, loopposY = 25;
+			for (unsigned int i = 0; i < optionButtons.size(); i++) {
+				optionButtons[i]->draw(window, loopposX + viewOffsetX, loopposY);
+				loopposY += optionButtons[i]->getPos().height + 30;
+			}
+			if (!small->isToggled()) {
+				window.setSize(sf::Vector2u(1280, 720));
+				view = viewPresets[0];
+				view.zoom(1.25f);
+				window.setView(view);
+				options->toggle();
+				small->toggle();
+			}
+			else if (!medium->isToggled()) {
+
+				options->toggle();
+				medium->toggle();
+			}
+			else if (!large->isToggled()) {
+
+				options->toggle();
+				large->toggle();
+			}
+			else if (!cancel->isToggled()) {
+				options->toggle();
 				cancel->toggle();
 			}
 		}
