@@ -26,20 +26,21 @@ using std::vector;
 #include <memory>
 using std::shared_ptr;
 using std::make_shared;
+#include <functional>
+using std::bind;
 
-int WinMain() {
+void mandachordThread(sf::RenderWindow * window, sf::Event * event) {
 	/* ---------- Initialize the window ---------- */
-	array<sf::View, 3> viewPresets = { sf::View(sf::FloatRect(160, 90, 1280, 720)), sf::View(sf::FloatRect(160, 90, 1600, 900)), sf::View(sf::FloatRect(160, 90, 1920, 1080)) };
+	array<sf::View, 3> viewPresets = { sf::View(sf::FloatRect(160, 90, 1280, 720)), sf::View(sf::FloatRect(0, 0, 1600, 900)), sf::View(sf::FloatRect(-120, -65, 1920, 1080)) };
 	sf::View view;
 	view = viewPresets[0];
 	view.zoom(1.25f);
-	auto viewStartX = view.getCenter().x;
 	float viewOffsetX = 0.0f; // No need for a Y offset
 
-	unsigned int width = 1280, height = 720;
-	sf::RenderWindow window(sf::VideoMode(width, height), "Mock Mandachord", sf::Style::Titlebar | sf::Style::Close);
-	window.setView(view);
-	window.setFramerateLimit(60);
+	//sf::RenderWindow window(sf::VideoMode(1280, 720), "Mock Mandachord", sf::Style::Titlebar | sf::Style::Close);
+	window->setActive(true);
+	window->setView(view);
+	window->setFramerateLimit(60);
 
 	vector<shared_ptr<Button>> uiButtons;
 	vector<shared_ptr<Button>> loopButtons;
@@ -53,7 +54,7 @@ int WinMain() {
 	if (!font.loadFromFile("fonts/DroidSans.ttf")) {
 		cout << "Unable to load font" << endl;
 		system("pause");
-		return EXIT_FAILURE;
+		throw EXIT_FAILURE;
 	}
 
 	/* ---------- Text caption ---------- */
@@ -196,7 +197,7 @@ int WinMain() {
 	auto small = make_shared<Button>("1280x720", font, textSize, sf::Color::White);
 	optionButtons.push_back(small);
 
-	/* ---------- Options button ---------- */
+	/* ---------- 900 button ---------- */
 	auto medium = make_shared<Button>("1600x900", font, textSize, sf::Color::White);
 	optionButtons.push_back(medium);
 
@@ -244,16 +245,14 @@ int WinMain() {
 	bool isOverMaxNotes = false;
 
 	/* ---------- Running application ---------- */
-	while (window.isOpen())
-	{
+	while (window->isOpen()) {
 		mandachord.advance(play->isToggled(), loopMeasure);
 
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			switch (event.type) {
+		//sf::Event event;
+		while (window->pollEvent(*event)) {
+			switch (event->type) {
 			case (sf::Event::KeyPressed):
-				if (event.key.code == sf::Keyboard::Space) {
+				if (event->key.code == sf::Keyboard::Space) {
 					play->toggle();
 					if (play->isToggled())
 						play->updateText("PAUSE");
@@ -262,64 +261,66 @@ int WinMain() {
 				}
 				break;
 			case (sf::Event::MouseWheelScrolled):
-				if (event.mouseWheelScroll.delta > 0) {
-					if (!(view.getCenter().x - 20 < viewStartX)) {
-						view.move(-20, 0);
-						window.setView(view);
-						viewOffsetX -= 20;
+				if (save->isToggled() && load->isToggled() && mallets->isToggled() && resonator->isToggled() && metronome->isToggled() && loop->isToggled() && clear->isToggled() && options->isToggled() && !isOverMaxNotes) {
+					if (event->mouseWheelScroll.delta < 0) {
+						if (!(view.getCenter().x + 20 > 4 * 16 * 60 - 13 * 60)) {
+							view.move(20, 0);
+							window->setView(view);
+							viewOffsetX += 20;
+						}
 					}
-				}
-				else if (event.mouseWheelScroll.delta < 0) {
-					if (!(view.getCenter().x + 20 > (4 * 16 * 60 - 13 * 60))) {
-						view.move(20, 0);
-						window.setView(view);
-						viewOffsetX += 20;
+					else if (event->mouseWheelScroll.delta > 0) {
+						if (!(view.getCenter().x - 20 < 13.25 * 60)) {
+							view.move(-20, 0);
+							window->setView(view);
+							viewOffsetX -= 20;
+						}
 					}
 				}
 				break;
 			case (sf::Event::MouseButtonPressed):
-				if (save->isToggled() && load->isToggled() && mallets->isToggled() && resonator->isToggled() && metronome->isToggled() && loop->isToggled() && clear->isToggled()) {
-					mandachord.checkMouse(window, isOverMaxNotes, errorPrompt);
+				if (save->isToggled() && load->isToggled() && mallets->isToggled() && resonator->isToggled() && metronome->isToggled() && loop->isToggled() && clear->isToggled() && options->isToggled()) {
+					mandachord.checkMouse(*window, isOverMaxNotes, errorPrompt);
 					for (auto i : uiButtons)
-						i->checkMouse(window);
+						i->checkMouse(*window);
 					if (play->isToggled())
 						play->updateText("PAUSE");
 					else
 						play->updateText("PLAY");
 					if (isOverMaxNotes)
-						confirm->checkMouse(window);
+						confirm->checkMouse(*window);
 				}
 				else if (!save->isToggled() || !load->isToggled()) {
-					cancel->checkMouse(window);
+					cancel->checkMouse(*window);
 				}
 				else if (!mallets->isToggled() || !resonator->isToggled() || !metronome->isToggled()) {
 					for (auto i : instrButtons)
-						i->checkMouse(window);
+						i->checkMouse(*window);
 				}
 				else if (!loop->isToggled()) {
 					for (auto i : loopButtons)
-						i->checkMouse(window);
+						i->checkMouse(*window);
 				}
 				else if (!clear->isToggled()) {
 					for (auto i : clearButtons)
-						i->checkMouse(window);
+						i->checkMouse(*window);
 				}
 				else if (!options->isToggled()) {
 					for (auto i : optionButtons)
-						i->checkMouse(window);
+						i->checkMouse(*window);
 				}
 				break;
 			case (sf::Event::TextEntered):
 				if (!save->isToggled() || !load->isToggled()) {
-					if (event.text.unicode == '\b' && input.getSize() > 0) {
+					if (event->text.unicode == '\b' && input.getSize() > 0) {
 						input.erase(input.getSize() - 1, 1);
 						inputDisplay.setString(input);
 					}
-					else if (event.text.unicode < 128 && event.text.unicode != '\b' && event.text.unicode != '\r') {
-						input += event.text.unicode;
+					else if (event->text.unicode < 128 && event->text.unicode != '\b' && event->text.unicode != '\r') {
+						input += event->text.unicode;
 						inputDisplay.setString(input);
 					}
-					else if (event.text.unicode == '\r' && input.getSize() > 0) {
+					else if (event->text.unicode == '\r' && input.getSize() > 0) {
 						string filepath = "songs/" + input.toAnsiString() + ".uwu";
 						ofstream outToFile;
 						if (!save->isToggled()) {
@@ -349,7 +350,7 @@ int WinMain() {
 				}
 				break;
 			case (sf::Event::Closed):
-				window.close();
+				window->close();
 			default:
 				break;
 			}
@@ -357,25 +358,25 @@ int WinMain() {
 		
 		mandachord.play();
 
-		window.clear();
-		window.draw(text);
+		window->clear();
+		window->draw(text);
 		float butposX = 5, butposY = 820;
 		for (unsigned int i = 0; i < uiButtons.size(); i++) {
-			uiButtons[i]->draw(window, butposX + viewOffsetX, butposY);
+			uiButtons[i]->draw(*window, butposX + viewOffsetX, butposY);
 			butposX += uiButtons[i]->getPos().width + 15;
 		}
 		float manposX = 10, manposY = 40;
-		mandachord.draw(window, manposX, manposY);
+		mandachord.draw(*window, manposX, manposY);
 		if (!save->isToggled() || !load->isToggled()) {
 			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
-			window.draw(screen);
+			window->draw(screen);
 			inputPrompt.setPosition(100 + viewOffsetX, 200);
-			window.draw(inputPrompt);
+			window->draw(inputPrompt);
 			inputField.setPosition(inputPrompt.getGlobalBounds().width + 95 + viewOffsetX, 200);
-			window.draw(inputField);
+			window->draw(inputField);
 			inputDisplay.setPosition(inputPrompt.getGlobalBounds().width + 100 + viewOffsetX, 200);
-			window.draw(inputDisplay);
-			cancel->draw(window, view.getSize().x - 140 + viewOffsetX, view.getSize().y - 50);
+			window->draw(inputDisplay);
+			cancel->draw(*window, view.getSize().x - 140 + viewOffsetX, view.getSize().y - 50);
 			if (!cancel->isToggled()) {
 				if (!save->isToggled())
 					save->toggle();
@@ -388,10 +389,10 @@ int WinMain() {
 		}
 		else if (!mallets->isToggled() || !resonator->isToggled() || !metronome->isToggled()) {
 			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
-			window.draw(screen);
+			window->draw(screen);
 			float loopposX = 10, loopposY = 25;
 			for (unsigned int i = 0; i < instrButtons.size(); i++) {
-				instrButtons[i]->draw(window, loopposX + viewOffsetX, loopposY);
+				instrButtons[i]->draw(*window, loopposX + viewOffsetX, loopposY);
 				loopposY += instrButtons[i]->getPos().height + 30;
 			}
 			if (!mallets->isToggled()) {
@@ -451,10 +452,10 @@ int WinMain() {
 		}
 		else if (!loop->isToggled()) {
 			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
-			window.draw(screen);
+			window->draw(screen);
 			float loopposX = 10, loopposY = 25;
 			for (unsigned int i = 0; i < loopButtons.size(); i++) {
-				loopButtons[i]->draw(window, loopposX + viewOffsetX, loopposY);
+				loopButtons[i]->draw(*window, loopposX + viewOffsetX, loopposY);
 				loopposY += loopButtons[i]->getPos().height + 25;
 			}
 			for (unsigned int i = 0; i < loopButtons.size(); i++) {
@@ -475,11 +476,11 @@ int WinMain() {
 		}
 		else if (!clear->isToggled()) {
 			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
-			window.draw(screen);
-			clearPrompt.setPosition((view.getViewport().left + viewOffsetX) + width / 2, view.getViewport().top + height / 2);
-			window.draw(clearPrompt);
-			confirm->draw(window, view.getSize().x - cancel->getPos().width - 160 + viewOffsetX, view.getSize().y - 50);
-			cancel->draw(window, view.getSize().x - 140 + viewOffsetX, view.getSize().y - 50);
+			window->draw(screen);
+			clearPrompt.setPosition((view.getViewport().left + viewOffsetX) + window->getSize().x / 2, view.getViewport().top + window->getSize().y / 2);
+			window->draw(clearPrompt);
+			confirm->draw(*window, view.getSize().x - cancel->getPos().width - 160 + viewOffsetX, view.getSize().y - 50);
+			cancel->draw(*window, view.getSize().x - 140 + viewOffsetX, view.getSize().y - 50);
 			if (!confirm->isToggled()) {
 				mandachord.clear();
 				clear->toggle();
@@ -492,27 +493,36 @@ int WinMain() {
 		}
 		else if (!options->isToggled()) {
 			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
-			window.draw(screen);
+			window->draw(screen);
 			float loopposX = 10, loopposY = 25;
 			for (unsigned int i = 0; i < optionButtons.size(); i++) {
-				optionButtons[i]->draw(window, loopposX + viewOffsetX, loopposY);
+				optionButtons[i]->draw(*window, loopposX + viewOffsetX, loopposY);
 				loopposY += optionButtons[i]->getPos().height + 30;
 			}
 			if (!small->isToggled()) {
-				window.setSize(sf::Vector2u(1280, 720));
+				window->setSize(sf::Vector2u(1280, 720));
 				view = viewPresets[0];
 				view.zoom(1.25f);
-				window.setView(view);
+				window->setView(view);
+				screen.setSize(view.getSize());
 				options->toggle();
 				small->toggle();
 			}
 			else if (!medium->isToggled()) {
-
+				window->setSize(sf::Vector2u(1600, 900));
+				view = viewPresets[1];
+				view.zoom(1.0f);
+				window->setView(view);
+				screen.setSize(view.getSize());
 				options->toggle();
 				medium->toggle();
 			}
 			else if (!large->isToggled()) {
-
+				window->setSize(sf::Vector2u(1920, 1080));
+				view = viewPresets[2];
+				view.zoom(0.875f);
+				window->setView(view);
+				screen.setSize(view.getSize());
 				options->toggle();
 				large->toggle();
 			}
@@ -523,17 +533,33 @@ int WinMain() {
 		}
 		else if (isOverMaxNotes) {
 			screen.setPosition(view.getViewport().left + viewOffsetX, view.getViewport().top);
-			window.draw(screen);
-			errorPrompt.setPosition((view.getViewport().left + viewOffsetX) + width / 2, view.getViewport().top + height / 2);
-			window.draw(errorPrompt);
-			confirm->draw(window, view.getSize().x - 140 + viewOffsetX, view.getSize().y - 50);
+			window->draw(screen);
+			errorPrompt.setPosition((view.getViewport().left + viewOffsetX) + window->getSize().x / 2, view.getViewport().top + window->getSize().y / 2);
+			window->draw(errorPrompt);
+			confirm->draw(*window, view.getSize().x - 140 + viewOffsetX, view.getSize().y - 50);
 			if (!confirm->isToggled()) {
 				isOverMaxNotes = false;
 				confirm->toggle();
 			}
 		}
-		window.display();
+		window->display();
 	}
+}
+
+int WinMain() {
+	sf::RenderWindow window(sf::VideoMode(1280, 720), "Mock Mandachord", sf::Style::Titlebar | sf::Style::Close);
+	sf::Event event;
+	sf::Thread mandachordThread(std::bind(&mandachordThread, &window, &event));
+
+	window.setActive(false);
+
+	mandachordThread.launch();
+
+	while (window.waitEvent(event)) {
+		if (event.type == sf::Event::Closed) window.close();
+	}
+
+	mandachordThread.wait();
 
 	/* ---------- Exit success ---------- */
 	/*cout << "Exit success!" << endl;
