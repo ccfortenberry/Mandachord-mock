@@ -49,6 +49,7 @@ void mandachordThread(sf::RenderWindow * window,
 					sf::Text * clearPrompt, 
 					sf::String * input, 
 					bool * isOverMaxNotes, 
+					bool * isFileGood, 
 					vector<shared_ptr<Button>> * uiButtons, 
 					vector<shared_ptr<Button>> * loopButtons, 
 					vector<shared_ptr<Button>> * instrButtons, 
@@ -237,14 +238,17 @@ void mandachordThread(sf::RenderWindow * window,
 				optionButtons->at(3)->toggle();
 			}
 		}
-		else if (*isOverMaxNotes) {
+		else if (*isOverMaxNotes || !*isFileGood) {
 			screen->setPosition(view->getViewport().left + *viewOffsetX, view->getViewport().top);
 			window->draw(*screen);
 			errorPrompt->setPosition((view->getViewport().left + *viewOffsetX) + window->getSize().x / 2, view->getViewport().top + window->getSize().y / 2);
 			window->draw(*errorPrompt);
 			clearButtons->at(0)->draw(*window, view->getSize().x - 140 + *viewOffsetX, view->getSize().y - 50);
 			if (!clearButtons->at(0)->isToggled()) {
-				*isOverMaxNotes = false;
+				if (*isOverMaxNotes)
+					*isOverMaxNotes = false;
+				else if (!*isFileGood)
+					*isFileGood = true;
 				clearButtons->at(0)->toggle();
 			}
 		}
@@ -462,6 +466,7 @@ int WinMain() {
 	errorPrompt.setStyle(sf::Text::Bold);
 	errorPrompt.setString("");
 	bool isOverMaxNotes = false;
+	bool isFileGood = true;
 
 	sf::Thread mandachordThread(std::bind(&mandachordThread, 
 		&window,
@@ -484,6 +489,7 @@ int WinMain() {
 		&clearPrompt,
 		&input,
 		&isOverMaxNotes,
+		&isFileGood, 
 		&uiButtons,
 		&loopButtons,
 		&instrButtons,
@@ -532,7 +538,7 @@ int WinMain() {
 					play->updateText("PAUSE");
 				else
 					play->updateText("PLAY");
-				if (isOverMaxNotes)
+				if (isOverMaxNotes || !isFileGood)
 					confirm->checkMouse(window);
 			}
 			else if (!save->isToggled() || !load->isToggled()) {
@@ -580,11 +586,13 @@ int WinMain() {
 					else if (!load->isToggled()) {
 						ifstream inFromFile(filepath, std::ios::binary);
 						if (inFromFile.is_open()) {
-							mandachord.loadFmFile(inFromFile, currentMallets, currentResonator, currentMetronome);
+							mandachord.loadFmFile(inFromFile, currentMallets, currentResonator, currentMetronome, isFileGood, instrTable, errorPrompt);
 							inFromFile.close();
-							mallets->updateText("MALLETS: " + currentMallets);
-							resonator->updateText("RESONATOR: " + currentResonator);
-							metronome->updateText("METRONOME: " + currentMetronome);
+							if (isFileGood) {
+								mallets->updateText("MALLETS: " + currentMallets);
+								resonator->updateText("RESONATOR: " + currentResonator);
+								metronome->updateText("METRONOME: " + currentMetronome);
+							}
 						}
 						else cout << "Could not open file: " << filepath << endl;
 						load->toggle();

@@ -93,7 +93,7 @@ public:
 	void draw(sf::RenderWindow &, float &, float &);
 	void play();
 	void saveToFile(std::ofstream &, const inst_type &, const inst_type &, const inst_type &);
-	void loadFmFile(std::ifstream &, inst_type &, inst_type &, inst_type &);
+	void loadFmFile(std::ifstream &, inst_type &, inst_type &, inst_type &, bool &, const std::array<inst_type, 10> &, sf::Text &);
 };
 
 #endif //MANDACHORD_HPP_INCLUDED

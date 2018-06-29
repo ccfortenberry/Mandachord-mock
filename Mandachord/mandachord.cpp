@@ -8,6 +8,8 @@ using std::getline;
 using std::to_string;
 #include <array>
 using std::array;
+#include <algorithm>
+using std::equal;
 #include <utility>
 using std::pair;
 
@@ -460,17 +462,62 @@ void Mandachord::saveToFile(std::ofstream & out, const inst_type & mallets, cons
 	}
 }
 
-void Mandachord::loadFmFile(std::ifstream & in, inst_type & mallets, inst_type & resonator, inst_type & metronome) {
+bool ignoreCaseCompare(const string & s1, const string & s2) {
+	return equal(s1.begin(), s1.end(), s2.begin(), s2.end(), [](char c1, char c2) { return tolower(c1) == tolower(c2); });
+}
+
+void Mandachord::loadFmFile(std::ifstream & in, inst_type & mallets, inst_type & resonator, inst_type & metronome, 
+							bool & isFileGood, const array<inst_type, 10> & instrTable, sf::Text & errorPrompt) {
 	getline(in, mallets);
+	for (unsigned int i = 0; i <= instrTable.size(); i++) {
+		if (i == instrTable.size()) {
+			errorPrompt.setString("FILE ERROR: Not a valid mallets!");
+			isFileGood = false;
+			return;
+		}
+		else if (ignoreCaseCompare(mallets, instrTable[i])) break;
+	}
+
 	getline(in, resonator);
+	for (unsigned int i = 0; i <= instrTable.size(); i++) {
+		if (i == instrTable.size()) {
+			errorPrompt.setString("FILE ERROR: Not a valid resonator!");
+			isFileGood = false;
+			return;
+		}
+		else if (ignoreCaseCompare(resonator, instrTable[i])) break;
+	}
+
 	getline(in, metronome);
+	for (unsigned int i = 0; i <= instrTable.size(); i++) {
+		if (i == instrTable.size()) {
+			errorPrompt.setString("FILE ERROR: Not a valid metronome!");
+			isFileGood = false;
+			return;
+		}
+		else if (ignoreCaseCompare(metronome, instrTable[i])) break;
+	}
+
+	string buffer;
+	array<unsigned int, MANSIZE> test;
+	for (unsigned int i = 0; i < MANSIZE; i++) {
+		getline(in, buffer);
+		if (buffer == "1") 
+			test[i] = 1;
+		else if (buffer == "0") 
+			test[i] = 0;
+		else {
+			errorPrompt.setString("ERROR: Bad note at " + to_string(i) + "!");
+			isFileGood = false;
+			return;
+		}
+	}
+
 	changeMallets(mallets);
 	changeResonator(resonator);
 	changeMetronome(metronome);
-	string buffer;
 	for (unsigned int i = 0; i < MANSIZE; i++) {
-		getline(in, buffer);
-		if (buffer == "1") {
+		if (test[i] == 1) {
 			if (!_mandachord[i].isToggled()) {
 				_mandachord[i].toggle();
 				incTotal(i, _noteTotal);
