@@ -55,7 +55,9 @@ private:
 	sf::Color _pink = {sf::Color(107, 58, 113, 225)};
 
 	// Icon textures
-	sf::Texture _malTexture;
+	sf::Texture _malTexture1;
+	sf::Texture _malTexture2;
+	sf::Texture _malTexture3;
 	sf::Texture _resTexture;
 	sf::Texture _metTexture;
 	

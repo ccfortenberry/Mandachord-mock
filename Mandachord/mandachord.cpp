@@ -95,7 +95,9 @@ void loadSound(sf::Sound & sound, sf::SoundBuffer & buffer, const string & sound
 Mandachord::Mandachord() {
 	// ---------- Mallets section ----------
 	// Icon
-	loadIcon(_malTexture, "icons/mallets_icon.png");
+	loadIcon(_malTexture1, "icons/mallets-1_icon.png");
+	loadIcon(_malTexture2, "icons/mallets-2_icon.png");
+	loadIcon(_malTexture3, "icons/mallets-3_icon.png");
 
 	// Sound for first row
 	loadSound(_mandachordSounds[0], _mandachordSoundsBuffer[0], "instruments/adau/adau_mal_1.wav");
@@ -107,9 +109,9 @@ Mandachord::Mandachord() {
 	loadSound(_mandachordSounds[2], _mandachordSoundsBuffer[2], "instruments/adau/adau_mal_3.wav");
 
 	// Mallet notes
-	Note malNote1(_malTexture, _gray);
-	Note malNote2(_malTexture, _gray);
-	Note malNote3(_malTexture, _gray);
+	Note malNote1(_malTexture1, _gray);
+	Note malNote2(_malTexture2, _gray);
+	Note malNote3(_malTexture3, _gray);
 
 	// ---------- Resonator section ----------
 	// Icon
