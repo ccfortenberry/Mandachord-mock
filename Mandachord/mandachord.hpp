@@ -37,22 +37,23 @@ class Mandachord {
 private:
 	// Types
 	using size_type = unsigned int;
+	using pos_type = float;
 	using inst_type = std::string;
-	
+
 	// Size consts
 	const static size_type MALSIZE = 3 * 64;
 	const static size_type RESSIZE = 5 * 64;
 	const static size_type METSIZE = RESSIZE;
 	const static size_type MANSIZE = MALSIZE + RESSIZE + METSIZE;
-	const size_type MEASURE = 16 * 60;
-	const size_type BOARD = 4 * 16 * 60;
-	size_type _posmin = 0;
-	size_type _posmax = BOARD;
+	const pos_type MEASURE = 16 * 60;
+	const pos_type BOARD = 4 * 16 * 60;
+	pos_type _posmin = 0;
+	pos_type _posmax = BOARD;
 
 	// Colors
-	sf::Color _gray = {sf::Color(91, 91, 91, 225)};
-	sf::Color _blue = {sf::Color(39, 89, 114, 225)};
-	sf::Color _pink = {sf::Color(107, 58, 113, 225)};
+	sf::Color _gray = { sf::Color(91, 91, 91, 225) };
+	sf::Color _blue = { sf::Color(39, 89, 114, 225) };
+	sf::Color _pink = { sf::Color(107, 58, 113, 225) };
 
 	// Icon textures
 	sf::Texture _malTexture1;
@@ -60,12 +61,12 @@ private:
 	sf::Texture _malTexture3;
 	sf::Texture _resTexture;
 	sf::Texture _metTexture;
-	
+
 	// Containers
 	std::array<Note, MANSIZE> _mandachord;
 	std::array<sf::Sound, 13> _mandachordSounds;
 	std::array<sf::SoundBuffer, 13> _mandachordSoundsBuffer;
-	std::deque<std::pair<unsigned int ,sf::Sound>> _nowPlaying;
+	std::deque<std::pair<unsigned int, sf::Sound>> _nowPlaying;
 	unsigned int _npindex;
 
 	// Line
@@ -75,12 +76,15 @@ private:
 	sf::RectangleShape _m3;
 	sf::RectangleShape _m4;
 
-	// Note limits: TODO at some point
+	// Note limits
 	size_type _malLimit = 26;
 	size_type _resLimit = 16;
 	size_type _metLimit = 16;
 
 	std::array<size_type, 12> _noteTotal;
+
+	// Private member utilities
+	void resetLine();
 
 public:
 	Mandachord();
@@ -96,6 +100,7 @@ public:
 	void play();
 	void saveToFile(std::ofstream &, const inst_type &, const inst_type &, const inst_type &);
 	void loadFmFile(std::ifstream &, inst_type &, inst_type &, inst_type &, bool &, const std::array<inst_type, 10> &, sf::Text &);
+
 };
 
 #endif //MANDACHORD_HPP_INCLUDED

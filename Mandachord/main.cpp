@@ -93,6 +93,7 @@ void mandachordThread(sf::RenderWindow * window,
 				clearButtons->at(1)->toggle();
 				input->clear();
 				inputDisplay->setString(*input);
+				uiButtons->at(0)->toggle();
 			}
 		}
 		else if (!uiButtons->at(3)->isToggled() || !uiButtons->at(4)->isToggled() || !uiButtons->at(5)->isToggled()) {
@@ -302,67 +303,67 @@ int WinMain() {
 
 	/* ---------- Play button ---------- */
 	auto play = make_shared<Button>("PAUSE", font, textSize, sf::Color::White);
-	uiButtons.push_back(play);
+	uiButtons.push_back(play); //ui 0
 
 	/* ---------- Save button ---------- */
 	auto save = make_shared<Button>("SAVE", font, textSize, sf::Color::White);
-	uiButtons.push_back(save);
+	uiButtons.push_back(save); //ui 1
 
 	/* ---------- Load button ---------- */
 	auto load = make_shared<Button>("LOAD", font, textSize, sf::Color::White);
-	uiButtons.push_back(load);
+	uiButtons.push_back(load); //ui 2
 
 	/* ---------- Mallets button ---------- */
 	auto mallets = make_shared<Button>("MALLETS: " + currentMallets, font, textSize, sf::Color::White);
-	uiButtons.push_back(mallets);
+	uiButtons.push_back(mallets); //ui 3
 
 	/* ---------- Resonator button ---------- */
 	auto resonator = make_shared<Button>("RESONATOR: " + currentResonator, font, textSize, sf::Color::White);
-	uiButtons.push_back(resonator);
+	uiButtons.push_back(resonator); //ui 4
 
 	/* ---------- Metronome button ---------- */
 	auto metronome = make_shared<Button>("METRONOME: " + currentMetronome, font, textSize, sf::Color::White);
-	uiButtons.push_back(metronome);
+	uiButtons.push_back(metronome); //ui 5
 
 	/* ---------- Adau button ---------- */
 	auto adauButton = make_shared<Button>("ADAU", font, textSize, sf::Color::White);
-	instrButtons.push_back(adauButton);
+	instrButtons.push_back(adauButton); //instr 0
 
 	/* ---------- Alpha button ---------- */
 	auto alphaButton = make_shared<Button>("ALPHA", font, textSize, sf::Color::White);
-	instrButtons.push_back(alphaButton);
+	instrButtons.push_back(alphaButton); //instr 1
 
 	/* ---------- Beta button ---------- */
 	auto betaButton = make_shared<Button>("BETA", font, textSize, sf::Color::White);
-	instrButtons.push_back(betaButton);
+	instrButtons.push_back(betaButton); //instr 2
 
 	/* ---------- Delta button ---------- */
 	auto deltaButton = make_shared<Button>("DELTA", font, textSize, sf::Color::White);
-	instrButtons.push_back(deltaButton);
+	instrButtons.push_back(deltaButton); //instr 3
 
 	/* ---------- Druk button ---------- */
 	auto drukButton = make_shared<Button>("DRUK", font, textSize, sf::Color::White);
-	instrButtons.push_back(drukButton);
+	instrButtons.push_back(drukButton); //instr 4
 
 	/* ---------- Epsilon button ---------- */
 	auto epsilonButton = make_shared<Button>("EPSILON", font, textSize, sf::Color::White);
-	instrButtons.push_back(epsilonButton);
+	instrButtons.push_back(epsilonButton); //instr 5
 
 	/* ---------- Gamma button ---------- */
 	auto gammaButton = make_shared<Button>("GAMMA", font, textSize, sf::Color::White);
-	instrButtons.push_back(gammaButton);
+	instrButtons.push_back(gammaButton); //instr 6
 
 	/* ---------- Horos button ---------- */
 	auto horosButton = make_shared<Button>("HOROS", font, textSize, sf::Color::White);
-	instrButtons.push_back(horosButton);
+	instrButtons.push_back(horosButton); //instr 7
 
 	/* ---------- Plogg button ---------- */
 	auto ploggButton = make_shared<Button>("PLOGG", font, textSize, sf::Color::White);
-	instrButtons.push_back(ploggButton);
+	instrButtons.push_back(ploggButton); //instr 8
 
 	/* ---------- Loop button ---------- */
 	auto loop = make_shared<Button>("LOOP: FULL", font, textSize, sf::Color::White);
-	uiButtons.push_back(loop);
+	uiButtons.push_back(loop); //ui 6
 
 	/* ---------- Full loop button ---------- */
 	auto measureAllButton = make_shared<Button>("FULL", font, textSize, sf::Color::White);
@@ -406,7 +407,7 @@ int WinMain() {
 
 	/* ---------- Clear button ---------- */
 	auto clear = make_shared<Button>("CLEAR", font, textSize, sf::Color::White);
-	uiButtons.push_back(clear);
+	uiButtons.push_back(clear); //ui 7
 
 	/* ---------- Confirm button ---------- */
 	auto confirm = make_shared<Button>("CONFIRM", font, textSize, sf::Color::White);
@@ -414,7 +415,7 @@ int WinMain() {
 
 	/* ---------- Options button ---------- */
 	auto options = make_shared<Button>("OPTIONS", font, textSize, sf::Color::White);
-	uiButtons.push_back(options);
+	uiButtons.push_back(options); //ui 8
 
 	/* ---------- 720 button ---------- */
 	auto small = make_shared<Button>("1280x720", font, textSize, sf::Color::White);
@@ -439,7 +440,7 @@ int WinMain() {
 	sf::RectangleShape screen(sf::Vector2f(view.getSize()));
 	screen.setFillColor(sf::Color(0, 128, 128, 255));
 
-	sf::RectangleShape inputField(sf::Vector2f(view.getSize().x * 0.8, view.getSize().y * 0.05));
+	sf::RectangleShape inputField(sf::Vector2f(view.getSize().x * 0.8f, view.getSize().y * 0.05f));
 	inputField.setFillColor(sf::Color(0, 108, 108, 235));
 
 	/* ---------- Text prompts ---------- */
@@ -542,6 +543,7 @@ int WinMain() {
 					confirm->checkMouse(window);
 			}
 			else if (!save->isToggled() || !load->isToggled()) {
+				if (play->isToggled()) play->toggle();
 				cancel->checkMouse(window);
 			}
 			else if (!mallets->isToggled() || !resonator->isToggled() || !metronome->isToggled()) {
@@ -574,6 +576,7 @@ int WinMain() {
 				else if (event.text.unicode == '\r' && input.getSize() > 0) {
 					string filepath = "songs/" + input.toAnsiString() + ".uwu";
 					ofstream outToFile;
+					play->toggle();
 					if (!save->isToggled()) {
 						outToFile.open(filepath, std::ios::binary);
 						if (outToFile.is_open()) {
@@ -597,6 +600,7 @@ int WinMain() {
 						else cout << "Could not open file: " << filepath << endl;
 						load->toggle();
 					}
+					if (!play->isToggled()) play->toggle();
 					input.clear();
 					inputDisplay.setString(input);
 				}

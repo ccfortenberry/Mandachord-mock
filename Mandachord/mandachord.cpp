@@ -204,6 +204,14 @@ Mandachord::Mandachord() {
 	_m4.setPosition(4 * MEASURE + 6, 35);
 }
 
+// Reset line utility
+void Mandachord::resetLine() {
+	_line.setPosition(5 + _posmin, 35);
+	for (auto i : _mandachord) {
+		if (!i.isPlayable()) i.togglePlayable();
+	}
+}
+
 // Advance
 void Mandachord::advance(const bool & toggled, const unsigned int & loopMeasure) {
 	if (loopMeasure == 0) {
@@ -240,10 +248,7 @@ void Mandachord::advance(const bool & toggled, const unsigned int & loopMeasure)
 		if (_line.getPosition().x > _posmin && _line.getPosition().x < _posmax)
 			_line.move(sf::Vector2f(8, 0));
 		else {
-			_line.setPosition(5 + _posmin, 35);
-			for (auto i : _mandachord) {
-				if (!i.isPlayable()) i.togglePlayable();
-			}
+			resetLine();
 		}
 	}
 }
@@ -532,5 +537,5 @@ void Mandachord::loadFmFile(std::ifstream & in, inst_type & mallets, inst_type &
 			}
 		}
 	}
-	_line.setPosition(5 + _posmin, 35);
+	resetLine();
 }
