@@ -8,6 +8,7 @@
 #include <utility>
 #include <string>
 #include <fstream>
+#include <functional>
 
 class Note {
 private:
@@ -66,8 +67,8 @@ private:
 	std::array<Note, MANSIZE> _mandachord;
 	std::array<sf::Sound, 13> _mandachordSounds;
 	std::array<sf::SoundBuffer, 13> _mandachordSoundsBuffer;
-	std::deque<std::pair<unsigned int, sf::Sound>> _nowPlaying;
-	unsigned int _npindex;
+	std::deque<std::pair<size_type, sf::Sound>> _nowPlaying;
+	size_type _npindex;
 
 	// Line
 	sf::RectangleShape _line;
@@ -86,11 +87,14 @@ private:
 	// Private member utilities
 	void resetLine();
 
+	// Other, to be renamed
+	bool _isPlaying;
+
 public:
 	Mandachord();
 	~Mandachord() = default;
 
-	void advance(const bool &, const unsigned int &);
+	void advance(const unsigned int &);
 	void checkMouse(sf::RenderWindow &, bool &, sf::Text &);
 	void changeMallets(const inst_type &);
 	void changeResonator(const inst_type &);
@@ -100,6 +104,14 @@ public:
 	void play();
 	void saveToFile(std::ofstream &, const inst_type &, const inst_type &, const inst_type &);
 	void loadFmFile(std::ifstream &, inst_type &, inst_type &, inst_type &, bool &, const std::array<inst_type, 10> &, sf::Text &);
+
+	// to implement
+	std::function<void()> togglePlaying = [&]() {
+		if (_isPlaying) _isPlaying = false;
+		else _isPlaying = true;
+	};
+
+	bool isMandachordPlaying();
 
 };
 

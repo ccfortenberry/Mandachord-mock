@@ -92,7 +92,7 @@ void loadSound(sf::Sound & sound, sf::SoundBuffer & buffer, const string & sound
 }
 
 // Default Ctor
-Mandachord::Mandachord() {
+Mandachord::Mandachord(): _isPlaying(true) {
 	// ---------- Mallets section ----------
 	// Icon
 	loadIcon(_malTexture1, "icons/mallets-1_icon.png");
@@ -213,7 +213,7 @@ void Mandachord::resetLine() {
 }
 
 // Advance
-void Mandachord::advance(const bool & toggled, const unsigned int & loopMeasure) {
+void Mandachord::advance(const unsigned int & loopMeasure) {
 	if (loopMeasure == 0) {
 		_posmin = 0, _posmax = BOARD;
 	}
@@ -244,7 +244,7 @@ void Mandachord::advance(const bool & toggled, const unsigned int & loopMeasure)
 	else if (loopMeasure == 9) {
 		_posmin = MEASURE, _posmax = 4 * MEASURE;
 	}
-	if (toggled) {
+	if (_isPlaying) {
 		if (_line.getPosition().x > _posmin && _line.getPosition().x < _posmax)
 			_line.move(sf::Vector2f(8, 0));
 		else {
@@ -426,36 +426,40 @@ void Mandachord::draw(sf::RenderWindow & window, float & posX, float & posY) {
 // Play
 void Mandachord::play() {
 	for (unsigned int i = 0; i < MANSIZE; i++) {
-		if (_mandachord[i].isToggled() && _mandachord[i].isPlayable() && _mandachord[i].isColliding(_line)) {
-			_mandachord[i].togglePlayable();
-			if (i < 64) _nowPlaying.emplace_back(i, _mandachordSounds[0]);
-			else if (i < 2 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[1]);
-			else if (i < 3 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[2]);
-			else if (i < 4 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[3]);
-			else if (i < 5 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[4]);
-			else if (i < 6 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[5]);
-			else if (i < 7 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[6]);
-			else if (i < 8 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[7]);
-			else if (i < 9 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[8]);
-			else if (i < 10 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[9]);
-			else if (i < 11 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[10]);
-			else if (i < 12 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[11]);
-			else _nowPlaying.emplace_back(i, _mandachordSounds[12]);
-			_nowPlaying[_npindex].second.play();
-			_npindex++;
+		if (_mandachord[i].isColliding(_line)) {
+			if (_mandachord[i].isToggled()) {
+				if (_mandachord[i].isPlayable()) {
+					_mandachord[i].togglePlayable();
+					if (i < 64) _nowPlaying.emplace_back(i, _mandachordSounds[0]);
+					else if (i < 2 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[1]);
+					else if (i < 3 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[2]);
+					else if (i < 4 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[3]);
+					else if (i < 5 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[4]);
+					else if (i < 6 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[5]);
+					else if (i < 7 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[6]);
+					else if (i < 8 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[7]);
+					else if (i < 9 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[8]);
+					else if (i < 10 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[9]);
+					else if (i < 11 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[10]);
+					else if (i < 12 * 64) _nowPlaying.emplace_back(i, _mandachordSounds[11]);
+					else _nowPlaying.emplace_back(i, _mandachordSounds[12]);
+					_nowPlaying[_npindex].second.play();
+					_npindex++;
+				}
+			}
 		}
 	}
-	
-	if (!_nowPlaying.empty())
+
+	if (!_nowPlaying.empty()) {
 		for (auto i = 0; i < _nowPlaying.size(); i++) {
 			if (_nowPlaying[i].second.getStatus() == sf::Sound::Status::Stopped) {
-				if (!_mandachord[_nowPlaying[i].first].isColliding(_line) && !_mandachord[_nowPlaying[i].first].isPlayable())
-					_mandachord[_nowPlaying[i].first].togglePlayable();
+				if (!_mandachord[_nowPlaying[i].first].isColliding(_line) && !_mandachord[_nowPlaying[i].first].isPlayable()) _mandachord[_nowPlaying[i].first].togglePlayable();
 				auto temp = _nowPlaying[0];
 				_nowPlaying[0] = _nowPlaying[i];
 				_nowPlaying[i] = temp;
 				_nowPlaying.pop_front();
 				_npindex--;
+			}
 		}
 	}
 }
@@ -538,4 +542,14 @@ void Mandachord::loadFmFile(std::ifstream & in, inst_type & mallets, inst_type &
 		}
 	}
 	resetLine();
+}
+
+// functions to implement as part of the big cleanup
+//Mandachord::toggleplaying = []() {
+//	if (_isplaying) _isplaying = false;
+//	else _isplaying = true;
+//}
+
+bool Mandachord::isMandachordPlaying() {
+	return _isPlaying;
 }

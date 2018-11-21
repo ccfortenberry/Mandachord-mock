@@ -5,7 +5,18 @@ using std::endl;
 
 // Ctor from data
 Button::Button(const text_type & text, const sf::Font & font, const unsigned int & size, const sf::Color & color)
-	:_toggled(true)  {
+	:_toggled(true) {
+	_text.setString(text);
+	_text.setFont(font);
+	_text.setCharacterSize(size);
+	_text.setFillColor(sf::Color::Green);
+	_box = { sf::RectangleShape(sf::Vector2f(_text.getLocalBounds().width + 4, _text.getLocalBounds().height + 10)) };
+	_box.setFillColor(color);
+}
+
+// Ctor from data with functional
+Button::Button(const text_type & text, const sf::Font & font, const unsigned int & size, const sf::Color & color, const std::function<void()> & f)
+	:_toggled(true), _f(f) {
 	_text.setString(text);
 	_text.setFont(font);
 	_text.setCharacterSize(size);
@@ -48,10 +59,14 @@ void Button::updateText(const text_type & text) {
 }
 
 // Check mouse position on button
-void Button::checkMouse(sf::RenderWindow & window) {
-	if (getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window))))
-		toggle();
+bool Button::checkMouse(sf::RenderWindow & window) {
+	return getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
 }
+
+//void Button::checkMouse(sf::RenderWindow & window) {
+//	if (getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window))))
+//		toggle();
+//}
 
 // Draw
 void Button::draw(sf::RenderWindow & window, const size_type & posX, const size_type & posY) {
@@ -59,4 +74,9 @@ void Button::draw(sf::RenderWindow & window, const size_type & posX, const size_
 	_text.setPosition(_box.getPosition());
 	window.draw(_box);
 	window.draw(_text);
+}
+
+// Execute button function
+void Button::execute() {
+	_f();
 }

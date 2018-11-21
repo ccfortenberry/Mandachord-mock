@@ -62,9 +62,14 @@ void mandachordThread(sf::RenderWindow * window,
 
 	/* ---------- Running application ---------- */
 	while (window->isOpen()) {
-		mandachord->advance(uiButtons->at(0)->isToggled(), *loopMeasure);
-		
-		mandachord->play();
+		if (mandachord->isMandachordPlaying()) {
+			mandachord->advance(*loopMeasure);
+			mandachord->play();
+			uiButtons->at(0)->updateText("PAUSE");
+		}
+		else {
+			uiButtons->at(0)->updateText("PLAY");
+		}
 
 		window->clear();
 		window->draw(*text);
@@ -93,7 +98,6 @@ void mandachordThread(sf::RenderWindow * window,
 				clearButtons->at(1)->toggle();
 				input->clear();
 				inputDisplay->setString(*input);
-				uiButtons->at(0)->toggle();
 			}
 		}
 		else if (!uiButtons->at(3)->isToggled() || !uiButtons->at(4)->isToggled() || !uiButtons->at(5)->isToggled()) {
@@ -302,7 +306,9 @@ int WinMain() {
 	string currentMetronome = "ADAU";
 
 	/* ---------- Play button ---------- */
-	auto play = make_shared<Button>("PAUSE", font, textSize, sf::Color::White);
+	//auto play = make_shared<Button>("PAUSE", font, textSize, sf::Color::White);
+	//uiButtons.push_back(play); //ui 0
+	auto play = make_shared<Button>("PAUSE", font, textSize, sf::Color::White, mandachord.togglePlaying);
 	uiButtons.push_back(play); //ui 0
 
 	/* ---------- Save button ---------- */
@@ -504,13 +510,16 @@ int WinMain() {
 	while (window.waitEvent(event)) {
 		switch (event.type) {
 		case (sf::Event::KeyPressed):
+			// Spacebar shortcut for pause/play
 			if (event.key.code == sf::Keyboard::Space) {
 				play->toggle();
-				if (play->isToggled())
+				play->execute();
+				if (play->isToggled()) // could check using mandachord.isMandachordPlaying() member
 					play->updateText("PAUSE");
 				else
 					play->updateText("PLAY");
 			}
+			// TODO: Add more keyboard shortcuts?
 			break;
 		case (sf::Event::MouseWheelScrolled):
 			if (save->isToggled() && load->isToggled() && mallets->isToggled() && resonator->isToggled() && metronome->isToggled() && loop->isToggled() && clear->isToggled() && options->isToggled() && !isOverMaxNotes) {
@@ -531,36 +540,36 @@ int WinMain() {
 			}
 			break;
 		case (sf::Event::MouseButtonPressed):
+			// Check Mandachord and UI
 			if (save->isToggled() && load->isToggled() && mallets->isToggled() && resonator->isToggled() && metronome->isToggled() && loop->isToggled() && clear->isToggled() && options->isToggled()) {
 				mandachord.checkMouse(window, isOverMaxNotes, errorPrompt);
-				for (auto i : uiButtons)
-					i->checkMouse(window);
-				if (play->isToggled())
-					play->updateText("PAUSE");
-				else
-					play->updateText("PLAY");
-				if (isOverMaxNotes || !isFileGood)
-					confirm->checkMouse(window);
+				for (auto i : uiButtons) {
+					if (i->checkMouse(window)) i->toggle();
+				}
+				if (isOverMaxNotes || !isFileGood) confirm->checkMouse(window);
 			}
 			else if (!save->isToggled() || !load->isToggled()) {
-				if (play->isToggled()) play->toggle();
-				cancel->checkMouse(window);
+				if (cancel->checkMouse(window)) cancel->toggle();
 			}
 			else if (!mallets->isToggled() || !resonator->isToggled() || !metronome->isToggled()) {
-				for (auto i : instrButtons)
-					i->checkMouse(window);
+				for (auto i : instrButtons) {
+					if (i->checkMouse(window)) i->toggle();
+				}
 			}
 			else if (!loop->isToggled()) {
-				for (auto i : loopButtons)
-					i->checkMouse(window);
+				for (auto i : loopButtons) {
+					if (i->checkMouse(window)) i->toggle();
+				}
 			}
 			else if (!clear->isToggled()) {
-				for (auto i : clearButtons)
-					i->checkMouse(window);
+				for (auto i : clearButtons) {
+					if (i->checkMouse(window)) i->toggle();
+				}
 			}
 			else if (!options->isToggled()) {
-				for (auto i : optionButtons)
-					i->checkMouse(window);
+				for (auto i : optionButtons) {
+					if (i->checkMouse(window)) i->toggle();
+				}
 			}
 			break;
 		case (sf::Event::TextEntered):
@@ -576,7 +585,6 @@ int WinMain() {
 				else if (event.text.unicode == '\r' && input.getSize() > 0) {
 					string filepath = "songs/" + input.toAnsiString() + ".uwu";
 					ofstream outToFile;
-					play->toggle();
 					if (!save->isToggled()) {
 						outToFile.open(filepath, std::ios::binary);
 						if (outToFile.is_open()) {
@@ -600,7 +608,6 @@ int WinMain() {
 						else cout << "Could not open file: " << filepath << endl;
 						load->toggle();
 					}
-					if (!play->isToggled()) play->toggle();
 					input.clear();
 					inputDisplay.setString(input);
 				}
