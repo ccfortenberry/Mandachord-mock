@@ -105,13 +105,16 @@ public:
 	void saveToFile(std::ofstream &, const inst_type &, const inst_type &, const inst_type &);
 	void loadFmFile(std::ifstream &, inst_type &, inst_type &, inst_type &, bool &, const std::array<inst_type, 10> &, sf::Text &);
 
-	// to implement
+	// to implement as buttons
 	std::function<void()> togglePlaying = [&]() {
 		if (_isPlaying) _isPlaying = false;
 		else _isPlaying = true;
 	};
 
 	bool isMandachordPlaying();
+
+	// TODO: save
+	// TODO: load
 
 };
 

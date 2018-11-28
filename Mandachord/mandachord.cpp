@@ -453,12 +453,14 @@ void Mandachord::play() {
 	if (!_nowPlaying.empty()) {
 		for (auto i = 0; i < _nowPlaying.size(); i++) {
 			if (_nowPlaying[i].second.getStatus() == sf::Sound::Status::Stopped) {
-				if (!_mandachord[_nowPlaying[i].first].isColliding(_line) && !_mandachord[_nowPlaying[i].first].isPlayable()) _mandachord[_nowPlaying[i].first].togglePlayable();
-				auto temp = _nowPlaying[0];
-				_nowPlaying[0] = _nowPlaying[i];
-				_nowPlaying[i] = temp;
-				_nowPlaying.pop_front();
-				_npindex--;
+				if (!_mandachord[_nowPlaying[i].first].isColliding(_line)) {
+					if (!_mandachord[_nowPlaying[i].first].isPlayable()) _mandachord[_nowPlaying[i].first].togglePlayable();
+					auto temp = _nowPlaying[0];
+					_nowPlaying[0] = _nowPlaying[i];
+					_nowPlaying[i] = temp;
+					_nowPlaying.pop_front();
+					_npindex--;
+				}
 			}
 		}
 	}

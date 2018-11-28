@@ -63,11 +63,6 @@ bool Button::checkMouse(sf::RenderWindow & window) {
 	return getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
 }
 
-//void Button::checkMouse(sf::RenderWindow & window) {
-//	if (getPos().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window))))
-//		toggle();
-//}
-
 // Draw
 void Button::draw(sf::RenderWindow & window, const size_type & posX, const size_type & posY) {
 	_box.setPosition(posX, posY);
